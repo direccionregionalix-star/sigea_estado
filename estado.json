@@ -1,0 +1,42 @@
+{
+ "generado": "2026-06-11T16:07:27",
+ "funcionarios": {
+  "igarrido": {
+   "asignacion_id": 12,
+   "codigo": "01485",
+   "unidad": "ESCUELA PARTICULAR SAGRADA FAMILIA",
+   "comuna": "Villarrica",
+   "n_electores": 1587,
+   "fecha_estimada": "2026-07-03",
+   "dias_restantes": 22,
+   "avance": 189,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto"
+  },
+  "mespinozan": null,
+  "jmedina": {
+   "asignacion_id": 10,
+   "codigo": "01388",
+   "unidad": "LICEO BICENTENARIO DE HOTELERIA Y TURISMO",
+   "comuna": "Pucón",
+   "n_electores": 1330,
+   "fecha_estimada": "2026-07-01",
+   "dias_restantes": 20,
+   "avance": 319,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto"
+  },
+  "pfigueroa": {
+   "asignacion_id": 7,
+   "codigo": "01469",
+   "unidad": "ESCUELA HEROES DE IQUIQUE",
+   "comuna": "Victoria",
+   "n_electores": 567,
+   "fecha_estimada": "2026-06-16",
+   "dias_restantes": 5,
+   "avance": 0,
+   "herramienta": "sige",
+   "tipo_origen": "recinto"
+  }
+ }
+}
