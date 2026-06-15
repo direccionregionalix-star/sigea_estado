@@ -1,5 +1,5 @@
 {
- "generado": "2026-06-12T08:33:31",
+ "generado": "2026-06-15T16:21:23",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -8,8 +8,8 @@
    "comuna": "Villarrica",
    "n_electores": 1587,
    "fecha_estimada": "2026-07-03",
-   "dias_restantes": 21,
-   "avance": 258,
+   "dias_restantes": 18,
+   "avance": 331,
    "herramienta": "qgis",
    "tipo_origen": "recinto"
   },
@@ -20,8 +20,8 @@
    "comuna": "Angol",
    "n_electores": 1650,
    "fecha_estimada": "2026-07-07",
-   "dias_restantes": 25,
-   "avance": 209,
+   "dias_restantes": 22,
+   "avance": 1138,
    "herramienta": "qgis",
    "tipo_origen": "recinto"
   },
@@ -32,22 +32,11 @@
    "comuna": "Pucón",
    "n_electores": 1330,
    "fecha_estimada": "2026-07-01",
-   "dias_restantes": 19,
-   "avance": 376,
+   "dias_restantes": 16,
+   "avance": 559,
    "herramienta": "qgis",
    "tipo_origen": "recinto"
   },
-  "pfigueroa": {
-   "asignacion_id": 7,
-   "codigo": "01469",
-   "unidad": "ESCUELA HEROES DE IQUIQUE",
-   "comuna": "Victoria",
-   "n_electores": 567,
-   "fecha_estimada": "2026-06-16",
-   "dias_restantes": 4,
-   "avance": 0,
-   "herramienta": "sige",
-   "tipo_origen": "recinto"
-  }
+  "pfigueroa": null
  }
 }
