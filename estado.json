@@ -1,5 +1,5 @@
 {
- "generado": "2026-06-15T16:21:23",
+ "generado": "2026-06-16T08:11:22",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -8,7 +8,7 @@
    "comuna": "Villarrica",
    "n_electores": 1587,
    "fecha_estimada": "2026-07-03",
-   "dias_restantes": 18,
+   "dias_restantes": 17,
    "avance": 331,
    "herramienta": "qgis",
    "tipo_origen": "recinto"
@@ -20,7 +20,7 @@
    "comuna": "Angol",
    "n_electores": 1650,
    "fecha_estimada": "2026-07-07",
-   "dias_restantes": 22,
+   "dias_restantes": 21,
    "avance": 1138,
    "herramienta": "qgis",
    "tipo_origen": "recinto"
@@ -32,11 +32,22 @@
    "comuna": "Pucón",
    "n_electores": 1330,
    "fecha_estimada": "2026-07-01",
-   "dias_restantes": 16,
+   "dias_restantes": 15,
    "avance": 559,
    "herramienta": "qgis",
    "tipo_origen": "recinto"
   },
-  "pfigueroa": null
+  "pfigueroa": {
+   "asignacion_id": 14,
+   "codigo": "01466",
+   "unidad": "COLEGIO IGNACIO CARRERA PINTO",
+   "comuna": "Victoria",
+   "n_electores": 523,
+   "fecha_estimada": "2026-06-24",
+   "dias_restantes": 8,
+   "avance": 0,
+   "herramienta": "sige",
+   "tipo_origen": "recinto"
+  }
  }
 }
