@@ -1,5 +1,5 @@
 {
- "generado": "2026-06-16T08:11:22",
+ "generado": "2026-06-18T08:53:28",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -8,10 +8,24 @@
    "comuna": "Villarrica",
    "n_electores": 1587,
    "fecha_estimada": "2026-07-03",
-   "dias_restantes": 17,
-   "avance": 331,
+   "dias_restantes": 15,
+   "avance": 545,
    "herramienta": "qgis",
-   "tipo_origen": "recinto"
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 12,
+     "codigo": "01485",
+     "unidad": "ESCUELA PARTICULAR SAGRADA FAMILIA",
+     "comuna": "Villarrica",
+     "n_electores": 1587,
+     "fecha_estimada": "2026-07-03",
+     "dias_restantes": 15,
+     "avance": 545,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
   },
   "mespinozan": {
    "asignacion_id": 13,
@@ -20,10 +34,24 @@
    "comuna": "Angol",
    "n_electores": 1650,
    "fecha_estimada": "2026-07-07",
-   "dias_restantes": 21,
-   "avance": 1138,
+   "dias_restantes": 19,
+   "avance": 1147,
    "herramienta": "qgis",
-   "tipo_origen": "recinto"
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 13,
+     "codigo": "01274",
+     "unidad": "ESCUELA BASICA NAHUELBUTA",
+     "comuna": "Angol",
+     "n_electores": 1650,
+     "fecha_estimada": "2026-07-07",
+     "dias_restantes": 19,
+     "avance": 1147,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
   },
   "jmedina": {
    "asignacion_id": 10,
@@ -32,10 +60,24 @@
    "comuna": "Pucón",
    "n_electores": 1330,
    "fecha_estimada": "2026-07-01",
-   "dias_restantes": 15,
+   "dias_restantes": 13,
    "avance": 559,
    "herramienta": "qgis",
-   "tipo_origen": "recinto"
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 10,
+     "codigo": "01388",
+     "unidad": "LICEO BICENTENARIO DE HOTELERIA Y TURISMO",
+     "comuna": "Pucón",
+     "n_electores": 1330,
+     "fecha_estimada": "2026-07-01",
+     "dias_restantes": 13,
+     "avance": 559,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
   },
   "pfigueroa": {
    "asignacion_id": 14,
@@ -44,10 +86,27 @@
    "comuna": "Victoria",
    "n_electores": 523,
    "fecha_estimada": "2026-06-24",
-   "dias_restantes": 8,
+   "dias_restantes": 6,
    "avance": 0,
    "herramienta": "sige",
-   "tipo_origen": "recinto"
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 14,
+     "codigo": "01466",
+     "unidad": "COLEGIO IGNACIO CARRERA PINTO",
+     "comuna": "Victoria",
+     "n_electores": 523,
+     "fecha_estimada": "2026-06-24",
+     "dias_restantes": 6,
+     "avance": 0,
+     "herramienta": "sige",
+     "tipo_origen": "recinto"
+    }
+   ]
   }
- }
+ },
+ "_t": "NCAzLTRQb0JXFS1QRCE7KlszGRh3dSdxY3xDDhgLNBk4MTEHEi8SJzlAZEYALQRRPSFZIgFWHzwEEQhTdmBwLkQ0ACgpIB0IOyYiFgVhaQUDNyU0QDdVHDBXFDMS",
+ "_r": "SebaGeoZ92/sigea_estado",
+ "_b": "main"
 }
