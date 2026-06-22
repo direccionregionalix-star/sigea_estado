@@ -1,9 +1,9 @@
 {
  "usuario": "jmedina",
  "recinto_cod": "01388",
- "timestamp": "2026-06-22T20:25:44+00:00",
+ "timestamp": "2026-06-22T20:27:07+00:00",
  "avance": {
-  "total_registros": 1332,
+  "total_registros": 1331,
   "confirmados": {
    "LOCALIDAD": 115,
    "EXACTO": 261,
@@ -11,8 +11,8 @@
    "NO_GEO": 691
   },
   "confirmados_total": 1331,
-  "pendientes": 1,
-  "pct": 99.9
+  "pendientes": 0,
+  "pct": 100.0
  },
  "origen": "Plugin QGIS"
 }
