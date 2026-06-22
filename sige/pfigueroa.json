@@ -2,20 +2,20 @@
   "usuario": "pfigueroa",
   "recinto_cod": "01466",
   "archivo": "R01466_COLEGIO_IGNACIO_CARRERA_PINTO_padron",
-  "timestamp": "2026-06-22T17:33:26.790Z",
+  "timestamp": "2026-06-22T18:08:26.912Z",
   "avance": {
     "total_registros": 523,
     "total_clusters": 490,
     "confirmados": {
       "EXACTO": 88,
-      "CALLE": 196,
+      "CALLE": 198,
       "LOCALIDAD": 44,
-      "NO_GEO": 134
+      "NO_GEO": 135
     },
-    "confirmados_total": 462,
+    "confirmados_total": 465,
     "por_revisar": 0,
-    "pendientes": 61,
-    "pct": 88.3
+    "pendientes": 58,
+    "pct": 88.9
   },
   "origen": "SIGE 4.1"
 }
