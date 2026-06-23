@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <plugins>
-  <pyqgis_plugin name="SIGEA Panel" version="1.4.5">
+  <pyqgis_plugin name="SIGEA Panel" version="1.4.7">
     <description>Panel de rectificación electoral integrado con SIGEA DR Araucanía</description>
     <about>Asignaciones, rectificación tipo_geo, avance a GitHub, sesión local de trabajo (sin conflictos OneDrive) y selector de asignaciones múltiples.</about>
-    <version>1.4.5</version>
+    <version>1.4.7</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99.99</qgis_maximum_version>
     <homepage>https://sigeadmin.netlify.app</homepage>
-    <file_name>sigea_panel.1.4.5.zip</file_name>
+    <file_name>sigea_panel.1.4.7.zip</file_name>
     <icon>icon.png</icon>
     <author_name>SERVEL DR Araucanía</author_name>
-    <download_url>https://sigeadmin.netlify.app/sigea_panel.1.4.5.zip</download_url>
+    <download_url>https://sigeadmin.netlify.app/sigea_panel.1.4.7.zip</download_url>
     <update_date>2026-06-18</update_date>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
