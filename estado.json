@@ -1,5 +1,5 @@
 {
- "generado": "2026-06-18T08:53:28",
+ "generado": "2026-06-23T14:49:57",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -8,8 +8,8 @@
    "comuna": "Villarrica",
    "n_electores": 1587,
    "fecha_estimada": "2026-07-03",
-   "dias_restantes": 15,
-   "avance": 545,
+   "dias_restantes": 10,
+   "avance": 668,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
@@ -20,8 +20,8 @@
      "comuna": "Villarrica",
      "n_electores": 1587,
      "fecha_estimada": "2026-07-03",
-     "dias_restantes": 15,
-     "avance": 545,
+     "dias_restantes": 10,
+     "avance": 668,
      "herramienta": "qgis",
      "tipo_origen": "recinto"
     }
@@ -34,8 +34,8 @@
    "comuna": "Angol",
    "n_electores": 1650,
    "fecha_estimada": "2026-07-07",
-   "dias_restantes": 19,
-   "avance": 1147,
+   "dias_restantes": 14,
+   "avance": 1289,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
@@ -46,39 +46,14 @@
      "comuna": "Angol",
      "n_electores": 1650,
      "fecha_estimada": "2026-07-07",
-     "dias_restantes": 19,
-     "avance": 1147,
+     "dias_restantes": 14,
+     "avance": 1289,
      "herramienta": "qgis",
      "tipo_origen": "recinto"
     }
    ]
   },
-  "jmedina": {
-   "asignacion_id": 10,
-   "codigo": "01388",
-   "unidad": "LICEO BICENTENARIO DE HOTELERIA Y TURISMO",
-   "comuna": "Pucón",
-   "n_electores": 1330,
-   "fecha_estimada": "2026-07-01",
-   "dias_restantes": 13,
-   "avance": 559,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 10,
-     "codigo": "01388",
-     "unidad": "LICEO BICENTENARIO DE HOTELERIA Y TURISMO",
-     "comuna": "Pucón",
-     "n_electores": 1330,
-     "fecha_estimada": "2026-07-01",
-     "dias_restantes": 13,
-     "avance": 559,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "jmedina": null,
   "pfigueroa": {
    "asignacion_id": 14,
    "codigo": "01466",
@@ -86,7 +61,7 @@
    "comuna": "Victoria",
    "n_electores": 523,
    "fecha_estimada": "2026-06-24",
-   "dias_restantes": 6,
+   "dias_restantes": 1,
    "avance": 0,
    "herramienta": "sige",
    "tipo_origen": "recinto",
@@ -98,7 +73,7 @@
      "comuna": "Victoria",
      "n_electores": 523,
      "fecha_estimada": "2026-06-24",
-     "dias_restantes": 6,
+     "dias_restantes": 1,
      "avance": 0,
      "herramienta": "sige",
      "tipo_origen": "recinto"
