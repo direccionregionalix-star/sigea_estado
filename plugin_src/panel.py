@@ -273,6 +273,14 @@ class SigeaPanel(QWidget):
         self._btn_entregar.setEnabled(False)
         root.addWidget(self._btn_entregar)
 
+        # Botón Admin — solo visible si el token tiene permisos de escritura
+        self._btn_admin = QPushButton("🔑  Modo Admin")
+        self._btn_admin.setStyleSheet(self._estilo("#7b1fa2", "#9c27b0"))
+        self._btn_admin.clicked.connect(self._abrir_admin)
+        self._btn_admin.setVisible(False)
+        self._btn_admin.setToolTip("Gestión de asignaciones, QA y cierres (solo admin)")
+        root.addWidget(self._btn_admin)
+
         root.addStretch()
 
         self._lbl_msg = QLabel("")
@@ -325,8 +333,10 @@ class SigeaPanel(QWidget):
             self._set_modo("online", generado)
             if asig is None:
                 self._set_sin_asignacion()
-                return
-            self._aplicar_asignacion(asig)
+            else:
+                self._aplicar_asignacion(asig)
+            # Detectar permisos admin en background (no bloquea la carga)
+            self._detectar_admin()
             return
         except api.SigeaError:
             pass
@@ -334,6 +344,30 @@ class SigeaPanel(QWidget):
         # 2) Caché local
         self._set_modo("cache")
         self._modo_desconectado()
+
+    def _detectar_admin(self):
+        """Verifica si el token tiene push access al repo. GET, no write."""
+        try:
+            from . import github_report
+            from urllib import request as urllib_request, error as urllib_error
+            import json as _json
+            creds = github_report._obtener_credenciales()
+            url = f"https://api.github.com/repos/{creds['repo']}"
+            req = urllib_request.Request(url)
+            req.add_header("Authorization", f"Bearer {creds['token']}")
+            req.add_header("Accept", "application/vnd.github+json")
+            req.add_header("User-Agent", "SIGEA-Plugin")
+            with urllib_request.urlopen(req, timeout=8) as r:
+                data = _json.loads(r.read().decode())
+            tiene_push = data.get("permissions", {}).get("push", False)
+            self._btn_admin.setVisible(tiene_push)
+        except Exception:
+            self._btn_admin.setVisible(False)
+
+    def _abrir_admin(self):
+        from .admin_dialog import AdminDialog
+        dlg = AdminDialog(self)
+        dlg.exec()
 
     def _set_modo(self, modo, generado=""):
         """Modo de operación: online | cache."""
@@ -920,13 +954,20 @@ class SigeaPanel(QWidget):
         # aparte con "Pausar y sincronizar" (no aquí: editamos copia local).
         conteos, total = self._conteos_capa()
         codigo = self._codigo_activo or ""
-        from . import github_report
+        from . import github_report, bitacora
         ok, msg = github_report.publicar_avance(codigo, conteos, total)
         if ok:
             n_rev = sum(n for t, n in conteos.items() if int(t) not in (8, 9))
             self.asignacion["avance"] = n_rev
             self._actualizar_vista()
             self._set_msg(f"✓ {msg}")
+            # Bitácora: evento avance (best-effort, no bloquea si falla)
+            nombres = github_report.NOMBRES
+            conf_named = {nombres.get(int(t), f"TIPO_{t}"): n
+                          for t, n in conteos.items() if int(t) not in (8, 9)}
+            pct = round(100 * n_rev / total, 1) if total else 0
+            bitacora.evento_avance(codigo, settings.usuario(),
+                                   conf_named, n_rev, total, pct)
         else:
             self._set_msg(f"Error: {msg}", error=True)
 
@@ -979,14 +1020,22 @@ class SigeaPanel(QWidget):
         if dlg.exec() != DialogAccepted:
             return
 
-        # Publicar avance final a GitHub (mismo mecanismo que registrar_avance)
-        from . import github_report
+        # Publicar avance final a GitHub + evento entrega en bitácora
+        from . import github_report, bitacora
         codigo = self._codigo_activo or ""
         ok, msg = github_report.publicar_avance(
             codigo, conteos, total_feat,
             metadata_version="entrega")
         if ok:
-            self._set_msg("✓ Recinto entregado y avance publicado en GitHub.")
+            # Bitácora: evento entrega con conteos por tipo
+            nombres = github_report.NOMBRES
+            conf_named = {nombres.get(int(t), f"TIPO_{t}"): n
+                          for t, n in conteos.items() if int(t) not in (8, 9)}
+            n_conf = sum(conf_named.values())
+            pct = round(100 * n_conf / total_feat, 1) if total_feat else 0
+            bitacora.evento_entrega(codigo, settings.usuario(),
+                                    conf_named, n_conf, total_feat, pct)
+            self._set_msg("✓ Recinto entregado, avance y bitácora publicados.")
             if layer:
                 QgsProject.instance().removeMapLayer(layer.id())
                 self.capa_activa = None

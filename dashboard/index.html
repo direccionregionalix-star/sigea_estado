@@ -299,7 +299,8 @@ const QGIS_BASE  = "./qgis/";
 const SIGE_BASE  = "./sige/";
 const REFRESH_MS = 5 * 60 * 1000;           // 5 min
 
-const USUARIOS = ["igarrido", "jmedina", "mespinozan", "pfigueroa"];
+// Fix A: usuarios dinámicos — se extraen de estado.json al cargar
+let USUARIOS = [];
 
 const COLOR = {
   EXACTO:       "#27ae60",
@@ -321,6 +322,11 @@ function colorTipo(tipo) {
 
 function clsTipo(tipo) {
   return "c-" + (COLOR[tipo] ? tipo : "OTRO");
+}
+
+// Fix B: etiqueta para tipos desconocidos
+function labelTipo(tipo) {
+  return COLOR[tipo] ? tipo : `Tipo desconocido (${tipo})`;
 }
 
 async function fetchJSON(url) {
@@ -423,14 +429,14 @@ function renderTarjeta(usuario, asig, rep) {
       return `<span style="width:${w}%;background:${colorTipo(tipo)}" title="${tipo}: ${fmt(n)}"></span>`;
     }).join("");
 
-  // conteos por tipo
+  // conteos por tipo — Fix B: tipos desconocidos en gris con etiqueta
   const conteoItems = Object.entries(confirmados)
     .sort(([,a],[,b]) => b - a)
     .map(([tipo, n]) => `
       <span class="conteo-item">
         <span class="dot ${clsTipo(tipo)}"></span>
         <span class="conteo-n">${fmt(n)}</span>
-        <span class="conteo-lbl">${tipo}</span>
+        <span class="conteo-lbl">${labelTipo(tipo)}</span>
       </span>`).join("");
 
   // pills de estado
@@ -518,10 +524,13 @@ async function cargar() {
   const funcEl = document.getElementById("funcionarios");
 
   try {
-    const [estado, avances] = await Promise.all([
-      fetchJSON(ESTADO_URL),
-      cargarAvances(USUARIOS),
-    ]);
+    // Fix A: cargar estado primero para extraer usuarios dinámicamente
+    const estado = await fetchJSON(ESTADO_URL);
+    const funcionarios = estado.funcionarios || {};
+    // Todos los usuarios del estado, con o sin asignación
+    USUARIOS = Object.keys(funcionarios);
+
+    const avances = await cargarAvances(USUARIOS);
 
     loadEl.style.display = "none";
     errEl.style.display  = "none";
@@ -536,7 +545,6 @@ async function cargar() {
 
     renderTotales(estado, avances);
 
-    const funcionarios = estado.funcionarios || {};
     funcEl.innerHTML = USUARIOS
       .map(u => renderTarjeta(u, funcionarios[u] ?? null, avances[u] ?? null))
       .join("");

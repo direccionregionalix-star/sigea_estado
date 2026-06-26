@@ -1,0 +1,12 @@
+{
+  "name": "sigea-mail-server",
+  "version": "1.0.0",
+  "description": "Servidor de notificaciones SIGEA DR Araucanía",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "optionalDependencies": {
+    "nodemailer": "^6.9.0"
+  }
+}
