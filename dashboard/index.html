@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGEA — Estado Rectificación La Araucanía</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rojo: #c0392b;
+    --rojo-oscuro: #922b21;
+    --gris-fondo: #f4f5f7;
+    --gris-borde: #dde1e7;
+    --gris-texto: #5a6270;
+    --negro: #1a1d23;
+    --blanco: #ffffff;
+    --verde: #27ae60;
+    --amarillo: #f39c12;
+    --azul: #2980b9;
+    --morado: #8e44ad;
+    --celeste: #16a085;
+    --naranja: #d35400;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--gris-fondo);
+    color: var(--negro);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--rojo);
+    color: var(--blanco);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+
+  header h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+
+  header h1 span {
+    font-weight: 400;
+    opacity: .85;
+    font-size: .95rem;
+  }
+
+  #meta {
+    font-size: .78rem;
+    opacity: .8;
+    text-align: right;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  /* ─── Totalizador ─── */
+  #totales {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: .75rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .total-card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    padding: .9rem 1rem;
+    text-align: center;
+  }
+
+  .total-card .val {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .total-card .lbl {
+    font-size: .72rem;
+    color: var(--gris-texto);
+    margin-top: .3rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  .total-card.destacado { border-color: var(--rojo); }
+  .total-card.destacado .val { color: var(--rojo); }
+
+  /* ─── Tarjetas funcionario ─── */
+  #funcionarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+
+  .card-header {
+    padding: .85rem 1.1rem .7rem;
+    border-bottom: 1px solid var(--gris-borde);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: .5rem;
+  }
+
+  .card-header h2 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .card-header .sub {
+    font-size: .78rem;
+    color: var(--gris-texto);
+    margin-top: .15rem;
+    line-height: 1.4;
+  }
+
+  .badge-pct {
+    font-size: 1.4rem;
+    font-weight: 800;
+    white-space: nowrap;
+    color: var(--rojo);
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* barra de progreso */
+  .barra-wrap {
+    padding: .6rem 1.1rem .5rem;
+  }
+
+  .barra-outer {
+    height: 10px;
+    background: var(--gris-fondo);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .barra-inner {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--rojo);
+    transition: width .4s ease;
+  }
+
+  /* stacked bar por tipo */
+  .tipos-bar-wrap {
+    padding: 0 1.1rem .5rem;
+  }
+
+  .tipos-bar {
+    height: 8px;
+    border-radius: 99px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .tipos-bar span {
+    height: 100%;
+    transition: width .4s ease;
+  }
+
+  /* tabla de conteos */
+  .conteos {
+    padding: .4rem 1.1rem .9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem .8rem;
+  }
+
+  .conteo-item {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .78rem;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .conteo-n { font-weight: 700; }
+  .conteo-lbl { color: var(--gris-texto); }
+
+  /* pie de tarjeta */
+  .card-footer {
+    padding: .55rem 1.1rem;
+    background: var(--gris-fondo);
+    border-top: 1px solid var(--gris-borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .3rem;
+    font-size: .74rem;
+    color: var(--gris-texto);
+  }
+
+  .pill {
+    padding: .2rem .55rem;
+    border-radius: 99px;
+    font-size: .7rem;
+    font-weight: 600;
+    background: var(--gris-borde);
+    color: var(--negro);
+  }
+
+  .pill.qgis  { background: #d6eaf8; color: #1a5276; }
+  .pill.sige  { background: #e8daef; color: #6c3483; }
+  .pill.alerta { background: #fdebd0; color: #935116; }
+  .pill.ok     { background: #d5f5e3; color: #1e8449; }
+
+  /* sin asignación */
+  .sin-asig {
+    padding: 1.1rem;
+    color: var(--gris-texto);
+    font-size: .85rem;
+    font-style: italic;
+  }
+
+  /* estado de carga */
+  #loading, #error-msg {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gris-texto);
+  }
+
+  #error-msg { color: var(--rojo); }
+
+  /* colores por tipo geo */
+  .c-EXACTO      { background: #27ae60; }
+  .c-CALLE       { background: #2980b9; }
+  .c-LOCALIDAD   { background: #f39c12; }
+  .c-NO_GEO      { background: #bdc3c7; }
+  .c-PROXIMIDAD  { background: #16a085; }
+  .c-FUERA_COMUNA{ background: #d35400; }
+  .c-AUTOGEO     { background: #8e44ad; }
+  .c-MASIVO      { background: #1abc9c; }
+  .c-OTRO        { background: #95a5a6; }
+
+  @media (max-width: 500px) {
+    #funcionarios { grid-template-columns: 1fr; }
+    .badge-pct { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>SIGEA <span>— Rectificación Electoral La Araucanía</span></h1>
+  </div>
+  <div id="meta">
+    <div id="ts-generado">Cargando…</div>
+    <div id="ts-lectura"></div>
+  </div>
+</header>
+
+<main>
+  <div id="loading">Leyendo estado…</div>
+  <div id="error-msg" style="display:none"></div>
+
+  <div id="totales" style="display:none"></div>
+  <div id="funcionarios" style="display:none"></div>
+</main>
+
+<script>
+// ─── Configuración ───────────────────────────────────────────────────────────
+// La URL base se resuelve desde el mismo estado.json (_r y _b),
+// así nunca hay que hardcodear el repo DRIX acá.
+// Para el arranque se lee desde la misma ubicación del dashboard.
+
+const ESTADO_URL = "./estado.json";          // relativo; Railway sirve desde raíz del repo
+const QGIS_BASE  = "./qgis/";
+const SIGE_BASE  = "./sige/";
+const REFRESH_MS = 5 * 60 * 1000;           // 5 min
+
+const USUARIOS = ["igarrido", "jmedina", "mespinozan", "pfigueroa"];
+
+const COLOR = {
+  EXACTO:       "#27ae60",
+  CALLE:        "#2980b9",
+  LOCALIDAD:    "#f39c12",
+  NO_GEO:       "#bdc3c7",
+  PROXIMIDAD:   "#16a085",
+  FUERA_COMUNA: "#d35400",
+  AUTOGEO:      "#8e44ad",
+  MASIVO:       "#1abc9c",
+};
+const COLOR_FALLBACK = "#95a5a6";
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function colorTipo(tipo) {
+  return COLOR[tipo] || COLOR_FALLBACK;
+}
+
+function clsTipo(tipo) {
+  return "c-" + (COLOR[tipo] ? tipo : "OTRO");
+}
+
+async function fetchJSON(url) {
+  const r = await fetch(url + "?_=" + Date.now());
+  if (!r.ok) throw new Error(r.status + " " + r.statusText);
+  return r.json();
+}
+
+function fmt(n) { return (n ?? 0).toLocaleString("es-CL"); }
+
+function tsRelativo(isoStr) {
+  if (!isoStr) return "";
+  const d = new Date(isoStr);
+  const diff = Math.floor((Date.now() - d) / 1000);
+  if (diff < 60)   return "hace un momento";
+  if (diff < 3600) return `hace ${Math.floor(diff/60)} min`;
+  if (diff < 86400)return `hace ${Math.floor(diff/3600)} h`;
+  return `hace ${Math.floor(diff/86400)} día(s)`;
+}
+
+function fmtFecha(isoStr) {
+  if (!isoStr) return "—";
+  return new Date(isoStr).toLocaleString("es-CL", {
+    day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"
+  });
+}
+
+// ─── Render ──────────────────────────────────────────────────────────────────
+
+function renderTotales(estado, avances) {
+  const funcionarios = estado.funcionarios || {};
+
+  let totalElectores = 0, totalConfirmados = 0, sinAsig = 0, conAsig = 0;
+
+  for (const u of USUARIOS) {
+    const asig = funcionarios[u];
+    if (!asig) { sinAsig++; continue; }
+    conAsig++;
+    totalElectores += asig.n_electores || 0;
+    // preferir avance detallado del reporte, si existe
+    const rep = avances[u];
+    if (rep) totalConfirmados += rep.avance?.confirmados_total || 0;
+    else     totalConfirmados += asig.avance || 0;
+  }
+
+  const pctTotal = totalElectores
+    ? Math.round(100 * totalConfirmados / totalElectores * 10) / 10
+    : 0;
+
+  const cards = [
+    { val: pctTotal + "%",        lbl: "Avance global",    cls: "destacado" },
+    { val: fmt(totalConfirmados), lbl: "Confirmados",      cls: "" },
+    { val: fmt(totalElectores - totalConfirmados), lbl: "Pendientes", cls: "" },
+    { val: fmt(totalElectores),   lbl: "Total electores",  cls: "" },
+    { val: conAsig + " / " + USUARIOS.length, lbl: "Funcionarios activos", cls: "" },
+  ];
+
+  const el = document.getElementById("totales");
+  el.innerHTML = cards.map(c => `
+    <div class="total-card ${c.cls}">
+      <div class="val">${c.val}</div>
+      <div class="lbl">${c.lbl}</div>
+    </div>
+  `).join("");
+  el.style.display = "grid";
+}
+
+function renderTarjeta(usuario, asig, rep) {
+  // asig puede ser null (sin asignación)
+  if (!asig) {
+    return `
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>${usuario}</h2>
+            <div class="sub">Sin asignación activa</div>
+          </div>
+          <div class="badge-pct" style="color:var(--gris-texto)">—</div>
+        </div>
+        <div class="sin-asig">No hay recinto asignado actualmente.</div>
+      </div>`;
+  }
+
+  const pct  = rep ? rep.avance.pct : (asig.n_electores
+    ? Math.round(100 * asig.avance / asig.n_electores * 10) / 10
+    : 0);
+  const total = rep ? rep.avance.total_registros : asig.n_electores;
+  const conf  = rep ? rep.avance.confirmados_total : asig.avance;
+  const pend  = rep ? rep.avance.pendientes : (total - conf);
+  const confirmados = rep ? rep.avance.confirmados : {};
+  const origen = rep ? rep.avance : null;
+  const herr   = rep ? rep.origen : (asig.herramienta || "");
+  const ts     = rep ? rep.timestamp : "";
+
+  // barra por tipos
+  const tiposBar = Object.entries(confirmados)
+    .filter(([,n]) => n > 0)
+    .map(([tipo, n]) => {
+      const w = total ? (100 * n / total).toFixed(1) : 0;
+      return `<span style="width:${w}%;background:${colorTipo(tipo)}" title="${tipo}: ${fmt(n)}"></span>`;
+    }).join("");
+
+  // conteos por tipo
+  const conteoItems = Object.entries(confirmados)
+    .sort(([,a],[,b]) => b - a)
+    .map(([tipo, n]) => `
+      <span class="conteo-item">
+        <span class="dot ${clsTipo(tipo)}"></span>
+        <span class="conteo-n">${fmt(n)}</span>
+        <span class="conteo-lbl">${tipo}</span>
+      </span>`).join("");
+
+  // pills de estado
+  let pillHerr = "";
+  if (herr.toLowerCase().includes("qgis")) pillHerr = `<span class="pill qgis">QGIS</span>`;
+  else if (herr.toLowerCase().includes("sige")) pillHerr = `<span class="pill sige">SIGE</span>`;
+
+  const diasRest = asig.dias_restantes ?? "—";
+  const pillDias = diasRest <= 2
+    ? `<span class="pill alerta">${diasRest}d restantes</span>`
+    : `<span class="pill ok">${diasRest}d restantes</span>`;
+
+  // campos extra SIGE
+  let extraSige = "";
+  if (rep && rep.avance.total_clusters != null) {
+    extraSige = `<span>${fmt(rep.avance.total_clusters)} clusters</span>`;
+  }
+
+  const pctColor = pct >= 80 ? "var(--verde)" : pct >= 40 ? "var(--amarillo)" : "var(--rojo)";
+
+  return `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>${usuario}</h2>
+          <div class="sub">
+            ${asig.unidad || "—"}<br>
+            ${asig.comuna || ""} · ${fmt(total)} electores
+          </div>
+        </div>
+        <div class="badge-pct" style="color:${pctColor}">${pct}%</div>
+      </div>
+
+      <div class="barra-wrap">
+        <div class="barra-outer">
+          <div class="barra-inner" style="width:${pct}%;background:${pctColor}"></div>
+        </div>
+      </div>
+
+      ${tiposBar ? `
+      <div class="tipos-bar-wrap">
+        <div class="tipos-bar">${tiposBar}</div>
+      </div>` : ""}
+
+      ${conteoItems ? `<div class="conteos">${conteoItems}</div>` : ""}
+
+      <div class="card-footer">
+        <span>${fmt(conf)} confirmados · ${fmt(pend)} pendientes</span>
+        <span style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+          ${pillHerr}
+          ${pillDias}
+          ${extraSige}
+        </span>
+      </div>
+
+      ${ts ? `
+      <div class="card-footer" style="padding-top:.35rem;padding-bottom:.35rem">
+        <span>Último reporte: ${fmtFecha(ts)} (${tsRelativo(ts)})</span>
+        <span>Código ${rep?.recinto_cod || asig.codigo}</span>
+      </div>` : ""}
+    </div>`;
+}
+
+// ─── Carga de datos ──────────────────────────────────────────────────────────
+
+async function cargarAvances(usuarios) {
+  const avances = {};
+  await Promise.allSettled(
+    usuarios.map(async u => {
+      // intenta qgis/ primero, luego sige/
+      for (const base of [QGIS_BASE, SIGE_BASE]) {
+        try {
+          const data = await fetchJSON(base + u + ".json");
+          if (data && data.avance) { avances[u] = data; return; }
+        } catch (_) { /* no existe, prueba siguiente */ }
+      }
+    })
+  );
+  return avances;
+}
+
+async function cargar() {
+  const loadEl = document.getElementById("loading");
+  const errEl  = document.getElementById("error-msg");
+  const funcEl = document.getElementById("funcionarios");
+
+  try {
+    const [estado, avances] = await Promise.all([
+      fetchJSON(ESTADO_URL),
+      cargarAvances(USUARIOS),
+    ]);
+
+    loadEl.style.display = "none";
+    errEl.style.display  = "none";
+
+    // meta header
+    document.getElementById("ts-generado").textContent =
+      "Estado: " + (estado.generado
+        ? new Date(estado.generado).toLocaleString("es-CL")
+        : "—");
+    document.getElementById("ts-lectura").textContent =
+      "Lectura: " + new Date().toLocaleTimeString("es-CL");
+
+    renderTotales(estado, avances);
+
+    const funcionarios = estado.funcionarios || {};
+    funcEl.innerHTML = USUARIOS
+      .map(u => renderTarjeta(u, funcionarios[u] ?? null, avances[u] ?? null))
+      .join("");
+    funcEl.style.display = "grid";
+
+  } catch (e) {
+    loadEl.style.display = "none";
+    errEl.style.display  = "block";
+    errEl.textContent    = "Error cargando datos: " + e.message;
+    console.error(e);
+  }
+}
+
+// ─── Arranque ────────────────────────────────────────────────────────────────
+cargar();
+setInterval(cargar, REFRESH_MS);
+</script>
+</body>
+</html>
