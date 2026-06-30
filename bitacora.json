@@ -94,6 +94,15 @@
     "motivo": "",
     "conservo_avance": false
    }
+  },
+  {
+   "ts": "2026-06-30T18:11:03+00:00",
+   "tipo": "asignacion",
+   "recinto": "03624",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "admin"
+   }
   }
  ]
 }
