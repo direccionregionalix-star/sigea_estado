@@ -9,6 +9,15 @@
     "tipo_detectado": "TIPO_40",
     "recinto": "01274"
    }
+  },
+  {
+   "ts": "2026-06-30T14:31:07+00:00",
+   "tipo": "asignacion",
+   "recinto": "03624",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "igarrido"
+   }
   }
  ]
 }
