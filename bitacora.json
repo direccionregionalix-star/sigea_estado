@@ -18,6 +18,16 @@
    "detalle": {
     "asignado_por": "igarrido"
    }
+  },
+  {
+   "ts": "2026-06-30T14:41:26+00:00",
+   "tipo": "qa",
+   "recinto": "03624",
+   "funcionario": "jmedina",
+   "detalle": {
+    "resultado": "aprobado",
+    "comentario": ""
+   }
   }
  ]
 }
