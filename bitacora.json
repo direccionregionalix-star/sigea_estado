@@ -1,0 +1,14 @@
+{
+ "eventos": [
+  {
+   "ts": "2026-06-30T12:23:13+00:00",
+   "tipo": "alerta_tipo",
+   "recinto": "01274",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "tipo_detectado": "TIPO_40",
+    "recinto": "01274"
+   }
+  }
+ ]
+}
