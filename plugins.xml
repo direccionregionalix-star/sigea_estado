@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <plugins>
-  <pyqgis_plugin name="SIGEA Panel" version="1.8.0">
+  <pyqgis_plugin name="SIGEA Panel" version="1.8.1">
     <description>Panel de rectificación electoral integrado con SIGEA DR Araucanía</description>
-    <about>v1.8.0: devolver asignación (con/sin avance) desde panel y admin, con rastro en bitácora. v1.7.x: modo admin local — recintos desde central.gpkg, asignar extrayendo gpkg, entrega a QA_pendiente (SHA-256), reimporte validado al central con respaldo, firma GeoPackage. v1.6.0: bitácora, modo admin online, mail.</about>
-    <version>1.8.0</version>
+    <about>v1.8.1: devolver asignación (con/sin avance) desde panel y admin, con rastro en bitácora. v1.7.x: modo admin local — recintos desde central.gpkg, asignar extrayendo gpkg, entrega a QA_pendiente (SHA-256), reimporte validado al central con respaldo, firma GeoPackage. v1.6.0: bitácora, modo admin online, mail.</about>
+    <version>1.8.1</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99.99</qgis_maximum_version>
     <homepage>https://sigeadmin.netlify.app</homepage>
-    <file_name>sigea_panel.1.8.0.zip</file_name>
+    <file_name>sigea_panel.1.8.1.zip</file_name>
     <icon>icon.png</icon>
     <author_name>SERVEL DR Araucanía</author_name>
-    <download_url>https://sigeadmin.netlify.app/sigea_panel.1.8.0.zip</download_url>
+    <download_url>https://sigeadmin.netlify.app/sigea_panel.1.8.1.zip</download_url>
     <update_date>2026-06-30</update_date>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
