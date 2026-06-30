@@ -46,6 +46,16 @@
    "detalle": {
     "cerrado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-06-30T14:45:54+00:00",
+   "tipo": "qa",
+   "recinto": "03624",
+   "funcionario": "jmedina",
+   "detalle": {
+    "resultado": "aprobado",
+    "comentario": ""
+   }
   }
  ]
 }
