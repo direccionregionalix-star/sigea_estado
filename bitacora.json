@@ -65,6 +65,16 @@
    "detalle": {
     "cerrado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-06-30T17:50:13+00:00",
+   "tipo": "devolucion",
+   "recinto": "03624",
+   "funcionario": "jmedina",
+   "detalle": {
+    "motivo": "",
+    "conservo_avance": false
+   }
   }
  ]
 }
