@@ -346,10 +346,14 @@ class SigeaPanel(QWidget):
         self._modo_desconectado()
 
     def _detectar_admin(self):
-        """Verifica si el token tiene push access al repo. GET, no write."""
+        """Muestra el botón Admin solo si el token tiene push access
+        Y el checkbox 'Habilitar modo admin' está activado en configuración."""
+        if not settings.modo_admin_habilitado():
+            self._btn_admin.setVisible(False)
+            return
         try:
             from . import github_report
-            from urllib import request as urllib_request, error as urllib_error
+            from urllib import request as urllib_request
             import json as _json
             creds = github_report._obtener_credenciales()
             url = f"https://api.github.com/repos/{creds['repo']}"

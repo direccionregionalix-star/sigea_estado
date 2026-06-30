@@ -111,3 +111,12 @@ def carpeta_trabajo_local():
 
 def set_carpeta_trabajo_local(ruta):
     _write("carpeta_trabajo_local", (ruta or "").strip())
+
+
+# --- Modo admin (apagado por defecto — requiere checkbox explícito) ---
+def modo_admin_habilitado():
+    return _read("modo_admin_habilitado", "false") == "true"
+
+
+def set_modo_admin_habilitado(value):
+    _write("modo_admin_habilitado", "true" if value else "false")
