@@ -28,6 +28,15 @@
     "resultado": "aprobado",
     "comentario": ""
    }
+  },
+  {
+   "ts": "2026-06-30T14:42:07+00:00",
+   "tipo": "asignacion",
+   "recinto": "03624",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "jmedina"
+   }
   }
  ]
 }
