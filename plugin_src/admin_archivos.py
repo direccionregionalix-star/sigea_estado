@@ -79,6 +79,17 @@ def ruta_historico_central():
     return _asegurar_dir(os.path.join(dev, "_historico_central"))
 
 
+def ruta_devuelto(codigo):
+    """Ruta del gpkg conservado al devolver una asignación CON avance.
+    Mismo nivel y patrón que QA_pendiente/ — carpeta Devueltos/. Un funcionario
+    reasignado continúa desde aquí en vez de extraer uno nuevo del central."""
+    dev = _carpeta_dev007()
+    if not dev:
+        return None
+    return os.path.join(_asegurar_dir(os.path.join(dev, "Devueltos")),
+                        f"R{codigo}.gpkg")
+
+
 # ─── Lectura del central ──────────────────────────────────────────────────────
 
 def _col_geom_central(con):
@@ -144,15 +155,24 @@ def listar_recintos_central(estado=None):
         con.close()
 
         # Construir mapa de asignaciones desde estado
-        asig_map = {}   # codigo → usuario
+        asig_map = {}      # codigo → usuario (asignado / en_qa)
         cerrado_set = set()
+        devuelto_map = {}  # codigo → usuario que devolvió con avance (Pieza 7)
         if estado:
             for usuario, asig in estado.get("funcionarios", {}).items():
                 if asig and asig.get("codigo"):
                     cod = str(asig["codigo"])
+                    flujo = asig.get("estado_flujo")
                     if asig.get("estado") == "cerrado":
                         cerrado_set.add(cod)
+                    elif flujo == "devuelto_con_avance":
+                        # Recinto devuelto conservando avance: queda disponible
+                        # para reasignación (continúa desde Devueltos/), no ocupa.
+                        devuelto_map[cod] = usuario
                     else:
+                        # Asignado normal o liberado en_qa (sigue ocupando).
+                        # Una devolución SIN avance deja la ranura en None, así
+                        # que aquí no aparece y el recinto vuelve a pendiente.
                         asig_map[cod] = usuario
 
         resultado = []
@@ -166,6 +186,9 @@ def listar_recintos_central(estado=None):
             if codigo in cerrado_set:
                 est = "cerrado"
                 asig_a = None
+            elif codigo in devuelto_map:
+                est = "devuelto"
+                asig_a = devuelto_map[codigo]
             elif codigo in asig_map:
                 est = "asignado"
                 asig_a = asig_map[codigo]
@@ -195,6 +218,11 @@ def _gpkg_vacio(ruta, tabla, col_geom, col_names_tipos):
     if os.path.exists(ruta):
         os.remove(ruta)
     con = sqlite3.connect(ruta)
+    # FIRMA GEOPACKAGE: sin esto QGIS rechaza el archivo con
+    # "bad application_id=0x00000000". Debe ir ANTES de crear tablas.
+    # 1196444487 = 0x47504B47 = "GPKG" en ASCII. user_version = GPKG 1.2.1.
+    con.execute("PRAGMA application_id = 1196444487")
+    con.execute("PRAGMA user_version = 10201")
     # Tablas mínimas requeridas por GeoPackage
     con.executescript("""
         CREATE TABLE IF NOT EXISTS gpkg_spatial_ref_sys (
@@ -333,6 +361,70 @@ def entregar_a_qa(codigo, usuario):
         return False, (f"Falló la copia a QA_pendiente: {msg}. "
                        "El trabajo del funcionario sigue intacto.")
     return True, f"R{codigo}.gpkg entregado a QA_pendiente. SHA-256 verificado."
+
+
+# ─── Devolver asignación (Pieza 7) ───────────────────────────────────────────
+
+def devolver_asignacion(codigo, usuario, conservar_avance):
+    """Lado de ARCHIVOS de una devolución. NO toca estado.json ni bitácora —
+    eso lo hace la capa de UI. Devuelve (ok, msg).
+
+    conservar_avance=True:
+        Conserva el gpkg del funcionario en Devueltos/R{codigo}.gpkg con el
+        mismo patrón que entregar_a_qa (respaldo previo si existe + copia
+        atómica verificada con SHA-256). Queda listo para reasignación.
+
+    conservar_avance=False:
+        Respalda y libera la copia LOCAL de trabajo reutilizando
+        sesion.limpiar_local (_historico/). No duplica esa lógica. Es no-op
+        seguro si no hay copia local en este PC (caso admin-en-nombre-de)."""
+    if conservar_avance:
+        origen = ruta_funcionario(codigo, usuario)
+        if not origen or not os.path.exists(origen):
+            return False, (f"No se encontró R{codigo}.gpkg de {usuario} para "
+                           "conservar el avance.")
+        destino = ruta_devuelto(codigo)
+        if not destino:
+            return False, "No se pudo resolver la carpeta Devueltos."
+        # Respaldar el devuelto previo antes de sobrescribir (regla jmedina)
+        if os.path.exists(destino):
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            bk_dir = _asegurar_dir(os.path.join(os.path.dirname(destino), "_respaldos"))
+            try:
+                shutil.copy2(destino, os.path.join(bk_dir, f"R{codigo}_{ts}.gpkg"))
+            except OSError:
+                pass
+        ok, msg = copia_atomica_verificada(origen, destino)
+        if not ok:
+            return False, (f"Falló al conservar el avance en Devueltos: {msg}. "
+                           "El gpkg del funcionario sigue intacto.")
+        return True, f"Avance conservado en Devueltos/R{codigo}.gpkg. SHA-256 verificado."
+
+    # Sin avance: respaldar a _historico/ y soltar la copia local activa.
+    from . import sesion
+    if sesion.limpiar_local(codigo):
+        return True, ("Copia local respaldada en _historico/ y liberada "
+                      "(sin conservar avance).")
+    return False, "No se pudo respaldar/limpiar la copia local de trabajo."
+
+
+def preparar_gpkg_asignacion(codigo, usuario):
+    """Prepara el gpkg de trabajo al asignar. Si hay un gpkg devuelto con avance
+    para este recinto, lo reutiliza (continúa el trabajo). Si no, lo extrae
+    nuevo del central. Devuelve (ok, msg, origen) con origen='devuelto'|'central'."""
+    devuelto = ruta_devuelto(codigo)
+    if devuelto and os.path.exists(devuelto):
+        ruta_dest = ruta_funcionario(codigo, usuario)
+        if not ruta_dest:
+            return False, "No se pudo resolver la ruta del funcionario.", "devuelto"
+        _asegurar_dir(os.path.dirname(ruta_dest))
+        ok, msg = copia_atomica_verificada(devuelto, ruta_dest)
+        if not ok:
+            return False, f"Falló al continuar desde el avance devuelto: {msg}", "devuelto"
+        return True, (f"Continúa desde el avance devuelto (Devueltos/R{codigo}.gpkg). "
+                      "SHA-256 verificado."), "devuelto"
+    ok, msg = extraer_recinto_para_funcionario(codigo, usuario)
+    return ok, msg, "central"
 
 
 # ─── Listar gpkg en QA_pendiente ─────────────────────────────────────────────

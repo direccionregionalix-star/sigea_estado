@@ -273,6 +273,14 @@ class SigeaPanel(QWidget):
         self._btn_entregar.setEnabled(False)
         root.addWidget(self._btn_entregar)
 
+        self._btn_devolver = QPushButton("↩  Devolver asignación")
+        self._btn_devolver.setStyleSheet(self._estilo("#b71c1c", "#c62828"))
+        self._btn_devolver.clicked.connect(self.devolver)
+        self._btn_devolver.setEnabled(False)
+        self._btn_devolver.setToolTip(
+            "Devuelve este recinto. Puedes conservar el avance o dejarlo pendiente.")
+        root.addWidget(self._btn_devolver)
+
         # Botón Admin — solo visible si el token tiene permisos de escritura
         self._btn_admin = QPushButton("🔑  Modo Admin")
         self._btn_admin.setStyleSheet(self._estilo("#7b1fa2", "#9c27b0"))
@@ -472,9 +480,10 @@ class SigeaPanel(QWidget):
         self._lbl_meta.setText("Sin conexión a SIGEA — solo rectificación local")
         self._lbl_plazo.setText("")
         self._btn_cargar.setEnabled(True)
-        # En modo desconectado no se puede registrar ni entregar
+        # En modo desconectado no se puede registrar, entregar ni devolver
         self._btn_avance.setEnabled(False)
         self._btn_entregar.setEnabled(False)
+        self._btn_devolver.setEnabled(False)
         self._set_msg("Sin conexión online. Puedes rectificar pero no publicar avance. Verifica la URL en ⚙.", error=True)
 
     def _set_sin_asignacion(self):
@@ -487,6 +496,7 @@ class SigeaPanel(QWidget):
         self._btn_cargar.setEnabled(False)
         self._btn_avance.setEnabled(False)
         self._btn_entregar.setEnabled(False)
+        self._btn_devolver.setEnabled(False)
         self._set_btns_tipo(False)
 
     def _actualizar_vista(self):
@@ -517,6 +527,7 @@ class SigeaPanel(QWidget):
         self._btn_cargar.setEnabled(True)
         self._btn_avance.setEnabled(True)
         self._btn_entregar.setEnabled(True)
+        self._btn_devolver.setEnabled(True)
         self._btn_avance.setToolTip("Registrar avance en GitHub")
         self._btn_entregar.setToolTip("Marcar recinto entregado (publica avance final en GitHub)")
 
@@ -1047,6 +1058,51 @@ class SigeaPanel(QWidget):
             self._set_sin_asignacion()
         else:
             self._set_msg(f"Error publicando entrega: {msg}", error=True)
+
+    def devolver(self):
+        """Devuelve la asignación activa. Pieza 7: el funcionario puede soltar
+        un recinto, conservando o no el avance. Deja rastro en bitácora."""
+        if not self.asignacion:
+            return
+        codigo = self._codigo_activo or self.asignacion.get("codigo") or ""
+        usuario = settings.usuario()
+        if not codigo or not usuario:
+            self._set_msg("No hay recinto/usuario activo para devolver.", error=True)
+            return
+
+        # Si hay ediciones sin guardar, ofrecer guardarlas (importan si se
+        # conserva el avance; si no, igual conviene no perder trabajo en disco).
+        layer = self._capa_valida()
+        if layer and layer.isEditable():
+            resp = QMessageBox.question(
+                self, "Ediciones sin guardar",
+                "Hay cambios sin guardar. ¿Guardar antes de devolver?",
+                MsgYes | MsgCancel)
+            if resp == MsgCancel:
+                return
+            layer.commitChanges()
+
+        from .devolver_dialog import DevolverDialog, ejecutar_devolucion
+        dlg = DevolverDialog(codigo, usuario, self)
+        if dlg.exec() != DialogAccepted:
+            return
+
+        # Quitar la capa del proyecto antes de tocar el archivo (evita locks).
+        if layer:
+            try:
+                QgsProject.instance().removeMapLayer(layer.id())
+                self.capa_activa = None
+            except Exception:
+                pass
+
+        ok, msg = ejecutar_devolucion(
+            codigo, usuario, dlg.conservar_avance(), dlg.motivo())
+        if ok:
+            self._set_msg(f"✓ {msg}")
+            self.asignacion = None
+            self._set_sin_asignacion()
+        else:
+            self._set_msg(f"Error devolviendo: {msg}", error=True)
 
     # ------------------------------------------------------------------
     # Helpers

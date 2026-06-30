@@ -214,10 +214,13 @@ class AdminDialog(QDialog):
                 est_item = QTableWidgetItem(
                     {"pendiente": "Pendiente",
                      "asignado": f"Asignado a {r['asignado_a']}",
+                     "devuelto": f"Devuelto c/avance ({r['asignado_a']})",
                      "cerrado": "Cerrado"}.get(est, est))
                 est_item.setBackground(
-                    QColor("#ffcdd2") if est == "pendiente" else (
-                        QColor("#fff9c4") if est == "asignado" else QColor("#c8e6c9")))
+                    {"pendiente": QColor("#ffcdd2"),
+                     "asignado": QColor("#fff9c4"),
+                     "devuelto": QColor("#ffe0b2"),
+                     "cerrado": QColor("#c8e6c9")}.get(est, QColor("#ffffff")))
                 t2.setItem(row, 4, est_item)
             lay.addWidget(t2)
         else:
@@ -252,6 +255,7 @@ class AdminDialog(QDialog):
             label = (f"[{r['codigo']}] {r['nombre']} — {r['comuna']} "
                      f"({r['n_electores']} elect.)"
                      + (f" ← {r['asignado_a']}" if est == "asignado" else "")
+                     + (f" ↩ devuelto c/avance ({r['asignado_a']})" if est == "devuelto" else "")
                      + (" [CERRADO]" if est == "cerrado" else ""))
             item = QListWidgetItem(label)
             item.setData(Qt.UserRole, r)
@@ -259,6 +263,8 @@ class AdminDialog(QDialog):
                 item.setForeground(QColor("#888"))
             elif est == "asignado":
                 item.setForeground(QColor("#e65100"))
+            elif est == "devuelto":
+                item.setForeground(QColor("#bf360c"))
             lay.addItem = None  # evitar confusión
             self._lst_recintos.addItem(item)
 
@@ -294,8 +300,40 @@ class AdminDialog(QDialog):
         btn.setStyleSheet(_btn_style("#1565c0", "#1976d2"))
         btn.clicked.connect(self._asignar)
         lay.addWidget(btn)
+
+        # Devolver asignación en nombre del funcionario seleccionado (Pieza 7).
+        btn_dev = QPushButton("Devolver asignación del funcionario seleccionado")
+        btn_dev.setStyleSheet(_btn_style("#b71c1c", "#c62828"))
+        btn_dev.setToolTip(
+            "Devuelve la asignación activa del funcionario elegido arriba. "
+            "Permite elegir conservar o no el avance. Útil para limpiar estado.")
+        btn_dev.clicked.connect(self._devolver_asignacion)
+        lay.addWidget(btn_dev)
         lay.addStretch()
         return w
+
+    def _devolver_asignacion(self):
+        from .devolver_dialog import DevolverDialog, ejecutar_devolucion
+        usuario = self._cmb_func_asig.currentText().strip()
+        self._recargar_estado()
+        asig = (self._estado or {}).get("funcionarios", {}).get(usuario)
+        if not asig or not asig.get("codigo"):
+            self._lbl_asig_msg.setText(
+                f"✗ {usuario} no tiene una asignación activa para devolver.")
+            self._lbl_asig_msg.setStyleSheet("color:#c62828;font-size:11px;")
+            return
+        codigo = asig.get("codigo")
+        dlg = DevolverDialog(codigo, usuario, self)
+        if dlg.exec() != DialogAccepted:
+            return
+        ok, msg = ejecutar_devolucion(
+            codigo, usuario, dlg.conservar_avance(), dlg.motivo())
+        color = "#2e7d32" if ok else "#c62828"
+        self._lbl_asig_msg.setText(f"{'✓' if ok else '✗'} {msg}")
+        self._lbl_asig_msg.setStyleSheet(f"color:{color};font-size:11px;")
+        if ok:
+            self._recargar_estado()
+            self._recargar_recintos()
 
     def _asignar(self):
         item = self._lst_recintos.currentItem()
@@ -324,15 +362,31 @@ class AdminDialog(QDialog):
             self._lbl_asig_msg.setStyleSheet("color:#c62828;font-size:11px;")
             return
 
-        # Copiar gpkg del recinto si está marcado
+        # Copiar gpkg del recinto si está marcado. Si el recinto fue devuelto
+        # con avance, continúa desde ese gpkg en vez de extraer uno nuevo.
         if self._chk_copiar_gpkg.isChecked():
             from . import admin_archivos
-            ok_gpkg, msg_gpkg = admin_archivos.extraer_recinto_para_funcionario(
+            ok_gpkg, msg_gpkg, origen_gpkg = admin_archivos.preparar_gpkg_asignacion(
                 codigo, usuario)
             if not ok_gpkg:
-                self._lbl_asig_msg.setText(f"✗ Error copiando gpkg: {msg_gpkg}")
+                self._lbl_asig_msg.setText(f"✗ Error preparando gpkg: {msg_gpkg}")
                 self._lbl_asig_msg.setStyleSheet("color:#c62828;font-size:11px;")
                 return
+
+        # ADVERTENCIA de asignación múltiple: si el funcionario ya tiene una
+        # asignación activa (no liberada), avisar. Se permite, pero se advierte.
+        self._recargar_estado()
+        actual = (self._estado or {}).get("funcionarios", {}).get(usuario)
+        if actual and actual.get("codigo") and not actual.get("liberado"):
+            cod_prev = actual.get("codigo")
+            if cod_prev != codigo and not getattr(self, "_confirmar_multiple", False):
+                self._lbl_asig_msg.setText(
+                    f"⚠ {usuario} ya tiene activo el recinto {cod_prev}. "
+                    f"Vuelve a presionar Asignar para confirmar la doble asignación.")
+                self._lbl_asig_msg.setStyleSheet("color:#e65100;font-size:11px;")
+                self._confirmar_multiple = True
+                return
+        self._confirmar_multiple = False
 
         # Actualizar estado.json
         asig_id = int(datetime.now().timestamp())
@@ -373,7 +427,7 @@ class AdminDialog(QDialog):
 
         asignado_por = settings.usuario() or "admin"
         ok_bit, msg_bit = bitacora.evento_asignacion(codigo, usuario, asignado_por)
-        gpkg_nota = (f" gpkg extraído ({msg_gpkg})" if self._chk_copiar_gpkg.isChecked()
+        gpkg_nota = (f" gpkg {origen_gpkg} ({msg_gpkg})" if self._chk_copiar_gpkg.isChecked()
                      else " (gpkg no copiado)")
         resultado = f"✓ Recinto {codigo} asignado a {usuario}.{gpkg_nota}"
         if not ok_bit:
@@ -447,6 +501,27 @@ class AdminDialog(QDialog):
                 pass
             self._lbl_ent_msg.setText(f"✓ {msg}")
             self._lbl_ent_msg.setStyleSheet("color:#2e7d32;font-size:11px;")
+
+            # LIBERAR al funcionario: al entregar a QA, queda disponible para
+            # una nueva asignación. Se marca liberado=True en estado.json
+            # (no se borra el registro, para conservar el historial del recinto).
+            try:
+                self._recargar_estado()
+                estado = self._estado.copy()
+                f = estado.get("funcionarios", {}).get(usuario)
+                if f:
+                    f["liberado"] = True
+                    f["estado_flujo"] = "en_qa"
+                    estado["generado"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+                    _github_put(
+                        self._creds["repo"], self._creds["branch"],
+                        "estado.json", estado, self._creds["token"],
+                        self._estado_sha,
+                        f"admin: {usuario} liberado, {codigo} en QA")
+                    self._recargar_estado()
+            except Exception as e:
+                self._lbl_ent_msg.setText(
+                    f"✓ {msg} (gpkg en QA, pero no pude marcar liberado: {e})")
         else:
             self._lbl_ent_msg.setText(f"✗ {msg}")
             self._lbl_ent_msg.setStyleSheet("color:#c62828;font-size:11px;")
@@ -463,21 +538,25 @@ class AdminDialog(QDialog):
         self._cmb_qa_func.currentTextChanged.connect(self._verificar_tipos_qa)
         lay.addLayout(form)
 
-        # Selector de gpkg en QA_pendiente
-        lay.addWidget(QLabel("Recintos en QA_pendiente:"))
-        self._cmb_qa_recinto = QComboBox()
-        self._cmb_qa_recinto.currentTextChanged.connect(self._on_qa_recinto_changed)
-        lay.addWidget(self._cmb_qa_recinto)
-        self._refrescar_qa_pendiente()
-
-        # Alerta tipos geo inválidos
+        # Alerta tipos geo inválidos — SE CREA ANTES del combo que la usa.
+        # _refrescar_qa_pendiente() puebla el combo y dispara
+        # _on_qa_recinto_changed → _verificar_tipos_qa_por_codigo, que lee
+        # self._lbl_alerta_tipo. Si el label no existe aún, crashea con
+        # AttributeError. Por eso se construye primero.
         self._lbl_alerta_tipo = QLabel("")
         self._lbl_alerta_tipo.setWordWrap(True)
         self._lbl_alerta_tipo.setStyleSheet(
             "background:#fff3cd;color:#856404;padding:6px;"
             "border-radius:4px;font-size:11px;")
         self._lbl_alerta_tipo.setVisible(False)
+
+        # Selector de gpkg en QA_pendiente
+        lay.addWidget(QLabel("Recintos en QA_pendiente:"))
+        self._cmb_qa_recinto = QComboBox()
+        self._cmb_qa_recinto.currentTextChanged.connect(self._on_qa_recinto_changed)
+        lay.addWidget(self._cmb_qa_recinto)
         lay.addWidget(self._lbl_alerta_tipo)
+        self._refrescar_qa_pendiente()
 
         # Botón abrir en QGIS
         btn_abrir = QPushButton("Abrir gpkg de QA en QGIS")
@@ -559,6 +638,11 @@ class AdminDialog(QDialog):
         self._verificar_tipos_qa_por_codigo(self._cmb_qa_recinto.currentText())
 
     def _verificar_tipos_qa_por_codigo(self, codigo):
+        # Guarda defensiva: este método puede dispararse mientras se puebla el
+        # combo, antes de que el resto de la UI exista. Si el label aún no está,
+        # salir en silencio en vez de crashear.
+        if not hasattr(self, "_lbl_alerta_tipo"):
+            return
         if not codigo or codigo.startswith("("):
             self._lbl_alerta_tipo.setVisible(False)
             return

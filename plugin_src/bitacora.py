@@ -136,3 +136,10 @@ def evento_mail(recinto, funcionario, destinatario, asunto, enviado):
 def evento_alerta_tipo(recinto, funcionario, tipo_detectado):
     return registrar("alerta_tipo", recinto, funcionario,
                      {"tipo_detectado": tipo_detectado, "recinto": recinto})
+
+
+def evento_devolucion(recinto, funcionario, conservo_avance, motivo=""):
+    """Registra la devolución de una asignación. conservo_avance: bool.
+    detalle solo lleva metadata de proceso — nunca datos sensibles."""
+    return registrar("devolucion", recinto, funcionario,
+                     {"motivo": motivo, "conservo_avance": bool(conservo_avance)})
