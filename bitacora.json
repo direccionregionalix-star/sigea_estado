@@ -56,6 +56,15 @@
     "resultado": "aprobado",
     "comentario": ""
    }
+  },
+  {
+   "ts": "2026-06-30T14:46:01+00:00",
+   "tipo": "cierre",
+   "recinto": "03624",
+   "funcionario": "jmedina",
+   "detalle": {
+    "cerrado_por": "jmedina"
+   }
   }
  ]
 }
