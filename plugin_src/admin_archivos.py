@@ -137,6 +137,10 @@ def listar_recintos_central(estado=None):
         col_comuna = (col_names.get("comuna") or col_names.get("nombre_comuna"))
         col_codigo = (col_names.get("codigo_rec") or col_names.get("codigo")
                       or col_names.get("cod_rec"))
+        # Columna de tipo geográfico para calcular electores sin revisar.
+        # sin_revisar = tipo_geo_id IS NULL OR tipo_geo_id IN (8, 9)
+        # (8=RECINTO_NO_GEO, 9=SIN_TIPO — tipos no rectificados ni confirmados).
+        col_tipo_geo = col_names.get("tipo_geo_id") or col_names.get("revisado_id")
 
         if not col_codigo:
             con.close()
@@ -147,7 +151,11 @@ def listar_recintos_central(estado=None):
             select_parts.append(f'"{col_nombre}"')
         if col_comuna:
             select_parts.append(f'"{col_comuna}"')
-        select_parts.append(f'COUNT(*) as n_electores')
+        select_parts.append('COUNT(*) as n_electores')
+        if col_tipo_geo:
+            select_parts.append(
+                f'COUNT(CASE WHEN "{col_tipo_geo}" IS NULL '
+                f'OR "{col_tipo_geo}" IN (8,9) THEN 1 END) as n_sin_revisar')
 
         sql = (f"SELECT {', '.join(select_parts)} FROM \"{tabla}\" "
                f"GROUP BY \"{col_codigo}\" ORDER BY \"{col_codigo}\"")
@@ -181,7 +189,8 @@ def listar_recintos_central(estado=None):
             codigo = str(row[idx]); idx += 1
             nombre = str(row[idx]) if col_nombre else "—"; idx += (1 if col_nombre else 0)
             comuna = str(row[idx]) if col_comuna else "—"; idx += (1 if col_comuna else 0)
-            n_electores = row[idx]
+            n_electores = row[idx]; idx += 1
+            n_sin_revisar = row[idx] if col_tipo_geo else n_electores
 
             if codigo in cerrado_set:
                 est = "cerrado"
@@ -201,6 +210,7 @@ def listar_recintos_central(estado=None):
                 "nombre": nombre,
                 "comuna": comuna,
                 "n_electores": n_electores,
+                "n_sin_revisar": n_sin_revisar,
                 "estado_recinto": est,
                 "asignado_a": asig_a,
             })

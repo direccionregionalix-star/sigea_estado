@@ -235,25 +235,53 @@ class AdminDialog(QDialog):
 
     # ── Tab 2: Asignar recinto ───────────────────────────────────────────
 
-    def _tab_asignar(self):
-        w = QWidget()
-        lay = QVBoxLayout(w)
-        lay.addWidget(QLabel("<b>Asignar recinto a un funcionario</b>"))
-        lay.addWidget(QLabel(
-            '<span style="color:#666;font-size:10px">'
-            'Selecciona un recinto de la lista + un funcionario. '
-            'Actualiza estado.json, extrae el gpkg del recinto en OneDrive '
-            'y registra evento en bitácora.</span>'))
+    @staticmethod
+    def _calcular_fecha_estimada(n_electores):
+        """Propone fecha hábil: techo(n_electores/100) días hábiles desde hoy.
+        Mínimo 1 día hábil. Solo salta sábados y domingos (feriados: mejora futura)."""
+        import math
+        from datetime import date, timedelta
+        dias = max(1, math.ceil(n_electores / 100))
+        d = date.today()
+        contados = 0
+        while contados < dias:
+            d += timedelta(days=1)
+            if d.weekday() < 5:   # lun–vie
+                contados += 1
+        return d.strftime("%Y-%m-%d")
 
-        # Lista seleccionable de recintos
-        lay.addWidget(QLabel("Recintos disponibles (central.gpkg):"))
-        self._lst_recintos = QListWidget()
-        self._lst_recintos.setSelectionMode(QAbstractItemView.SingleSelection)
-        self._lst_recintos.setFixedHeight(180)
-        for r in self._recintos:
+    def _refrescar_lista_recintos(self):
+        """Aplica filtro de comuna + orden seleccionados y reconstruye _lst_recintos."""
+        filtro = getattr(self, "_cmb_filtro_comuna", None)
+        orden_cmb = getattr(self, "_cmb_orden", None)
+        comuna_sel = filtro.currentText() if filtro else "(todas)"
+        orden_idx = orden_cmb.currentIndex() if orden_cmb else 0
+
+        recintos = list(self._recintos)
+
+        # Filtrar por comuna
+        if comuna_sel and comuna_sel != "(todas)":
+            recintos = [r for r in recintos if r["comuna"] == comuna_sel]
+
+        # Ordenar
+        if orden_idx == 0:   # electores sin revisar (desc)
+            recintos.sort(key=lambda r: r.get("n_sin_revisar", r["n_electores"]),
+                          reverse=True)
+        elif orden_idx == 1:  # cantidad electores (desc)
+            recintos.sort(key=lambda r: r["n_electores"], reverse=True)
+        else:                 # alfabético
+            recintos.sort(key=lambda r: r["nombre"])
+
+        self._lst_recintos.clear()
+        if not recintos:
+            self._lst_recintos.addItem("Sin recintos para esta selección.")
+            return
+
+        for r in recintos:
             est = r["estado_recinto"]
+            sin_rev = r.get("n_sin_revisar", r["n_electores"])
             label = (f"[{r['codigo']}] {r['nombre']} — {r['comuna']} "
-                     f"({r['n_electores']} elect.)"
+                     f"({r['n_electores']} elect., {sin_rev} sin rev.)"
                      + (f" ← {r['asignado_a']}" if est == "asignado" else "")
                      + (f" ↩ devuelto c/avance ({r['asignado_a']})" if est == "devuelto" else "")
                      + (" [CERRADO]" if est == "cerrado" else ""))
@@ -265,13 +293,67 @@ class AdminDialog(QDialog):
                 item.setForeground(QColor("#e65100"))
             elif est == "devuelto":
                 item.setForeground(QColor("#bf360c"))
-            lay.addItem = None  # evitar confusión
             self._lst_recintos.addItem(item)
 
+    def _proponer_fecha(self):
+        """Al seleccionar recinto, calcula y propone la fecha estimada."""
+        item = self._lst_recintos.currentItem()
+        if not item:
+            return
+        r = item.data(Qt.UserRole)
+        if not r:
+            return
+        self._txt_fecha.setText(self._calcular_fecha_estimada(r["n_electores"]))
+
+    def _tab_asignar(self):
+        w = QWidget()
+        lay = QVBoxLayout(w)
+        lay.addWidget(QLabel("<b>Asignar recinto a un funcionario</b>"))
+        lay.addWidget(QLabel(
+            '<span style="color:#666;font-size:10px">'
+            'Selecciona un recinto de la lista + un funcionario. '
+            'Actualiza estado.json, extrae el gpkg del recinto en OneDrive '
+            'y registra evento en bitácora.</span>'))
+
+        # ── Filtros ──────────────────────────────────────────────────────
+        filtros_lay = QHBoxLayout()
+
+        filtros_lay.addWidget(QLabel("Filtrar por comuna:"))
+        self._cmb_filtro_comuna = QComboBox()
+        self._cmb_filtro_comuna.setMinimumWidth(160)
+        comunas = sorted({r["comuna"] for r in self._recintos if r["comuna"] != "—"})
+        self._cmb_filtro_comuna.addItem("(todas)")
+        self._cmb_filtro_comuna.addItems(comunas)
+        self._cmb_filtro_comuna.currentIndexChanged.connect(self._refrescar_lista_recintos)
+        filtros_lay.addWidget(self._cmb_filtro_comuna)
+
+        filtros_lay.addSpacing(16)
+        filtros_lay.addWidget(QLabel("Ordenar por:"))
+        self._cmb_orden = QComboBox()
+        self._cmb_orden.addItems([
+            "Electores sin revisar (mayor primero)",
+            "Cantidad de electores (mayor primero)",
+            "Nombre (A-Z)",
+        ])
+        self._cmb_orden.currentIndexChanged.connect(self._refrescar_lista_recintos)
+        filtros_lay.addWidget(self._cmb_orden)
+        filtros_lay.addStretch()
+        lay.addLayout(filtros_lay)
+
+        # ── Lista seleccionable de recintos ──────────────────────────────
+        lay.addWidget(QLabel("Recintos disponibles (central.gpkg):"))
+        self._lst_recintos = QListWidget()
+        self._lst_recintos.setSelectionMode(QAbstractItemView.SingleSelection)
+        self._lst_recintos.setFixedHeight(200)
+        self._lst_recintos.currentItemChanged.connect(
+            lambda cur, _prev: self._proponer_fecha())
+        lay.addWidget(self._lst_recintos)
+        self._refrescar_lista_recintos()   # carga inicial con orden por defecto
+
         if not self._recintos:
+            self._lst_recintos.clear()
             self._lst_recintos.addItem(
                 "Sin datos — configura la carpeta de funcionarios en Config.")
-        lay.addWidget(self._lst_recintos)
 
         form = QFormLayout()
         self._cmb_func_asig = QComboBox()
@@ -279,7 +361,7 @@ class AdminDialog(QDialog):
         form.addRow("Funcionario:", self._cmb_func_asig)
 
         self._txt_fecha = QLineEdit()
-        self._txt_fecha.setPlaceholderText("2026-07-15")
+        self._txt_fecha.setPlaceholderText("2026-07-15 (se calcula al seleccionar recinto)")
         form.addRow("Fecha estimada:", self._txt_fecha)
         lay.addLayout(form)
 
