@@ -1,3 +1,19 @@
 {
- "eventos": []
+ "eventos": [
+  {
+   "ts": "2026-07-01T15:11:31+00:00",
+   "tipo": "avance",
+   "recinto": "01485",
+   "funcionario": "igarrido",
+   "detalle": {
+    "calle": 209,
+    "localidad": 180,
+    "no_geo": 400,
+    "fuera_comuna": 33,
+    "exacto": 253,
+    "total": 1587,
+    "pct": 67.7
+   }
+  }
+ ]
 }
