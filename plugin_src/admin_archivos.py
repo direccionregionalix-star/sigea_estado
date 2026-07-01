@@ -289,11 +289,11 @@ def extraer_recinto_para_funcionario(codigo, usuario):
             con_c.close()
             return False, "No se encontró tabla de features en central.gpkg"
 
-        # Columnas no-geometría
+        # Columnas no-geometría (excluye fid propio — se preserva como fid_central)
         cols_info = con_c.execute(f"PRAGMA table_info(\"{tabla}\")").fetchall()
-        # (cid, name, type, notnull, dflt, pk)
         col_names_tipos = [(r[1], r[2]) for r in cols_info
-                           if r[1].lower() not in (col_geom.lower(), "fid")]
+                           if r[1].lower() not in (col_geom.lower(), "fid",
+                                                   "fid_central")]
 
         col_codigo = next(
             (n for n, _ in col_names_tipos
@@ -302,8 +302,8 @@ def extraer_recinto_para_funcionario(codigo, usuario):
             con_c.close()
             return False, "No se encontró columna código en central.gpkg"
 
-        # Seleccionar electores del recinto
-        all_cols = [f'"{col_geom}"'] + [f'"{n}"' for n, _ in col_names_tipos]
+        # Seleccionar electores del recinto; incluye fid del central para el reimporte
+        all_cols = ['"fid"'] + [f'"{col_geom}"'] + [f'"{n}"' for n, _ in col_names_tipos]
         rows = con_c.execute(
             f'SELECT {", ".join(all_cols)} FROM "{tabla}" '
             f'WHERE "{col_codigo}" = ?', (codigo,)
@@ -313,12 +313,17 @@ def extraer_recinto_para_funcionario(codigo, usuario):
         if not rows:
             return False, f"No se encontraron electores para recinto {codigo} en el central."
 
+        # El esquema destino incluye fid_central (INTEGER) para poder reimportar
+        # actualizando el registro correcto por fid en el central.gpkg.
+        col_names_tipos_dest = [("fid_central", "INTEGER")] + col_names_tipos
+
         # Crear gpkg destino vacío con el mismo esquema
         tmp_dest = ruta_dest + ".tmp_asig"
-        _gpkg_vacio(tmp_dest, tabla, col_geom, col_names_tipos)
+        _gpkg_vacio(tmp_dest, tabla, col_geom, col_names_tipos_dest)
 
         con_d = sqlite3.connect(tmp_dest)
-        insert_cols = [f'"{col_geom}"'] + [f'"{n}"' for n, _ in col_names_tipos]
+        # INSERT: fid_central, geom, resto de columnas (fid del src va a fid_central)
+        insert_cols = ['"fid_central"', f'"{col_geom}"'] + [f'"{n}"' for n, _ in col_names_tipos]
         placeholders = ", ".join(["?"] * len(insert_cols))
         con_d.executemany(
             f'INSERT INTO "{tabla}" ({", ".join(insert_cols)}) VALUES ({placeholders})',
@@ -501,17 +506,23 @@ def reimportar_al_central(codigo):
             con_qa.close(); con_c.close()
             return False, "No se encontró tabla de features."
 
-        # Columnas editables (excluir fid y geometría)
+        # Columnas editables (excluir fid propio y geometría)
         cols_qa = con_qa.execute(f'PRAGMA table_info("{tabla_qa}")').fetchall()
         col_names_qa = [r[1] for r in cols_qa
                         if r[1].lower() not in (col_geom_qa.lower(), "fid")]
 
-        col_codigo = next(
-            (n for n in col_names_qa
-             if n.lower() in ("codigo_rec", "codigo", "cod_rec")), None)
-        if not col_codigo:
-            con_qa.close(); con_c.close()
-            return False, "No se encontró columna código en QA gpkg."
+        # fid_central es la clave de actualización (preservada durante la extracción).
+        # Fallback: si el gpkg QA es antiguo (sin fid_central), usamos codigo_rec
+        # con advertencia — actualizará todos los registros del recinto a la vez
+        # (comportamiento incorrecto para geo por elector, pero no rompe el proceso).
+        usa_fid_central = "fid_central" in col_names_qa
+        if not usa_fid_central:
+            col_codigo = next(
+                (n for n in col_names_qa
+                 if n.lower() in ("codigo_rec", "codigo", "cod_rec")), None)
+            if not col_codigo:
+                con_qa.close(); con_c.close()
+                return False, "No se encontró fid_central ni columna código en QA gpkg."
 
         # Leer todos los registros del gpkg QA
         all_cols = [f'"{col_geom_qa}"'] + [f'"{n}"' for n in col_names_qa]
@@ -523,23 +534,37 @@ def reimportar_al_central(codigo):
         # Mapear col_nombre → índice en row_qa (0=geom, 1..n = cols)
         col_idx = {n: i + 1 for i, n in enumerate(col_names_qa)}
 
-        # Columnas actualizables en el central (las que existen en ambos lados)
+        # Columnas actualizables en el central (las que existen en ambos lados,
+        # excepto la clave de join y fid_central que es solo del gpkg de trabajo)
         cols_c_info = con_c.execute(f'PRAGMA table_info("{tabla_c}")').fetchall()
         col_names_c = {r[1] for r in cols_c_info}
 
-        cols_update = [n for n in col_names_qa if n in col_names_c and n != col_codigo]
+        excluir = {"fid_central"}
+        if not usa_fid_central:
+            excluir.add(col_codigo)
+        cols_update = [n for n in col_names_qa
+                       if n in col_names_c and n.lower() not in excluir]
 
         actualizados = 0
         for row in rows_qa:
             geom_val = row[0]
-            codigo_val = row[col_idx[col_codigo]]
-            # Construir SET
             set_parts = [f'"{col_geom_c}" = ?'] + [f'"{c}" = ?' for c in cols_update]
-            vals = [geom_val] + [row[col_idx[c]] for c in cols_update] + [codigo_val]
-            updated = con_c.execute(
-                f'UPDATE "{tabla_c}" SET {", ".join(set_parts)} '
-                f'WHERE "{col_codigo}" = ?', vals
-            ).rowcount
+            vals = [geom_val] + [row[col_idx[c]] for c in cols_update]
+
+            if usa_fid_central:
+                # Actualización precisa: 1 elector por fid
+                fid_val = row[col_idx["fid_central"]]
+                updated = con_c.execute(
+                    f'UPDATE "{tabla_c}" SET {", ".join(set_parts)} '
+                    f'WHERE fid = ?', vals + [fid_val]
+                ).rowcount
+            else:
+                # Fallback: actualiza TODOS los registros del recinto (impreciso)
+                codigo_val = row[col_idx[col_codigo]]
+                updated = con_c.execute(
+                    f'UPDATE "{tabla_c}" SET {", ".join(set_parts)} '
+                    f'WHERE "{col_codigo}" = ?', vals + [codigo_val]
+                ).rowcount
             actualizados += updated
 
         con_c.commit()

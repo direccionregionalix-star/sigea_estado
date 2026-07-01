@@ -41,25 +41,41 @@
     box-shadow: 0 2px 8px rgba(0,0,0,.25);
   }
 
-  header h1 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: .02em;
+  header h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: .02em; }
+  header h1 span { font-weight: 400; opacity: .85; font-size: .95rem; }
+
+  #meta { font-size: .78rem; opacity: .8; text-align: right; line-height: 1.5; white-space: nowrap; }
+
+  /* ─── Tabs ─── */
+  nav.tabs {
+    background: var(--blanco);
+    border-bottom: 1px solid var(--gris-borde);
+    display: flex;
+    gap: 0;
+    padding: 0 1.5rem;
   }
 
-  header h1 span {
-    font-weight: 400;
-    opacity: .85;
-    font-size: .95rem;
+  nav.tabs button {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--gris-texto);
+    cursor: pointer;
+    font-size: .9rem;
+    font-weight: 600;
+    padding: .75rem 1.25rem;
+    transition: color .15s, border-color .15s;
   }
 
-  #meta {
-    font-size: .78rem;
-    opacity: .8;
-    text-align: right;
-    line-height: 1.5;
-    white-space: nowrap;
+  nav.tabs button.activo {
+    border-bottom-color: var(--rojo);
+    color: var(--rojo);
   }
+
+  nav.tabs button:hover:not(.activo) { color: var(--negro); }
+
+  .tab-panel { display: none; }
+  .tab-panel.activo { display: block; }
 
   main {
     max-width: 960px;
@@ -83,20 +99,8 @@
     text-align: center;
   }
 
-  .total-card .val {
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  .total-card .lbl {
-    font-size: .72rem;
-    color: var(--gris-texto);
-    margin-top: .3rem;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-  }
-
+  .total-card .val { font-size: 1.75rem; font-weight: 700; line-height: 1; }
+  .total-card .lbl { font-size: .72rem; color: var(--gris-texto); margin-top: .3rem; text-transform: uppercase; letter-spacing: .04em; }
   .total-card.destacado { border-color: var(--rojo); }
   .total-card.destacado .val { color: var(--rojo); }
 
@@ -107,160 +111,104 @@
     gap: 1rem;
   }
 
-  .card {
-    background: var(--blanco);
-    border: 1px solid var(--gris-borde);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,.06);
-  }
+  .card { background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
 
-  .card-header {
-    padding: .85rem 1.1rem .7rem;
-    border-bottom: 1px solid var(--gris-borde);
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: .5rem;
-  }
+  .card-header { padding: .85rem 1.1rem .7rem; border-bottom: 1px solid var(--gris-borde); display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+  .card-header h2 { font-size: 1rem; font-weight: 700; }
+  .card-header .sub { font-size: .78rem; color: var(--gris-texto); margin-top: .15rem; line-height: 1.4; }
+  .badge-pct { font-size: 1.4rem; font-weight: 800; white-space: nowrap; color: var(--rojo); flex-shrink: 0; align-self: center; }
 
-  .card-header h2 {
-    font-size: 1rem;
-    font-weight: 700;
-  }
+  .barra-wrap { padding: .6rem 1.1rem .5rem; }
+  .barra-outer { height: 10px; background: var(--gris-fondo); border-radius: 99px; overflow: hidden; }
+  .barra-inner { height: 100%; border-radius: 99px; background: var(--rojo); transition: width .4s ease; }
 
-  .card-header .sub {
-    font-size: .78rem;
-    color: var(--gris-texto);
-    margin-top: .15rem;
-    line-height: 1.4;
-  }
+  .tipos-bar-wrap { padding: 0 1.1rem .5rem; }
+  .tipos-bar { height: 8px; border-radius: 99px; overflow: hidden; display: flex; }
+  .tipos-bar span { height: 100%; transition: width .4s ease; }
 
-  .badge-pct {
-    font-size: 1.4rem;
-    font-weight: 800;
-    white-space: nowrap;
-    color: var(--rojo);
-    flex-shrink: 0;
-    align-self: center;
-  }
-
-  /* barra de progreso */
-  .barra-wrap {
-    padding: .6rem 1.1rem .5rem;
-  }
-
-  .barra-outer {
-    height: 10px;
-    background: var(--gris-fondo);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-
-  .barra-inner {
-    height: 100%;
-    border-radius: 99px;
-    background: var(--rojo);
-    transition: width .4s ease;
-  }
-
-  /* stacked bar por tipo */
-  .tipos-bar-wrap {
-    padding: 0 1.1rem .5rem;
-  }
-
-  .tipos-bar {
-    height: 8px;
-    border-radius: 99px;
-    overflow: hidden;
-    display: flex;
-  }
-
-  .tipos-bar span {
-    height: 100%;
-    transition: width .4s ease;
-  }
-
-  /* tabla de conteos */
-  .conteos {
-    padding: .4rem 1.1rem .9rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .35rem .8rem;
-  }
-
-  .conteo-item {
-    display: flex;
-    align-items: center;
-    gap: .3rem;
-    font-size: .78rem;
-  }
-
-  .dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
+  .conteos { padding: .4rem 1.1rem .9rem; display: flex; flex-wrap: wrap; gap: .35rem .8rem; }
+  .conteo-item { display: flex; align-items: center; gap: .3rem; font-size: .78rem; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
   .conteo-n { font-weight: 700; }
   .conteo-lbl { color: var(--gris-texto); }
 
-  /* pie de tarjeta */
-  .card-footer {
-    padding: .55rem 1.1rem;
-    background: var(--gris-fondo);
-    border-top: 1px solid var(--gris-borde);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: .3rem;
-    font-size: .74rem;
-    color: var(--gris-texto);
-  }
+  .card-footer { padding: .55rem 1.1rem; background: var(--gris-fondo); border-top: 1px solid var(--gris-borde); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .3rem; font-size: .74rem; color: var(--gris-texto); }
 
-  .pill {
-    padding: .2rem .55rem;
-    border-radius: 99px;
-    font-size: .7rem;
-    font-weight: 600;
-    background: var(--gris-borde);
-    color: var(--negro);
-  }
+  .pill { padding: .2rem .55rem; border-radius: 99px; font-size: .7rem; font-weight: 600; background: var(--gris-borde); color: var(--negro); }
+  .pill.qgis    { background: #d6eaf8; color: #1a5276; }
+  .pill.sige    { background: #e8daef; color: #6c3483; }
+  .pill.alerta  { background: #fdebd0; color: #935116; }
+  .pill.ok      { background: #d5f5e3; color: #1e8449; }
 
-  .pill.qgis  { background: #d6eaf8; color: #1a5276; }
-  .pill.sige  { background: #e8daef; color: #6c3483; }
-  .pill.alerta { background: #fdebd0; color: #935116; }
-  .pill.ok     { background: #d5f5e3; color: #1e8449; }
+  .sin-asig { padding: 1.1rem; color: var(--gris-texto); font-size: .85rem; font-style: italic; }
 
-  /* sin asignación */
-  .sin-asig {
-    padding: 1.1rem;
-    color: var(--gris-texto);
-    font-size: .85rem;
-    font-style: italic;
-  }
-
-  /* estado de carga */
-  #loading, #error-msg {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--gris-texto);
-  }
-
+  #loading, #error-msg { text-align: center; padding: 3rem 1rem; color: var(--gris-texto); }
   #error-msg { color: var(--rojo); }
 
-  /* colores por tipo geo */
-  .c-EXACTO      { background: #27ae60; }
-  .c-CALLE       { background: #2980b9; }
-  .c-LOCALIDAD   { background: #f39c12; }
-  .c-NO_GEO      { background: #bdc3c7; }
-  .c-PROXIMIDAD  { background: #16a085; }
-  .c-FUERA_COMUNA{ background: #d35400; }
-  .c-AUTOGEO     { background: #8e44ad; }
-  .c-MASIVO      { background: #1abc9c; }
-  .c-OTRO        { background: #95a5a6; }
+  .c-EXACTO       { background: #27ae60; }
+  .c-CALLE        { background: #2980b9; }
+  .c-LOCALIDAD    { background: #f39c12; }
+  .c-NO_GEO       { background: #bdc3c7; }
+  .c-PROXIMIDAD   { background: #16a085; }
+  .c-FUERA_COMUNA { background: #d35400; }
+  .c-AUTOGEO      { background: #8e44ad; }
+  .c-MASIVO       { background: #1abc9c; }
+  .c-OTRO         { background: #95a5a6; }
+
+  /* ─── Bitácora ─── */
+  #bita-filtros { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+  #bita-filtros select, #bita-filtros input { padding: .4rem .6rem; border: 1px solid var(--gris-borde); border-radius: 6px; font-size: .85rem; }
+  #bita-filtros button { padding: .4rem .9rem; background: var(--rojo); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: .85rem; font-weight: 600; }
+
+  #bita-tabla { width: 100%; border-collapse: collapse; font-size: .82rem; background: var(--blanco); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  #bita-tabla th { background: var(--gris-fondo); color: var(--gris-texto); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; padding: .55rem .8rem; text-align: left; border-bottom: 1px solid var(--gris-borde); }
+  #bita-tabla td { padding: .5rem .8rem; border-bottom: 1px solid var(--gris-fondo); vertical-align: top; }
+  #bita-tabla tr:last-child td { border-bottom: none; }
+  #bita-tabla tr:hover td { background: #fafafa; }
+
+  .bita-tipo { display: inline-block; padding: .15rem .5rem; border-radius: 99px; font-size: .7rem; font-weight: 600; }
+  .bita-asignacion  { background: #d6eaf8; color: #1a5276; }
+  .bita-entrega     { background: #e8daef; color: #6c3483; }
+  .bita-qa          { background: #d5f5e3; color: #1e8449; }
+  .bita-cierre      { background: #d5d8dc; color: #424949; }
+  .bita-devolucion  { background: #fdebd0; color: #935116; }
+  .bita-mail        { background: #d1f2eb; color: #0e6655; }
+  .bita-alerta_tipo { background: #fef9e7; color: #7d6608; border: 1px solid #f9e79f; }
+  .bita-otro        { background: var(--gris-borde); color: var(--negro); }
+
+  #bita-paginacion { display: flex; gap: .5rem; justify-content: center; margin-top: 1rem; }
+  #bita-paginacion button { padding: .35rem .75rem; border: 1px solid var(--gris-borde); border-radius: 6px; background: var(--blanco); cursor: pointer; font-size: .82rem; }
+  #bita-paginacion button.activo-pg { background: var(--rojo); color: #fff; border-color: var(--rojo); }
+
+  /* ─── Admin ─── */
+  .admin-section { background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .admin-section h3 { font-size: 1rem; font-weight: 700; margin-bottom: .75rem; }
+  .admin-section p.hint { font-size: .8rem; color: var(--gris-texto); margin-bottom: .75rem; line-height: 1.5; }
+
+  .form-row { display: flex; gap: .6rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: .75rem; }
+  .form-row label { font-size: .82rem; color: var(--gris-texto); display: flex; flex-direction: column; gap: .25rem; }
+  .form-row input, .form-row select { padding: .4rem .6rem; border: 1px solid var(--gris-borde); border-radius: 6px; font-size: .85rem; min-width: 160px; }
+  .form-row input[type="password"] { font-family: monospace; }
+
+  .btn { padding: .45rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-size: .85rem; font-weight: 600; }
+  .btn-rojo    { background: var(--rojo); color: #fff; }
+  .btn-azul    { background: var(--azul); color: #fff; }
+  .btn-gris    { background: var(--gris-borde); color: var(--negro); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .admin-msg { margin-top: .6rem; font-size: .82rem; padding: .4rem .7rem; border-radius: 6px; }
+  .admin-msg.ok  { background: #d5f5e3; color: #1e8449; }
+  .admin-msg.err { background: #fdebd0; color: #935116; }
+
+  #mail-lista { display: flex; flex-direction: column; gap: .5rem; }
+  .mail-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .5rem .75rem; background: var(--gris-fondo); border-radius: 8px; font-size: .83rem; }
+  .mail-row .mail-info { display: flex; flex-direction: column; gap: .15rem; }
+  .mail-row .mail-info strong { font-size: .88rem; }
+  .mail-row .mail-info span  { color: var(--gris-texto); font-size: .78rem; }
+  .mail-row .mail-bots { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  #lock-panel { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 2rem; text-align: center; }
+  #lock-panel p { color: var(--gris-texto); font-size: .88rem; }
 
   @media (max-width: 500px) {
     #funcionarios { grid-template-columns: 1fr; }
@@ -280,54 +228,166 @@
   </div>
 </header>
 
-<main>
-  <div id="loading">Leyendo estado…</div>
-  <div id="error-msg" style="display:none"></div>
+<nav class="tabs">
+  <button class="activo" onclick="cambiarTab('estado', this)">Estado</button>
+  <button onclick="cambiarTab('bitacora', this)">Bitácora</button>
+  <button onclick="cambiarTab('admin', this)">Admin</button>
+</nav>
 
-  <div id="totales" style="display:none"></div>
-  <div id="funcionarios" style="display:none"></div>
+<main>
+  <!-- ══ TAB ESTADO ══════════════════════════════════════════════════════ -->
+  <div id="tab-estado" class="tab-panel activo">
+    <div id="loading">Leyendo estado…</div>
+    <div id="error-msg" style="display:none"></div>
+    <div id="totales" style="display:none"></div>
+    <div id="funcionarios" style="display:none"></div>
+  </div>
+
+  <!-- ══ TAB BITÁCORA ════════════════════════════════════════════════════ -->
+  <div id="tab-bitacora" class="tab-panel">
+    <div id="bita-filtros">
+      <select id="bita-tipo-fil">
+        <option value="">Todos los tipos</option>
+        <option>asignacion</option>
+        <option>entrega</option>
+        <option>qa</option>
+        <option>cierre</option>
+        <option>devolucion</option>
+        <option>mail</option>
+        <option>alerta_tipo</option>
+      </select>
+      <input id="bita-recinto-fil" type="text" placeholder="Código recinto…" style="max-width:130px">
+      <input id="bita-func-fil"    type="text" placeholder="Funcionario…"    style="max-width:130px">
+      <button onclick="aplicarFiltroBita()">Filtrar</button>
+      <button class="btn btn-gris" onclick="limpiarFiltroBita()" style="background:none;border:1px solid var(--gris-borde);border-radius:6px;padding:.4rem .7rem;cursor:pointer;font-size:.85rem;">Limpiar</button>
+    </div>
+    <table id="bita-tabla">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Recinto</th>
+          <th>Funcionario</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody id="bita-body"><tr><td colspan="5" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando bitácora…</td></tr></tbody>
+    </table>
+    <div id="bita-paginacion"></div>
+  </div>
+
+  <!-- ══ TAB ADMIN ═══════════════════════════════════════════════════════ -->
+  <div id="tab-admin" class="tab-panel">
+
+    <!-- Panel de bloqueo hasta ingresar clave -->
+    <div id="lock-panel" class="admin-section">
+      <p>Esta sección requiere la clave de administración SIGEA para operar.</p>
+      <div class="form-row" style="justify-content:center">
+        <label>Clave admin
+          <input type="password" id="inp-clave" placeholder="SIGEA2026araucania" style="min-width:220px">
+        </label>
+        <button class="btn btn-rojo" onclick="desbloquearAdmin()">Desbloquear</button>
+      </div>
+      <div id="lock-msg" style="font-size:.82rem;color:var(--rojo)"></div>
+    </div>
+
+    <!-- Contenido admin (oculto hasta desbloquear) -->
+    <div id="admin-contenido" style="display:none">
+
+      <!-- Servidor de mail -->
+      <div class="admin-section">
+        <h3>Servidor de notificaciones</h3>
+        <p class="hint">URL del servidor Node (server.js). Deja en blanco para simular (sin envío real).</p>
+        <div class="form-row">
+          <label>URL servidor mail
+            <input type="text" id="inp-mail-url" placeholder="http://localhost:3001" style="min-width:260px">
+          </label>
+          <button class="btn btn-gris" onclick="guardarMailUrl()">Guardar</button>
+        </div>
+      </div>
+
+      <!-- Enviar notificaciones ─────────────────────────────────────────── -->
+      <div class="admin-section">
+        <h3>Enviar notificaciones por mail</h3>
+        <p class="hint">
+          Manda un aviso al funcionario con asignación activa. El servidor de mail
+          (server.js) debe estar corriendo y tener configurado el email del funcionario
+          en <code>SIGEA_MAILS</code>. Solo metadata — sin RUTs ni coordenadas.
+        </p>
+        <div id="mail-lista"><span style="color:var(--gris-texto);font-size:.85rem">Cargando asignaciones…</span></div>
+      </div>
+
+      <!-- Cerrar recinto sin asignar ────────────────────────────────────── -->
+      <div class="admin-section">
+        <h3>Cerrar recinto (marcar como cerrado)</h3>
+        <p class="hint">
+          Registra el recinto como cerrado en <code>estado.json</code> directamente
+          desde la web, sin pasar por el plugin QGIS. Útil para recintos corregidos
+          en Enterprise previamente. No toca <code>central.gpkg</code>.
+        </p>
+        <div class="form-row">
+          <label>Código recinto
+            <input type="text" id="inp-cod-cierre" placeholder="09101" style="max-width:100px">
+          </label>
+          <label>Nombre (opcional)
+            <input type="text" id="inp-nom-cierre" placeholder="COLEGIO…">
+          </label>
+          <label>Motivo
+            <select id="sel-motivo-cierre">
+              <option value="enterprise_previo">Corregido en Enterprise</option>
+              <option value="fuera_proceso">Fuera del proceso</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+          <button class="btn btn-rojo" onclick="cerrarRecinto()">Cerrar recinto</button>
+        </div>
+        <div id="cierre-msg" class="admin-msg" style="display:none"></div>
+      </div>
+
+    </div><!-- /admin-contenido -->
+  </div><!-- /tab-admin -->
 </main>
 
 <script>
 // ─── Configuración ───────────────────────────────────────────────────────────
-// La URL base se resuelve desde el mismo estado.json (_r y _b),
-// así nunca hay que hardcodear el repo DRIX acá.
-// Para el arranque se lee desde la misma ubicación del dashboard.
-
-const ESTADO_URL = "./estado.json";          // relativo; Railway sirve desde raíz del repo
+const ESTADO_URL = "./estado.json";
+const BITA_URL   = "./bitacora.json";
 const QGIS_BASE  = "./qgis/";
 const SIGE_BASE  = "./sige/";
-const REFRESH_MS = 5 * 60 * 1000;           // 5 min
+const REFRESH_MS = 5 * 60 * 1000;
 
-// Fix A: usuarios dinámicos — se extraen de estado.json al cargar
-let USUARIOS = [];
+let USUARIOS  = [];
+let _estado   = null;
+let _bitaData = [];          // eventos completos cargados
+let _bitaFilt = [];          // después de filtrar
+let _bitaPag  = 0;
+const BITA_POR_PAG = 30;
+
+// Token decodificado (solo en memoria, nunca en DOM ni localStorage)
+let _tokenDesc = null;
 
 const COLOR = {
-  EXACTO:       "#27ae60",
-  CALLE:        "#2980b9",
-  LOCALIDAD:    "#f39c12",
-  NO_GEO:       "#bdc3c7",
-  PROXIMIDAD:   "#16a085",
-  FUERA_COMUNA: "#d35400",
-  AUTOGEO:      "#8e44ad",
-  MASIVO:       "#1abc9c",
+  EXACTO: "#27ae60", CALLE: "#2980b9", LOCALIDAD: "#f39c12",
+  NO_GEO: "#bdc3c7", PROXIMIDAD: "#16a085", FUERA_COMUNA: "#d35400",
+  AUTOGEO: "#8e44ad", MASIVO: "#1abc9c",
 };
 const COLOR_FALLBACK = "#95a5a6";
 
+// ─── Tabs ────────────────────────────────────────────────────────────────────
+function cambiarTab(id, btn) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("activo"));
+  document.querySelectorAll("nav.tabs button").forEach(b => b.classList.remove("activo"));
+  document.getElementById("tab-" + id).classList.add("activo");
+  btn.classList.add("activo");
+
+  if (id === "bitacora" && _bitaData.length === 0) cargarBitacora();
+  if (id === "admin")    renderMailLista();
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function colorTipo(tipo) {
-  return COLOR[tipo] || COLOR_FALLBACK;
-}
-
-function clsTipo(tipo) {
-  return "c-" + (COLOR[tipo] ? tipo : "OTRO");
-}
-
-// Fix B: etiqueta para tipos desconocidos
-function labelTipo(tipo) {
-  return COLOR[tipo] ? tipo : `Tipo desconocido (${tipo})`;
-}
+function colorTipo(t) { return COLOR[t] || COLOR_FALLBACK; }
+function clsTipo(t)   { return "c-" + (COLOR[t] ? t : "OTRO"); }
+function labelTipo(t) { return COLOR[t] ? t : `Tipo desconocido (${t})`; }
 
 async function fetchJSON(url) {
   const r = await fetch(url + "?_=" + Date.now());
@@ -335,103 +395,81 @@ async function fetchJSON(url) {
   return r.json();
 }
 
-function fmt(n) { return (n ?? 0).toLocaleString("es-CL"); }
-
+function fmt(n)  { return (n ?? 0).toLocaleString("es-CL"); }
+function fmtFecha(isoStr) {
+  if (!isoStr) return "—";
+  return new Date(isoStr).toLocaleString("es-CL",
+    { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+}
 function tsRelativo(isoStr) {
   if (!isoStr) return "";
-  const d = new Date(isoStr);
-  const diff = Math.floor((Date.now() - d) / 1000);
-  if (diff < 60)   return "hace un momento";
-  if (diff < 3600) return `hace ${Math.floor(diff/60)} min`;
-  if (diff < 86400)return `hace ${Math.floor(diff/3600)} h`;
+  const diff = Math.floor((Date.now() - new Date(isoStr)) / 1000);
+  if (diff < 60)    return "hace un momento";
+  if (diff < 3600)  return `hace ${Math.floor(diff/60)} min`;
+  if (diff < 86400) return `hace ${Math.floor(diff/3600)} h`;
   return `hace ${Math.floor(diff/86400)} día(s)`;
 }
 
-function fmtFecha(isoStr) {
-  if (!isoStr) return "—";
-  return new Date(isoStr).toLocaleString("es-CL", {
-    day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"
-  });
+// XOR deofuscation (misma clave que el plugin Python)
+function deofuscar(b64, key = "SIGEA2026araucania") {
+  const bin = atob(b64);
+  const k   = Array.from(key).map(c => c.charCodeAt(0));
+  return Array.from(bin, (c, i) => String.fromCharCode(c.charCodeAt(0) ^ k[i % k.length])).join("");
 }
 
-// ─── Render ──────────────────────────────────────────────────────────────────
-
+// ─── Render Estado ───────────────────────────────────────────────────────────
 function renderTotales(estado, avances) {
   const funcionarios = estado.funcionarios || {};
-
-  let totalElectores = 0, totalConfirmados = 0, sinAsig = 0, conAsig = 0;
-
+  let totalE = 0, totalC = 0, sinAsig = 0, conAsig = 0;
   for (const u of USUARIOS) {
     const asig = funcionarios[u];
     if (!asig) { sinAsig++; continue; }
     conAsig++;
-    totalElectores += asig.n_electores || 0;
-    // preferir avance detallado del reporte, si existe
+    totalE += asig.n_electores || 0;
     const rep = avances[u];
-    if (rep) totalConfirmados += rep.avance?.confirmados_total || 0;
-    else     totalConfirmados += asig.avance || 0;
+    if (rep) totalC += rep.avance?.confirmados_total || 0;
+    else     totalC += asig.avance || 0;
   }
-
-  const pctTotal = totalElectores
-    ? Math.round(100 * totalConfirmados / totalElectores * 10) / 10
-    : 0;
-
+  const pct = totalE ? Math.round(100 * totalC / totalE * 10) / 10 : 0;
   const cards = [
-    { val: pctTotal + "%",        lbl: "Avance global",    cls: "destacado" },
-    { val: fmt(totalConfirmados), lbl: "Confirmados",      cls: "" },
-    { val: fmt(totalElectores - totalConfirmados), lbl: "Pendientes", cls: "" },
-    { val: fmt(totalElectores),   lbl: "Total electores",  cls: "" },
+    { val: pct + "%",                      lbl: "Avance global",          cls: "destacado" },
+    { val: fmt(totalC),                    lbl: "Confirmados",            cls: "" },
+    { val: fmt(totalE - totalC),           lbl: "Pendientes",             cls: "" },
+    { val: fmt(totalE),                    lbl: "Total electores",        cls: "" },
     { val: conAsig + " / " + USUARIOS.length, lbl: "Funcionarios activos", cls: "" },
   ];
-
   const el = document.getElementById("totales");
-  el.innerHTML = cards.map(c => `
-    <div class="total-card ${c.cls}">
-      <div class="val">${c.val}</div>
-      <div class="lbl">${c.lbl}</div>
-    </div>
-  `).join("");
+  el.innerHTML = cards.map(c =>
+    `<div class="total-card ${c.cls}"><div class="val">${c.val}</div><div class="lbl">${c.lbl}</div></div>`
+  ).join("");
   el.style.display = "grid";
 }
 
 function renderTarjeta(usuario, asig, rep) {
-  // asig puede ser null (sin asignación)
-  if (!asig) {
-    return `
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2>${usuario}</h2>
-            <div class="sub">Sin asignación activa</div>
-          </div>
-          <div class="badge-pct" style="color:var(--gris-texto)">—</div>
-        </div>
-        <div class="sin-asig">No hay recinto asignado actualmente.</div>
-      </div>`;
-  }
+  if (!asig) return `
+    <div class="card">
+      <div class="card-header">
+        <div><h2>${usuario}</h2><div class="sub">Sin asignación activa</div></div>
+        <div class="badge-pct" style="color:var(--gris-texto)">—</div>
+      </div>
+      <div class="sin-asig">No hay recinto asignado actualmente.</div>
+    </div>`;
 
-  const pct  = rep ? rep.avance.pct : (asig.n_electores
-    ? Math.round(100 * asig.avance / asig.n_electores * 10) / 10
-    : 0);
+  const pct   = rep ? rep.avance.pct : (asig.n_electores ? Math.round(100 * asig.avance / asig.n_electores * 10) / 10 : 0);
   const total = rep ? rep.avance.total_registros : asig.n_electores;
   const conf  = rep ? rep.avance.confirmados_total : asig.avance;
   const pend  = rep ? rep.avance.pendientes : (total - conf);
   const confirmados = rep ? rep.avance.confirmados : {};
-  const origen = rep ? rep.avance : null;
-  const herr   = rep ? rep.origen : (asig.herramienta || "");
-  const ts     = rep ? rep.timestamp : "";
+  const herr  = rep ? rep.origen : (asig.herramienta || "");
+  const ts    = rep ? rep.timestamp : "";
 
-  // barra por tipos
-  const tiposBar = Object.entries(confirmados)
-    .filter(([,n]) => n > 0)
+  const tiposBar = Object.entries(confirmados).filter(([,n]) => n > 0)
     .map(([tipo, n]) => {
       const w = total ? (100 * n / total).toFixed(1) : 0;
       return `<span style="width:${w}%;background:${colorTipo(tipo)}" title="${tipo}: ${fmt(n)}"></span>`;
     }).join("");
 
-  // conteos por tipo — Fix B: tipos desconocidos en gris con etiqueta
-  const conteoItems = Object.entries(confirmados)
-    .sort(([,a],[,b]) => b - a)
+  const conteoItems = Object.entries(confirmados).sort(([,a],[,b]) => b - a)
     .map(([tipo, n]) => `
       <span class="conteo-item">
         <span class="dot ${clsTipo(tipo)}"></span>
@@ -439,7 +477,6 @@ function renderTarjeta(usuario, asig, rep) {
         <span class="conteo-lbl">${labelTipo(tipo)}</span>
       </span>`).join("");
 
-  // pills de estado
   let pillHerr = "";
   if (herr.toLowerCase().includes("qgis")) pillHerr = `<span class="pill qgis">QGIS</span>`;
   else if (herr.toLowerCase().includes("sige")) pillHerr = `<span class="pill sige">SIGE</span>`;
@@ -449,72 +486,48 @@ function renderTarjeta(usuario, asig, rep) {
     ? `<span class="pill alerta">${diasRest}d restantes</span>`
     : `<span class="pill ok">${diasRest}d restantes</span>`;
 
-  // campos extra SIGE
-  let extraSige = "";
-  if (rep && rep.avance.total_clusters != null) {
-    extraSige = `<span>${fmt(rep.avance.total_clusters)} clusters</span>`;
-  }
-
   const pctColor = pct >= 80 ? "var(--verde)" : pct >= 40 ? "var(--amarillo)" : "var(--rojo)";
+  let extraSige = "";
+  if (rep && rep.avance.total_clusters != null)
+    extraSige = `<span>${fmt(rep.avance.total_clusters)} clusters</span>`;
 
   return `
     <div class="card">
       <div class="card-header">
         <div>
           <h2>${usuario}</h2>
-          <div class="sub">
-            ${asig.unidad || "—"}<br>
-            ${asig.comuna || ""} · ${fmt(total)} electores
-          </div>
+          <div class="sub">${asig.unidad || "—"}<br>${asig.comuna || ""} · ${fmt(total)} electores</div>
         </div>
         <div class="badge-pct" style="color:${pctColor}">${pct}%</div>
       </div>
-
       <div class="barra-wrap">
-        <div class="barra-outer">
-          <div class="barra-inner" style="width:${pct}%;background:${pctColor}"></div>
-        </div>
+        <div class="barra-outer"><div class="barra-inner" style="width:${pct}%;background:${pctColor}"></div></div>
       </div>
-
-      ${tiposBar ? `
-      <div class="tipos-bar-wrap">
-        <div class="tipos-bar">${tiposBar}</div>
-      </div>` : ""}
-
+      ${tiposBar ? `<div class="tipos-bar-wrap"><div class="tipos-bar">${tiposBar}</div></div>` : ""}
       ${conteoItems ? `<div class="conteos">${conteoItems}</div>` : ""}
-
       <div class="card-footer">
         <span>${fmt(conf)} confirmados · ${fmt(pend)} pendientes</span>
         <span style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
-          ${pillHerr}
-          ${pillDias}
-          ${extraSige}
+          ${pillHerr}${pillDias}${extraSige}
         </span>
       </div>
-
-      ${ts ? `
-      <div class="card-footer" style="padding-top:.35rem;padding-bottom:.35rem">
+      ${ts ? `<div class="card-footer" style="padding-top:.35rem;padding-bottom:.35rem">
         <span>Último reporte: ${fmtFecha(ts)} (${tsRelativo(ts)})</span>
         <span>Código ${rep?.recinto_cod || asig.codigo}</span>
       </div>` : ""}
     </div>`;
 }
 
-// ─── Carga de datos ──────────────────────────────────────────────────────────
-
 async function cargarAvances(usuarios) {
   const avances = {};
-  await Promise.allSettled(
-    usuarios.map(async u => {
-      // intenta qgis/ primero, luego sige/
-      for (const base of [QGIS_BASE, SIGE_BASE]) {
-        try {
-          const data = await fetchJSON(base + u + ".json");
-          if (data && data.avance) { avances[u] = data; return; }
-        } catch (_) { /* no existe, prueba siguiente */ }
-      }
-    })
-  );
+  await Promise.allSettled(usuarios.map(async u => {
+    for (const base of [QGIS_BASE, SIGE_BASE]) {
+      try {
+        const data = await fetchJSON(base + u + ".json");
+        if (data && data.avance) { avances[u] = data; return; }
+      } catch (_) {}
+    }
+  }));
   return avances;
 }
 
@@ -522,40 +535,272 @@ async function cargar() {
   const loadEl = document.getElementById("loading");
   const errEl  = document.getElementById("error-msg");
   const funcEl = document.getElementById("funcionarios");
-
   try {
-    // Fix A: cargar estado primero para extraer usuarios dinámicamente
-    const estado = await fetchJSON(ESTADO_URL);
-    const funcionarios = estado.funcionarios || {};
-    // Todos los usuarios del estado, con o sin asignación
+    _estado = await fetchJSON(ESTADO_URL);
+    const funcionarios = _estado.funcionarios || {};
     USUARIOS = Object.keys(funcionarios);
 
     const avances = await cargarAvances(USUARIOS);
 
     loadEl.style.display = "none";
     errEl.style.display  = "none";
-
-    // meta header
     document.getElementById("ts-generado").textContent =
-      "Estado: " + (estado.generado
-        ? new Date(estado.generado).toLocaleString("es-CL")
-        : "—");
+      "Estado: " + (_estado.generado ? new Date(_estado.generado).toLocaleString("es-CL") : "—");
     document.getElementById("ts-lectura").textContent =
       "Lectura: " + new Date().toLocaleTimeString("es-CL");
 
-    renderTotales(estado, avances);
-
+    renderTotales(_estado, avances);
     funcEl.innerHTML = USUARIOS
       .map(u => renderTarjeta(u, funcionarios[u] ?? null, avances[u] ?? null))
       .join("");
     funcEl.style.display = "grid";
-
   } catch (e) {
     loadEl.style.display = "none";
     errEl.style.display  = "block";
     errEl.textContent    = "Error cargando datos: " + e.message;
     console.error(e);
   }
+}
+
+// ─── Bitácora ────────────────────────────────────────────────────────────────
+async function cargarBitacora() {
+  const body = document.getElementById("bita-body");
+  body.innerHTML = `<tr><td colspan="5" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando…</td></tr>`;
+  try {
+    const data = await fetchJSON(BITA_URL);
+    _bitaData = (data.eventos || []).slice().reverse(); // más recientes primero
+    _bitaFilt = _bitaData;
+    _bitaPag  = 0;
+    renderBitacora();
+  } catch (e) {
+    body.innerHTML = `<tr><td colspan="5" style="color:var(--rojo);padding:2rem;text-align:center">Error cargando bitácora: ${e.message}</td></tr>`;
+  }
+}
+
+function clsBitaTipo(tipo) {
+  const m = { asignacion:"bita-asignacion", entrega:"bita-entrega", qa:"bita-qa",
+               cierre:"bita-cierre", devolucion:"bita-devolucion",
+               mail:"bita-mail", alerta_tipo:"bita-alerta_tipo" };
+  return m[tipo] || "bita-otro";
+}
+
+function renderBitacora() {
+  const body = document.getElementById("bita-body");
+  const pg   = document.getElementById("bita-paginacion");
+  const ini  = _bitaPag * BITA_POR_PAG;
+  const pagina = _bitaFilt.slice(ini, ini + BITA_POR_PAG);
+
+  if (pagina.length === 0) {
+    body.innerHTML = `<tr><td colspan="5" style="color:var(--gris-texto);padding:2rem;text-align:center">Sin eventos.</td></tr>`;
+    pg.innerHTML = "";
+    return;
+  }
+
+  body.innerHTML = pagina.map(ev => {
+    const det = ev.detalle || {};
+    let detStr = "";
+    if (det.motivo)         detStr += `motivo: ${det.motivo} `;
+    if (det.conservo_avance !== undefined) detStr += `avance conservado: ${det.conservo_avance ? "sí" : "no"} `;
+    if (det.resultado)      detStr += `resultado: ${det.resultado} `;
+    if (det.comentario)     detStr += `"${det.comentario}" `;
+    if (det.asignado_por)   detStr += `por: ${det.asignado_por} `;
+    if (det.enviado !== undefined) detStr += det.enviado ? "✓ enviado" : "simulado";
+    return `
+      <tr>
+        <td style="white-space:nowrap;color:var(--gris-texto)">${fmtFecha(ev.ts)}</td>
+        <td><span class="bita-tipo ${clsBitaTipo(ev.tipo)}">${ev.tipo || "—"}</span></td>
+        <td>${ev.recinto || "—"}</td>
+        <td>${ev.funcionario || "—"}</td>
+        <td style="color:var(--gris-texto)">${detStr || "—"}</td>
+      </tr>`;
+  }).join("");
+
+  // Paginación
+  const totalPag = Math.ceil(_bitaFilt.length / BITA_POR_PAG);
+  if (totalPag <= 1) { pg.innerHTML = ""; return; }
+  pg.innerHTML = Array.from({ length: totalPag }, (_, i) =>
+    `<button class="${i === _bitaPag ? "activo-pg" : ""}" onclick="_bitaPag=${i};renderBitacora()">${i + 1}</button>`
+  ).join("");
+}
+
+function aplicarFiltroBita() {
+  const tipo    = document.getElementById("bita-tipo-fil").value.trim();
+  const recinto = document.getElementById("bita-recinto-fil").value.trim().toLowerCase();
+  const func    = document.getElementById("bita-func-fil").value.trim().toLowerCase();
+  _bitaFilt = _bitaData.filter(ev =>
+    (!tipo    || ev.tipo === tipo) &&
+    (!recinto || (ev.recinto || "").toLowerCase().includes(recinto)) &&
+    (!func    || (ev.funcionario || "").toLowerCase().includes(func))
+  );
+  _bitaPag = 0;
+  renderBitacora();
+}
+
+function limpiarFiltroBita() {
+  document.getElementById("bita-tipo-fil").value = "";
+  document.getElementById("bita-recinto-fil").value = "";
+  document.getElementById("bita-func-fil").value = "";
+  _bitaFilt = _bitaData;
+  _bitaPag  = 0;
+  renderBitacora();
+}
+
+// ─── Admin — unlock ──────────────────────────────────────────────────────────
+function desbloquearAdmin() {
+  const clave = document.getElementById("inp-clave").value || "SIGEA2026araucania";
+  const msg   = document.getElementById("lock-msg");
+  if (!_estado || !_estado._t) {
+    msg.textContent = "estado.json aún no cargado. Espera o recarga la página.";
+    return;
+  }
+  try {
+    const tok = deofuscar(_estado._t, clave);
+    // Verificación mínima: el token de GitHub empieza con "ghp_" o "github_pat_"
+    if (!tok.startsWith("ghp_") && !tok.startsWith("github_pat_")) {
+      msg.textContent = "Clave incorrecta o token no reconocido.";
+      return;
+    }
+    _tokenDesc = tok;
+    document.getElementById("lock-panel").style.display   = "none";
+    document.getElementById("admin-contenido").style.display = "";
+    // Cargar URL del servidor guardada
+    const savedUrl = localStorage.getItem("sigea_mail_url") || "";
+    document.getElementById("inp-mail-url").value = savedUrl;
+    renderMailLista();
+  } catch (e) {
+    msg.textContent = "Error decodificando: " + e.message;
+  }
+}
+
+function guardarMailUrl() {
+  const url = document.getElementById("inp-mail-url").value.trim();
+  localStorage.setItem("sigea_mail_url", url);
+  alert("URL guardada en este navegador.");
+}
+
+// ─── Admin — mail ────────────────────────────────────────────────────────────
+function renderMailLista() {
+  const el = document.getElementById("mail-lista");
+  if (!el) return;
+  if (!_estado) { el.innerHTML = `<span style="color:var(--gris-texto);font-size:.85rem">Estado no cargado aún.</span>`; return; }
+
+  const funs = _estado.funcionarios || {};
+  const rows = Object.entries(funs)
+    .filter(([, asig]) => asig && asig.codigo && !asig.liberado)
+    .map(([usuario, asig]) => ({ usuario, asig }));
+
+  if (rows.length === 0) {
+    el.innerHTML = `<span style="color:var(--gris-texto);font-size:.85rem">No hay funcionarios con asignación activa.</span>`;
+    return;
+  }
+
+  el.innerHTML = rows.map(({ usuario, asig }) => `
+    <div class="mail-row">
+      <div class="mail-info">
+        <strong>${usuario}</strong>
+        <span>${asig.unidad || asig.codigo} · ${asig.n_electores || "?"} electores</span>
+      </div>
+      <div class="mail-bots">
+        <button class="btn btn-azul" onclick="enviarMail('${usuario}','${asig.codigo}','asignacion')">Recordatorio</button>
+        <span id="mail-st-${usuario}" style="font-size:.78rem;color:var(--gris-texto)"></span>
+      </div>
+    </div>`).join("");
+}
+
+async function enviarMail(usuario, recinto, tipo) {
+  const stEl = document.getElementById("mail-st-" + usuario);
+  const url  = (localStorage.getItem("sigea_mail_url") || "").trim();
+  if (!url) {
+    if (stEl) stEl.textContent = "⚠ Configura URL del servidor primero.";
+    return;
+  }
+  if (stEl) stEl.textContent = "Enviando…";
+  try {
+    const r = await fetch(url + "/mail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ destinatario: usuario, tipo, recinto, funcionario: usuario }),
+    });
+    const d = await r.json();
+    if (stEl) stEl.textContent = d.enviado ? "✓ Enviado" : (d.simulado ? "⚠ Simulado (sin SMTP)" : "✗ Error");
+  } catch (e) {
+    if (stEl) stEl.textContent = "✗ " + e.message;
+  }
+}
+
+// ─── Admin — cerrar recinto ──────────────────────────────────────────────────
+async function cerrarRecinto() {
+  const codigo = document.getElementById("inp-cod-cierre").value.trim();
+  const nombre = document.getElementById("inp-nom-cierre").value.trim();
+  const motivo = document.getElementById("sel-motivo-cierre").value;
+  const msgEl  = document.getElementById("cierre-msg");
+
+  msgEl.style.display = "none";
+
+  if (!codigo) {
+    mostrarMsg(msgEl, "Ingresa el código del recinto.", "err"); return;
+  }
+  if (!_tokenDesc) {
+    mostrarMsg(msgEl, "Sesión no desbloqueada.", "err"); return;
+  }
+  if (!_estado || !_estado._r) {
+    mostrarMsg(msgEl, "estado.json no cargado.", "err"); return;
+  }
+
+  const repo   = _estado._r;
+  const branch = _estado._b || "main";
+  const token  = _tokenDesc;
+
+  mostrarMsg(msgEl, "Actualizando estado.json…", "ok");
+
+  try {
+    // GET actual de estado.json para obtener SHA
+    const getUrl = `https://api.github.com/repos/${repo}/contents/estado.json?ref=${branch}`;
+    const getR = await fetch(getUrl, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "User-Agent": "SIGEA-Dashboard" }
+    });
+    if (!getR.ok) throw new Error("GET estado.json: " + getR.status);
+    const getD = await getR.json();
+    const sha  = getD.sha;
+    const estadoActual = JSON.parse(atob(getD.content));
+
+    const clave = `_cerrado_${codigo}`;
+    estadoActual.funcionarios[clave] = {
+      codigo, unidad: nombre || codigo, estado: "cerrado",
+      motivo, cerrado_en: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
+    };
+    estadoActual.generado = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+
+    const contenidoB64 = btoa(unescape(encodeURIComponent(JSON.stringify(estadoActual, null, 1))));
+    const putR = await fetch(`https://api.github.com/repos/${repo}/contents/estado.json`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json",
+        "Content-Type": "application/json", "User-Agent": "SIGEA-Dashboard",
+      },
+      body: JSON.stringify({
+        message: `dashboard: cerrar recinto ${codigo} (${motivo})`,
+        content: contenidoB64, branch, sha,
+      }),
+    });
+    if (!putR.ok) {
+      const err = await putR.json();
+      throw new Error(err.message || putR.status);
+    }
+    mostrarMsg(msgEl, `✓ Recinto ${codigo} marcado como cerrado en estado.json.`, "ok");
+    document.getElementById("inp-cod-cierre").value = "";
+    document.getElementById("inp-nom-cierre").value = "";
+    // Refrescar estado en memoria
+    _estado = estadoActual;
+  } catch (e) {
+    mostrarMsg(msgEl, "✗ " + e.message, "err");
+  }
+}
+
+function mostrarMsg(el, txt, cls) {
+  el.textContent = txt;
+  el.className = "admin-msg " + cls;
+  el.style.display = "block";
 }
 
 // ─── Arranque ────────────────────────────────────────────────────────────────
