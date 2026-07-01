@@ -1,5 +1,5 @@
 {
- "generado": "2026-06-30T18:11:02+00:00",
+ "generado": "2026-07-01T12:06:52+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -53,32 +53,7 @@
     }
    ]
   },
-  "jmedina": {
-   "asignacion_id": 1782843062,
-   "codigo": "03624",
-   "unidad": "COLEGIO CUMBRES DE LABRANZA",
-   "comuna": "09101",
-   "n_electores": 1,
-   "fecha_estimada": "2026-07-01",
-   "dias_restantes": 1,
-   "avance": 0,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1782843062,
-     "codigo": "03624",
-     "unidad": "COLEGIO CUMBRES DE LABRANZA",
-     "comuna": "09101",
-     "n_electores": 1,
-     "fecha_estimada": "2026-07-01",
-     "dias_restantes": 1,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "jmedina": null,
   "pfigueroa": null
  },
  "_t": "NCAzLTRQb0JXFS1QRCE7KlszGRh3dSdxY3xDDhgLNBk4MTEHEi8SJzlAZEYALQRRPSFZIgFWHzwEEQhTdmBwLkQ0ACgpIB0IOyYiFgVhaQUDNyU0QDdVHDBXFDMS",
