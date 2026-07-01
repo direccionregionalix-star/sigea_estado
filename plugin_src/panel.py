@@ -600,8 +600,22 @@ class SigeaPanel(QWidget):
                 self._actualizar_btn_pausa()
                 return
 
-        # No estaba cargada — cargar desde la copia local
-        uri = f"{ruta}|layername={nombre_capa}"
+        # No estaba cargada — cargar desde la copia local.
+        # El nombre de la tabla interna del gpkg no es necesariamente igual al
+        # nombre de la capa QGIS: se lee desde gpkg_geometry_columns.
+        tabla_interna = nombre_capa
+        try:
+            import sqlite3 as _sq3
+            _c = _sq3.connect(ruta)
+            _r = _c.execute(
+                "SELECT table_name FROM gpkg_geometry_columns LIMIT 1").fetchone()
+            _c.close()
+            if _r:
+                tabla_interna = _r[0]
+        except Exception:
+            pass
+
+        uri = f"{ruta}|layername={tabla_interna}"
         layer = QgsVectorLayer(uri, nombre_capa, "ogr")
         if not layer.isValid():
             self._set_msg(f"No se pudo abrir {nombre_capa} en {ruta}.", error=True)
