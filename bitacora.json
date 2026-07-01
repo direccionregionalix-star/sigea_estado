@@ -113,6 +113,15 @@
     "motivo": "",
     "conservo_avance": false
    }
+  },
+  {
+   "ts": "2026-07-01T12:24:24+00:00",
+   "tipo": "asignacion",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "igarrido"
+   }
   }
  ]
 }
