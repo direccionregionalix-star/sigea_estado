@@ -6,11 +6,11 @@
     <version>1.9.0</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99.99</qgis_maximum_version>
-    <homepage>https://sigeadmin.netlify.app</homepage>
+    <homepage>https://sebageoz92.github.io/sigea_estado/</homepage>
     <file_name>sigea_panel.1.9.0.zip</file_name>
     <icon>icon.png</icon>
     <author_name>SERVEL DR Araucanía</author_name>
-    <download_url>https://sigeadmin.netlify.app/sigea_panel.1.9.0.zip</download_url>
+    <download_url>https://sebageoz92.github.io/sigea_estado/sigea_panel.1.9.0.zip</download_url>
     <update_date>2026-07-01</update_date>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
