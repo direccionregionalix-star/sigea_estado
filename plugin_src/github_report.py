@@ -23,6 +23,11 @@ except ImportError:
 # Misma clave que usa SIGEA (estado_online.py)
 _OBF_KEY = b"SIGEA2026araucania"
 
+# Mapa de tipo_geo_id → nombre legible (exportado para uso en bitacora.py)
+NOMBRES = {1: "LOCALIDAD", 2: "EXACTO", 3: "CALLE", 4: "NO_GEO",
+           5: "PROXIMIDAD", 6: "FUERA_COMUNA", 7: "AUTOGEO",
+           8: "RECINTO_NO_GEO", 9: "SIN_TIPO", 10: "MASIVO"}
+
 
 def _deofuscar(b64):
     key = _OBF_KEY
@@ -113,10 +118,7 @@ def publicar_avance(codigo, conteos, total, metadata_version=""):
     except RuntimeError as e:
         return False, str(e)
 
-    # Mapear tipo_geo_id numérico a nombres legibles
-    NOMBRES = {1: "LOCALIDAD", 2: "EXACTO", 3: "CALLE", 4: "NO_GEO",
-               5: "PROXIMIDAD", 6: "FUERA_COMUNA", 7: "AUTOGEO",
-               8: "RECINTO_NO_GEO", 9: "SIN_TIPO", 10: "MASIVO"}
+    # Usar el mapa de módulo (exportado)
     confirmados = {}
     confirmados_total = 0
     for tid, n in conteos.items():

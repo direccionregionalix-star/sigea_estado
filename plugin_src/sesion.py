@@ -158,6 +158,33 @@ def _rotar_respaldos(codigo, gpkg_onedrive):
             pass
 
 
+def copia_atomica_verificada(origen, destino):
+    """Copia origen→destino de forma atómica (.tmp + os.replace) y verifica
+    tamaño + SHA-256. Devuelve (ok, msg). NO borra el origen.
+    Reutilizable para central→funcionario, funcionario→QA, y la sync existente."""
+    tmp = destino + ".tmp"
+    try:
+        shutil.copy2(origen, tmp)
+        os.replace(tmp, destino)
+    except (OSError, shutil.Error) as e:
+        try:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+        except OSError:
+            pass
+        return False, f"No pude escribir en destino: {e}"
+    try:
+        if not os.path.exists(destino):
+            return False, "El archivo no quedó en destino tras copiar."
+        if os.path.getsize(destino) != os.path.getsize(origen):
+            return False, "El archivo destino quedó con tamaño distinto."
+        if _hash_archivo(destino) != _hash_archivo(origen):
+            return False, "La verificación SHA-256 falló."
+    except OSError as e:
+        return False, f"No pude verificar la copia: {e}"
+    return True, "ok"
+
+
 def sincronizar(codigo, usuario=None, manifest_cb=None):
     """Escribe la copia local de vuelta a OneDrive (sobrescritura atómica),
     respaldando el anterior. La capa ya debe estar QUITADA del proyecto y
@@ -178,34 +205,9 @@ def sincronizar(codigo, usuario=None, manifest_cb=None):
     # Respaldar el actual de OneDrive antes de pisarlo
     _rotar_respaldos(codigo, destino)
 
-    # Escritura atómica: copiar a .tmp y renombrar
-    tmp = destino + ".tmp"
-    try:
-        shutil.copy2(local, tmp)
-        os.replace(tmp, destino)
-    except (OSError, shutil.Error) as e:
-        try:
-            if os.path.exists(tmp):
-                os.remove(tmp)
-        except OSError:
-            pass
-        return False, f"No pude escribir a OneDrive: {e}"
-
-    # VERIFICACIÓN DE INTEGRIDAD: el archivo en OneDrive debe existir y
-    # coincidir en tamaño y hash con la copia local. Si no, la sincronización
-    # NO es confiable — avisar y NO borrar nada local.
-    try:
-        if not os.path.exists(destino):
-            return False, "El archivo no quedó en OneDrive tras copiar."
-        if os.path.getsize(destino) != os.path.getsize(local):
-            return False, "El archivo en OneDrive quedó con tamaño distinto. "\
-                          "Tu trabajo sigue a salvo en la copia local."
-        if _hash_archivo(destino) != _hash_archivo(local):
-            return False, "La verificación de integridad falló. Tu trabajo "\
-                          "sigue a salvo en la copia local."
-    except OSError as e:
-        return False, f"No pude verificar la sincronización: {e}. "\
-                      "Tu trabajo sigue a salvo en la copia local."
+    ok, msg = copia_atomica_verificada(local, destino)
+    if not ok:
+        return False, f"{msg}. Tu trabajo sigue a salvo en la copia local."
 
     # Manifest para que SIGEA pueda verificar la sincronización del otro lado
     if manifest_cb:

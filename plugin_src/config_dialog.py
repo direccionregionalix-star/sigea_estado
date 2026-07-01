@@ -98,6 +98,13 @@ class SigeaConfigDialog(QDialog):
                                    "Pruébalo tú antes de recomendarlo al equipo.")
         gl.addWidget(self._chk_click)
 
+        self._chk_admin = QCheckBox("Habilitar modo admin")
+        self._chk_admin.setChecked(settings.modo_admin_habilitado())
+        self._chk_admin.setToolTip(
+            "Muestra el botón 🔑 Modo Admin si el token tiene acceso de escritura. "
+            "Solo para el supervisor del proceso. Apagado por defecto.")
+        gl.addWidget(self._chk_admin)
+
         gl.addWidget(QLabel("Tipos visibles en la botonera:"))
         TIPOS = [(2, "EXACTO"), (1, "LOCALIDAD"), (3, "CALLE"), (5, "PROXIMIDAD"),
                  (4, "NO GEO"), (6, "FUERA COMUNA"), (7, "AUTOGEO"),
@@ -172,6 +179,7 @@ class SigeaConfigDialog(QDialog):
         settings.set_carpeta_base_local(self._carpeta.text().strip())
         settings.set_carpeta_trabajo_local(self._carpeta_trabajo.text().strip())
         settings.set_modo_click(self._chk_click.isChecked())
+        settings.set_modo_admin_habilitado(self._chk_admin.isChecked())
         ocultos = {cod for cod, chk in self._chks_tipos.items()
                    if not chk.isChecked()}
         settings.set_tipos_ocultos(ocultos)
