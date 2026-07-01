@@ -42,6 +42,21 @@
     "total": 1587,
     "pct": 68.6
    }
+  },
+  {
+   "ts": "2026-07-01T19:27:29+00:00",
+   "tipo": "avance",
+   "recinto": "01485",
+   "funcionario": "igarrido",
+   "detalle": {
+    "calle": 212,
+    "localidad": 181,
+    "no_geo": 402,
+    "fuera_comuna": 33,
+    "exacto": 261,
+    "total": 1587,
+    "pct": 68.6
+   }
   }
  ]
 }
