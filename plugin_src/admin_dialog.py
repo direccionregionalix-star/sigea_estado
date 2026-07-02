@@ -134,6 +134,7 @@ class AdminDialog(QDialog):
         tabs.addTab(self._tab_asignar(), "Asignar recinto")
         tabs.addTab(self._tab_entregar_qa(), "Entregar a QA")
         tabs.addTab(self._tab_qa(), "QA / Cierre")
+        tabs.addTab(self._tab_entregas_sige(), "Entregas SIGE")
 
         lay.addWidget(tabs)
         cerrar = QPushButton("Cerrar")
@@ -896,6 +897,182 @@ class AdminDialog(QDialog):
             f"✓ Recinto {codigo} cerrado sin asignar (enterprise_previo).")
         self._lbl_qa_msg.setStyleSheet("color:#2e7d32;font-size:11px;")
         self._recargar_recintos()
+
+
+    # ── Tab 5: Entregas SIGE ─────────────────────────────────────────────
+
+    def _tab_entregas_sige(self):
+        w = QWidget()
+        lay = QVBoxLayout(w)
+        lay.addWidget(QLabel("<b>Importar entregas SIGE (xlsx)</b>"))
+        lay.addWidget(QLabel(
+            '<span style="color:#666;font-size:10px">'
+            'Escanea entregas xlsx del directorio de funcionarios. '
+            'Al aprobar copia a QA_pendiente/, actualiza estado y registra bitácora.</span>'))
+
+        btn_scan = QPushButton("Buscar entregas SIGE")
+        btn_scan.setStyleSheet(_btn_style("#1565c0", "#1976d2"))
+        btn_scan.clicked.connect(self._escanear_sige)
+        lay.addWidget(btn_scan)
+
+        lay.addWidget(QLabel("Entregas pendientes:"))
+        self._lst_sige = QListWidget()
+        self._lst_sige.setFixedHeight(140)
+        self._lst_sige.setSelectionMode(QAbstractItemView.SingleSelection)
+        self._lst_sige.currentItemChanged.connect(
+            lambda cur, _prev: self._mostrar_resumen_sige(cur))
+        lay.addWidget(self._lst_sige)
+
+        lay.addWidget(QLabel("Resumen de filas (sin RUTs ni datos sensibles):"))
+        self._tbl_sige = QTableWidget()
+        self._tbl_sige.setColumnCount(5)
+        self._tbl_sige.setHorizontalHeaderLabels(
+            ["N°", "tipo_geo", "lat", "lon", "método"])
+        self._tbl_sige.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self._tbl_sige.horizontalHeader().setStretchLastSection(True)
+        self._tbl_sige.setFixedHeight(160)
+        lay.addWidget(self._tbl_sige)
+
+        self._lbl_sige_msg = QLabel("")
+        self._lbl_sige_msg.setWordWrap(True)
+        self._lbl_sige_msg.setStyleSheet("font-size:11px;")
+        lay.addWidget(self._lbl_sige_msg)
+
+        btn_aprobar = QPushButton("✓ Aprobar e importar entrega seleccionada")
+        btn_aprobar.setStyleSheet(_btn_style("#2e7d32", "#388e3c"))
+        btn_aprobar.clicked.connect(self._aprobar_sige)
+        lay.addWidget(btn_aprobar)
+        lay.addStretch()
+
+        self._sige_filas_validadas = []   # cache de filas validadas
+        self._sige_entrega_actual = None  # dict con recinto/usuario/ruta_xlsx
+        return w
+
+    def _escanear_sige(self):
+        try:
+            from . import importador_sige
+        except ImportError as e:
+            self._lbl_sige_msg.setText(f"✗ importador_sige no disponible: {e}")
+            self._lbl_sige_msg.setStyleSheet("color:#c62828;font-size:11px;")
+            return
+        self._lst_sige.clear()
+        self._tbl_sige.setRowCount(0)
+        self._sige_filas_validadas = []
+        self._sige_entrega_actual = None
+
+        try:
+            entregas = importador_sige.escanear_entregas_sige()
+        except Exception as e:
+            self._lbl_sige_msg.setText(f"✗ Error escaneando: {e}")
+            self._lbl_sige_msg.setStyleSheet("color:#c62828;font-size:11px;")
+            return
+
+        if not entregas:
+            self._lbl_sige_msg.setText("Sin entregas SIGE nuevas pendientes.")
+            self._lbl_sige_msg.setStyleSheet("color:#666;font-size:11px;")
+            return
+
+        for e in entregas:
+            label = (f"[{e['recinto']}] {e['usuario']} — "
+                     f"{__import__('os').path.basename(e['ruta_xlsx'])} "
+                     f"({e.get('ts_archivo', '')})")
+            item = QListWidgetItem(label)
+            item.setData(Qt.UserRole, e)
+            self._lst_sige.addItem(item)
+
+        self._lbl_sige_msg.setText(f"{len(entregas)} entrega(s) SIGE encontradas.")
+        self._lbl_sige_msg.setStyleSheet("color:#1565c0;font-size:11px;")
+
+    def _mostrar_resumen_sige(self, item):
+        self._tbl_sige.setRowCount(0)
+        self._sige_filas_validadas = []
+        self._sige_entrega_actual = None
+        if not item:
+            return
+        entrega = item.data(Qt.UserRole)
+        if not entrega:
+            return
+
+        try:
+            from . import importador_sige
+            _headers, filas_raw = importador_sige.leer_entrega_xlsx(entrega["ruta_xlsx"])
+            filas_val, resumen = importador_sige.validar_entrega_sige(filas_raw)
+        except Exception as e:
+            self._lbl_sige_msg.setText(f"✗ Error leyendo xlsx: {e}")
+            self._lbl_sige_msg.setStyleSheet("color:#c62828;font-size:11px;")
+            return
+
+        self._sige_filas_validadas = filas_val
+        self._sige_entrega_actual = entrega
+
+        # Resumen de tipos (sin datos sensibles)
+        n_exc = resumen.get("excepcion", 0)
+        n_pend = resumen.get("pendiente", 0)
+        n_val = resumen.get("validas", 0)
+        self._lbl_sige_msg.setText(
+            f"Filas: {n_val} válidas, {n_pend} pendientes (sin coords), "
+            f"{n_exc} excepciones. "
+            + (f"⚠ {n_exc} excepción(es) — revisar antes de aprobar." if n_exc else ""))
+        self._lbl_sige_msg.setStyleSheet(
+            "color:#b71c1c;font-size:11px;" if n_exc else "color:#1565c0;font-size:11px;")
+
+        # Tabla de resumen por fila (solo tipo_geo, coordenadas y método — sin RUTs/dir)
+        self._tbl_sige.setRowCount(len(filas_val))
+        for row_i, fila in enumerate(filas_val):
+            estado_fila = fila.get("_estado", "")
+            self._tbl_sige.setItem(row_i, 0, QTableWidgetItem(str(row_i + 1)))
+            self._tbl_sige.setItem(row_i, 1, QTableWidgetItem(str(fila.get("tipo_geo_id", ""))))
+            self._tbl_sige.setItem(row_i, 2, QTableWidgetItem(str(fila.get("latitud", ""))))
+            self._tbl_sige.setItem(row_i, 3, QTableWidgetItem(str(fila.get("longitud", ""))))
+            self._tbl_sige.setItem(row_i, 4, QTableWidgetItem(str(fila.get("metodo", ""))))
+            if estado_fila == "excepcion":
+                for col in range(5):
+                    it = self._tbl_sige.item(row_i, col)
+                    if it:
+                        it.setBackground(QColor("#ffcdd2"))
+            elif estado_fila == "pendiente":
+                for col in range(5):
+                    it = self._tbl_sige.item(row_i, col)
+                    if it:
+                        it.setBackground(QColor("#fff9c4"))
+
+    def _aprobar_sige(self):
+        if not self._sige_entrega_actual or not self._sige_filas_validadas:
+            self._lbl_sige_msg.setText("✗ Selecciona una entrega y espera el resumen.")
+            self._lbl_sige_msg.setStyleSheet("color:#c62828;font-size:11px;")
+            return
+
+        entrega = self._sige_entrega_actual
+        n_exc = sum(1 for f in self._sige_filas_validadas if f.get("_estado") == "excepcion")
+        if n_exc:
+            resp = QMessageBox.question(
+                self, "Hay excepciones",
+                f"Esta entrega tiene {n_exc} fila(s) marcadas como excepción.\n"
+                "¿Importar de todas formas? Las excepciones se conservan.",
+                QMessageBox.Yes | QMessageBox.Cancel)
+            if resp != QMessageBox.Yes:
+                return
+
+        try:
+            from . import importador_sige
+            ok, msg = importador_sige.procesar_entrega_sige(
+                entrega["recinto"], entrega["usuario"],
+                entrega["ruta_xlsx"], self._sige_filas_validadas)
+        except Exception as e:
+            self._lbl_sige_msg.setText(f"✗ Error al procesar: {e}")
+            self._lbl_sige_msg.setStyleSheet("color:#c62828;font-size:11px;")
+            return
+
+        color = "#2e7d32" if ok else "#c62828"
+        self._lbl_sige_msg.setText(f"{'✓' if ok else '✗'} {msg}")
+        self._lbl_sige_msg.setStyleSheet(f"color:{color};font-size:11px;")
+        if ok:
+            # Quitar de la lista
+            row = self._lst_sige.currentRow()
+            self._lst_sige.takeItem(row)
+            self._tbl_sige.setRowCount(0)
+            self._sige_filas_validadas = []
+            self._sige_entrega_actual = None
 
 
 class _SeleccionarRecintoDlg(QDialog):
