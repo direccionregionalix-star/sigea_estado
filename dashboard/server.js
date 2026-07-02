@@ -15,6 +15,8 @@
 
 const http = require("http");
 const https = require("https");
+const fs = require("fs");
+const path = require("path");
 
 const PORT = process.env.PORT || 3001;
 const SMTP_HOST = process.env.SIGEA_SMTP_HOST || "";
@@ -248,6 +250,17 @@ const server = http.createServer(async (req, res) => {
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, enviado, simulado: !!info.simulado }));
+    });
+    return;
+  }
+
+  // Servir index.html para GET / y GET /dashboard
+  if (req.method === "GET" && (req.url === "/" || req.url === "/dashboard" || req.url === "/index.html")) {
+    const htmlPath = path.join(__dirname, "index.html");
+    fs.readFile(htmlPath, (err, data) => {
+      if (err) { res.writeHead(404); res.end("Not found"); return; }
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(data);
     });
     return;
   }

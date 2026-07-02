@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIGEA — Estado Rectificación La Araucanía</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23b03a2e'/%3E%3Ctext x='16' y='22' font-size='16' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -382,10 +381,13 @@
 
 <script>
 // ─── Configuración ───────────────────────────────────────────────────────────
-const ESTADO_URL = "../estado.json";
-const BITA_URL   = "../bitacora.json";
-const QGIS_BASE  = "../qgis/";
-const SIGE_BASE  = "../sige/";
+// URLs de datos — apuntan al repo GitHub donde vive el estado real.
+// Si en el futuro el servidor Railway sirve los JSON localmente, cambiar a "./".
+const _GH_RAW = "https://raw.githubusercontent.com/SebaGeoZ92/sigea_estado/main";
+const ESTADO_URL = _GH_RAW + "/estado.json";
+const BITA_URL   = _GH_RAW + "/bitacora.json";
+const QGIS_BASE  = _GH_RAW + "/qgis/";
+const SIGE_BASE  = _GH_RAW + "/sige/";
 const REFRESH_MS = 5 * 60 * 1000;
 
 let USUARIOS  = [];
