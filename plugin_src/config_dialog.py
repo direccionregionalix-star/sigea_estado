@@ -25,7 +25,7 @@ class SigeaConfigDialog(QDialog):
         form = QFormLayout()
 
         self._usuario = QLineEdit(settings.usuario())
-        self._usuario.setPlaceholderText("mespinoza")
+        self._usuario.setPlaceholderText("mespinozan")
         form.addRow("Usuario:", self._usuario)
 
         self._estado_url = QLineEdit(settings.estado_url())

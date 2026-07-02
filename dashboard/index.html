@@ -232,6 +232,7 @@
 <nav class="tabs">
   <button class="activo" onclick="cambiarTab('estado', this)">Estado</button>
   <button onclick="cambiarTab('bitacora', this)">Bitácora</button>
+  <button onclick="cambiarTab('correos', this)">Correos</button>
   <button onclick="cambiarTab('admin', this)">Admin</button>
 </nav>
 
@@ -275,6 +276,36 @@
       <tbody id="bita-body"><tr><td colspan="5" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando bitácora…</td></tr></tbody>
     </table>
     <div id="bita-paginacion"></div>
+  </div>
+
+  <!-- ══ TAB CORREOS ════════════════════════════════════════════════════ -->
+  <div id="tab-correos" class="tab-panel">
+    <div id="correos-filtros" style="display:flex;gap:.5rem;flex-wrap:wrap;padding:1rem 1.5rem;background:var(--blanco);border-bottom:1px solid var(--gris-borde);align-items:center;">
+      <input id="correos-recinto-fil" type="text" placeholder="Código recinto…" style="max-width:130px">
+      <input id="correos-func-fil"    type="text" placeholder="Funcionario…"    style="max-width:130px">
+      <select id="correos-estado-fil">
+        <option value="">Todos</option>
+        <option value="enviado">Enviado</option>
+        <option value="simulado">Simulado</option>
+      </select>
+      <button onclick="filtrarCorreos()">Filtrar</button>
+      <button class="btn btn-gris" onclick="limpiarFiltrosCorreos()" style="background:none;border:1px solid var(--gris-borde);border-radius:6px;padding:.4rem .7rem;cursor:pointer;font-size:.85rem;">Limpiar</button>
+    </div>
+    <table id="correos-tabla" style="width:100%;border-collapse:collapse;font-size:.85rem;">
+      <thead>
+        <tr style="background:var(--gris-fondo);">
+          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Fecha</th>
+          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Destinatario</th>
+          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Asunto</th>
+          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Recinto</th>
+          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Funcionario</th>
+          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Estado</th>
+        </tr>
+      </thead>
+      <tbody id="correos-body">
+        <tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando…</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- ══ TAB ADMIN ═══════════════════════════════════════════════════════ -->
@@ -363,6 +394,8 @@ let _bitaData = [];          // eventos completos cargados
 let _bitaFilt = [];          // después de filtrar
 let _bitaPag  = 0;
 const BITA_POR_PAG = 30;
+let _correosData = [];       // eventos mail del bitacora
+let _correosFilt = [];
 
 // Token decodificado (solo en memoria, nunca en DOM ni localStorage)
 let _tokenDesc = null;
@@ -382,6 +415,7 @@ function cambiarTab(id, btn) {
   btn.classList.add("activo");
 
   if (id === "bitacora" && _bitaData.length === 0) cargarBitacora();
+  if (id === "correos")  cargarCorreos();
   if (id === "admin")    renderMailLista();
 }
 
@@ -644,6 +678,77 @@ function limpiarFiltroBita() {
   _bitaFilt = _bitaData;
   _bitaPag  = 0;
   renderBitacora();
+}
+
+// ─── Correos ─────────────────────────────────────────────────────────────────
+async function cargarCorreos() {
+  if (_bitaData.length > 0) {
+    _renderCorreosData();
+    return;
+  }
+  // Si la bitácora no está cargada aún, cargarla primero
+  try {
+    const data = await fetchJSON(BITA_URL);
+    _bitaData = (data.eventos || []).slice().reverse();
+  } catch (e) {
+    document.getElementById("correos-body").innerHTML =
+      `<tr><td colspan="6" style="color:var(--rojo);padding:2rem;text-align:center">Error al cargar bitácora: ${e.message}</td></tr>`;
+    return;
+  }
+  _renderCorreosData();
+}
+
+function _renderCorreosData() {
+  _correosData = _bitaData.filter(ev => ev.tipo === "mail");
+  _correosFilt = _correosData;
+  _renderCorreosTabla();
+}
+
+function filtrarCorreos() {
+  const recFil  = (document.getElementById("correos-recinto-fil").value || "").trim().toLowerCase();
+  const funcFil = (document.getElementById("correos-func-fil").value || "").trim().toLowerCase();
+  const estFil  = document.getElementById("correos-estado-fil").value;
+  _correosFilt = _correosData.filter(ev => {
+    if (recFil  && !(ev.recinto   || "").toLowerCase().includes(recFil))  return false;
+    if (funcFil && !(ev.funcionario|| "").toLowerCase().includes(funcFil)) return false;
+    if (estFil === "enviado"  && !ev.detalle?.enviado)  return false;
+    if (estFil === "simulado" &&  ev.detalle?.enviado)  return false;
+    return true;
+  });
+  _renderCorreosTabla();
+}
+
+function limpiarFiltrosCorreos() {
+  document.getElementById("correos-recinto-fil").value = "";
+  document.getElementById("correos-func-fil").value = "";
+  document.getElementById("correos-estado-fil").value = "";
+  _correosFilt = _correosData;
+  _renderCorreosTabla();
+}
+
+function _renderCorreosTabla() {
+  const tbody = document.getElementById("correos-body");
+  if (_correosFilt.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Sin eventos de correo registrados.</td></tr>';
+    return;
+  }
+  const filas = _correosFilt.map(ev => {
+    const det = ev.detalle || {};
+    const enviado = det.enviado;
+    const badge = enviado
+      ? '<span style="background:#c8e6c9;color:#1b5e20;padding:2px 7px;border-radius:10px;font-size:.78rem;">enviado</span>'
+      : '<span style="background:#fff9c4;color:#6d4c41;padding:2px 7px;border-radius:10px;font-size:.78rem;">simulado</span>';
+    return `<tr>
+      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${fmtFecha(ev.ts)}</td>
+      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${det.destinatario || "—"}</td>
+      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${(det.asunto||"").replace(/"/g,"'")}">
+        ${det.asunto || "—"}</td>
+      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${ev.recinto || "—"}</td>
+      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${ev.funcionario || "—"}</td>
+      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${badge}</td>
+    </tr>`;
+  }).join("");
+  tbody.innerHTML = filas;
 }
 
 // ─── Admin — unlock ──────────────────────────────────────────────────────────
