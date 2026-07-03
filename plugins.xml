@@ -6,11 +6,11 @@
     <version>2.1.0</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99.99</qgis_maximum_version>
-    <homepage>https://github.com/direccionregionalix/sigea_estado</homepage>
+    <homepage>https://github.com/direccionregionalix-star/sigea_estado</homepage>
     <file_name>sigea_panel.2.1.0.zip</file_name>
     <icon>icon.png</icon>
     <author_name>SERVEL DR Araucanía</author_name>
-    <download_url>https://raw.githubusercontent.com/direccionregionalix/sigea_estado/main/sigea_panel.2.1.0.zip</download_url>
+    <download_url>https://raw.githubusercontent.com/direccionregionalix-star/sigea_estado/main/sigea_panel.2.1.0.zip</download_url>
     <update_date>2026-07-03</update_date>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
