@@ -15,6 +15,8 @@
 
 const http = require("http");
 const https = require("https");
+const fs = require("fs");
+const path = require("path");
 
 const PORT = process.env.PORT || 3001;
 const SMTP_HOST = process.env.SIGEA_SMTP_HOST || "";
@@ -22,6 +24,12 @@ const SMTP_PORT = parseInt(process.env.SIGEA_SMTP_PORT || "587", 10);
 const SMTP_USER = process.env.SIGEA_SMTP_USER || "";
 const SMTP_PASS = process.env.SIGEA_SMTP_PASS || "";
 const MAIL_FROM = process.env.SIGEA_MAIL_FROM || SMTP_USER;
+
+// Repo GitHub donde viven estado.json / bitacora.json / qgis/ / sige/
+// Variable: SIGEA_REPO=SebaGeoZ92/sigea_estado  (owner/repo, sin slash final)
+// El servidor inyecta esta URL en el HTML al servir index.html.
+const SIGEA_REPO = process.env.SIGEA_REPO || "SebaGeoZ92/sigea_estado";
+const GH_RAW_BASE = `https://raw.githubusercontent.com/${SIGEA_REPO}/main`;
 
 // Mapa funcionario → email (configurable por variable de entorno JSON)
 // SIGEA_MAILS='{"igarrido":"i.garrido@servel.cl", ...}'
@@ -248,6 +256,19 @@ const server = http.createServer(async (req, res) => {
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, enviado, simulado: !!info.simulado }));
+    });
+    return;
+  }
+
+  // Servir index.html para GET / y GET /dashboard
+  // Reemplaza el placeholder __GH_RAW_BASE__ con la URL real del repo.
+  if (req.method === "GET" && (req.url === "/" || req.url === "/dashboard" || req.url === "/index.html")) {
+    const htmlPath = path.join(__dirname, "index.html");
+    fs.readFile(htmlPath, "utf8", (err, html) => {
+      if (err) { res.writeHead(404); res.end("Not found"); return; }
+      const out = html.replace("__GH_RAW_BASE__", GH_RAW_BASE);
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(out);
     });
     return;
   }

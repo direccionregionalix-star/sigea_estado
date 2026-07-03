@@ -1,0 +1,15 @@
+{
+  "name": "sigea-estado",
+  "version": "2.0.0",
+  "description": "SIGEA DR Araucanía — servidor de notificaciones y dashboard",
+  "main": "dashboard/server.js",
+  "scripts": {
+    "start": "node dashboard/server.js"
+  },
+  "optionalDependencies": {
+    "nodemailer": "^6.9.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
