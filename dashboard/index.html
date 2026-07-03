@@ -381,9 +381,9 @@
 
 <script>
 // ─── Configuración ───────────────────────────────────────────────────────────
-// URLs de datos — apuntan al repo GitHub donde vive el estado real.
-// Si en el futuro el servidor Railway sirve los JSON localmente, cambiar a "./".
-const _GH_RAW = "https://raw.githubusercontent.com/SebaGeoZ92/sigea_estado/main";
+// _GH_RAW es inyectado por server.js al servir este archivo (reemplaza el placeholder).
+// Para desarrollo local sin server.js, puedes cambiarlo manualmente.
+const _GH_RAW = "__GH_RAW_BASE__";
 const ESTADO_URL = _GH_RAW + "/estado.json";
 const BITA_URL   = _GH_RAW + "/bitacora.json";
 const QGIS_BASE  = _GH_RAW + "/qgis/";
