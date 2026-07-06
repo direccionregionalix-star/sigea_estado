@@ -294,6 +294,16 @@
     "total": 1087,
     "pct": 100.0
    }
+  },
+  {
+   "ts": "2026-07-06T20:05:11+00:00",
+   "tipo": "qa",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "resultado": "aprobado",
+    "comentario": ""
+   }
   }
  ]
 }
