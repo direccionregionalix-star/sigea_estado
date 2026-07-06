@@ -382,6 +382,16 @@
     "asunto": "[SIGEA] entrega — recinto 01346",
     "enviado": false
    }
+  },
+  {
+   "ts": "2026-07-06T20:11:16+00:00",
+   "tipo": "devolucion",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "motivo": "",
+    "conservo_avance": true
+   }
   }
  ]
 }
