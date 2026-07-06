@@ -280,6 +280,20 @@
     "total": 1087,
     "pct": 100.0
    }
+  },
+  {
+   "ts": "2026-07-06T19:44:23+00:00",
+   "tipo": "entrega",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "localidad": 365,
+    "exacto": 366,
+    "calle": 259,
+    "no_geo": 97,
+    "total": 1087,
+    "pct": 100.0
+   }
   }
  ]
 }
