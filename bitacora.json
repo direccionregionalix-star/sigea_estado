@@ -314,6 +314,16 @@
     "resultado": "aprobado",
     "comentario": ""
    }
+  },
+  {
+   "ts": "2026-07-06T20:05:17+00:00",
+   "tipo": "qa",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "resultado": "aprobado",
+    "comentario": ""
+   }
   }
  ]
 }
