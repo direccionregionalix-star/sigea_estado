@@ -352,6 +352,15 @@
    "detalle": {
     "cerrado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-07-06T20:07:27+00:00",
+   "tipo": "asignacion",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "jmedina"
+   }
   }
  ]
 }
