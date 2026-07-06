@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-06T20:09:32+00:00",
+ "generado": "2026-07-06T20:11:14+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -79,7 +79,7 @@
     }
    ],
    "liberado": true,
-   "estado_flujo": "en_qa",
+   "estado_flujo": "devuelto_con_avance",
    "conservo_avance": true
   },
   "pfigueroa": null
