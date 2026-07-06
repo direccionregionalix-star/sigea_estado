@@ -343,6 +343,15 @@
    "detalle": {
     "cerrado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-07-06T20:06:24+00:00",
+   "tipo": "cierre",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "cerrado_por": "jmedina"
+   }
   }
  ]
 }
