@@ -371,6 +371,17 @@
     "motivo": "",
     "conservo_avance": true
    }
+  },
+  {
+   "ts": "2026-07-06T20:09:30+00:00",
+   "tipo": "mail",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "destinatario": "jmedina",
+    "asunto": "[SIGEA] entrega — recinto 01346",
+    "enviado": false
+   }
   }
  ]
 }
