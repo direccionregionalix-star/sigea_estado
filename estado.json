@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-07T18:22:07+00:00",
+ "generado": "2026-07-07T18:22:46+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -53,7 +53,32 @@
     }
    ]
   },
-  "jmedina": null,
+  "jmedina": {
+   "asignacion_id": 1783448565,
+   "codigo": "01393",
+   "unidad": "LICEO POLITECNICO DOMINGO SANTA MARIA",
+   "comuna": "09209",
+   "n_electores": 1027,
+   "fecha_estimada": "2026-07-22",
+   "dias_restantes": 15,
+   "avance": 0,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 1783448565,
+     "codigo": "01393",
+     "unidad": "LICEO POLITECNICO DOMINGO SANTA MARIA",
+     "comuna": "09209",
+     "n_electores": 1027,
+     "fecha_estimada": "2026-07-22",
+     "dias_restantes": 15,
+     "avance": 0,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
+  },
   "pfigueroa": null
  },
  "_t": "NCAzLTRQb0JXFS1QRCFWJy8qCwh3KiJhalp1ECMEOCgyMTNTJXgFFAtEQGFmUxwRMCcQLRg3Ih0yPzZ6dQF4EBMqEhMnBAcHBH1/BHJjBGhuJDclICIjNg5ZHiET",
