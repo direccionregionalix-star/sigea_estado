@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-07T18:22:46+00:00",
+ "generado": "2026-07-07T20:25:54+00:00Z",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -9,7 +9,7 @@
    "n_electores": 1587,
    "fecha_estimada": "2026-07-03",
    "dias_restantes": 10,
-   "avance": 668,
+   "avance": 1581,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
@@ -35,7 +35,7 @@
    "n_electores": 1650,
    "fecha_estimada": "2026-07-07",
    "dias_restantes": 14,
-   "avance": 1289,
+   "avance": 996,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
@@ -61,7 +61,7 @@
    "n_electores": 1027,
    "fecha_estimada": "2026-07-22",
    "dias_restantes": 15,
-   "avance": 0,
+   "avance": 216,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
