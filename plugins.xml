@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <plugins>
-  <pyqgis_plugin name="SIGEA Panel" version="2.1.0">
+  <pyqgis_plugin name="SIGEA Panel" version="2.1.1">
     <description>Panel de rectificación electoral integrado con SIGEA DR Araucanía</description>
-    <about>v2.1.0: correo real vía servidor Railway (mailer.py), copia automática al supervisor en entregas. v2.0.0: importador entregas SIGE (xlsx), pestaña Correos en dashboard, fix mespinozan.</about>
-    <version>2.1.0</version>
+    <about>v2.1.1: Soporte nativo para QGIS 4.x (PyQt6), Modo Admin funcional y conexión a estado mediante proxy anti-caché. v2.1.0: correo real vía servidor Railway, copia automática al supervisor en entregas. v2.0.0: importador entregas SIGE.</about>
+    <version>2.1.1</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99.99</qgis_maximum_version>
     <homepage>https://github.com/direccionregionalix-star/sigea_estado</homepage>
-    <file_name>sigea_panel.2.1.0.zip</file_name>
+    <file_name>sigea_panel.2.1.1.zip</file_name>
     <icon>icon.png</icon>
     <author_name>SERVEL DR Araucanía</author_name>
-    <download_url>https://raw.githubusercontent.com/direccionregionalix-star/sigea_estado/main/sigea_panel.2.1.0.zip</download_url>
-    <update_date>2026-07-03</update_date>
+    <download_url>https://raw.githubusercontent.com/direccionregionalix-star/sigea_estado/main/sigea_panel.2.1.1.zip</download_url>
+    <update_date>2026-07-07</update_date>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>electoral,servel,sigea</tags>
