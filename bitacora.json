@@ -448,6 +448,16 @@
     "total": 1587,
     "pct": 97.3
    }
+  },
+  {
+   "ts": "2026-07-07T18:17:04+00:00",
+   "tipo": "devolucion",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "motivo": "",
+    "conservo_avance": true
+   }
   }
  ]
 }
