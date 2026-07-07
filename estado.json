@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-07T18:17:20+00:00",
+ "generado": "2026-07-07T18:17:32+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -53,35 +53,7 @@
     }
    ]
   },
-  "jmedina": {
-   "asignacion_id": 1783368445,
-   "codigo": "01346",
-   "unidad": "ESCUELA GUSTAVO VASQUEZ DIAZ",
-   "comuna": "09206",
-   "n_electores": 1087,
-   "fecha_estimada": "2026-07-21",
-   "dias_restantes": 15,
-   "avance": 0,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1783368445,
-     "codigo": "01346",
-     "unidad": "ESCUELA GUSTAVO VASQUEZ DIAZ",
-     "comuna": "09206",
-     "n_electores": 1087,
-     "fecha_estimada": "2026-07-21",
-     "dias_restantes": 15,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ],
-   "liberado": true,
-   "estado_flujo": "devuelto_con_avance",
-   "conservo_avance": true
-  },
+  "jmedina": null,
   "pfigueroa": null
  },
  "_t": "NCAzLTRQb0JXFS1QRCFWJy8qCwh3KiJhalp1ECMEOCgyMTNTJXgFFAtEQGFmUxwRMCcQLRg3Ih0yPzZ6dQF4EBMqEhMnBAcHBH1/BHJjBGhuJDclICIjNg5ZHiET",
