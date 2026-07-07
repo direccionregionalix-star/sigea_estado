@@ -575,6 +575,21 @@
     "total": 1587,
     "pct": 99.6
    }
+  },
+  {
+   "ts": "2026-07-07T19:58:37+00:00",
+   "tipo": "entrega",
+   "recinto": "01485",
+   "funcionario": "igarrido",
+   "detalle": {
+    "calle": 317,
+    "no_geo": 629,
+    "localidad": 242,
+    "fuera_comuna": 35,
+    "exacto": 358,
+    "total": 1587,
+    "pct": 99.6
+   }
   }
  ]
 }
