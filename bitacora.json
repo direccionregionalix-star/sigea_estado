@@ -497,6 +497,15 @@
     "motivo": "",
     "conservo_avance": false
    }
+  },
+  {
+   "ts": "2026-07-07T18:22:47+00:00",
+   "tipo": "asignacion",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "jmedina"
+   }
   }
  ]
 }
