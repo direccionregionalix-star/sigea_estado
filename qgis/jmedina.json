@@ -1,18 +1,14 @@
 {
  "usuario": "jmedina",
- "recinto_cod": "01346",
- "timestamp": "2026-07-06T19:44:21+00:00",
+ "recinto_cod": "01393",
+ "timestamp": "2026-07-07T15:12:30+00:00",
  "avance": {
-  "total_registros": 1087,
-  "confirmados": {
-   "LOCALIDAD": 365,
-   "EXACTO": 366,
-   "CALLE": 259,
-   "NO_GEO": 97
-  },
-  "confirmados_total": 1087,
-  "pendientes": 0,
-  "pct": 100.0
+  "total_registros": 1027,
+  "confirmados": {},
+  "confirmados_total": 0,
+  "pendientes": 1027,
+  "pct": 0
  },
- "origen": "Plugin QGIS entrega"
+ "origen": "Plugin QGIS",
+ "_nota": "reporte reseteado tras reasignacion 01346->01393 (limpieza admin)"
 }
