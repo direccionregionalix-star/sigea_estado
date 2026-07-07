@@ -1,7 +1,7 @@
 {
  "usuario": "igarrido",
  "recinto_cod": "01485",
- "timestamp": "2026-07-07T19:58:18+00:00",
+ "timestamp": "2026-07-07T19:58:35+00:00",
  "avance": {
   "total_registros": 1587,
   "confirmados": {
@@ -15,5 +15,5 @@
   "pendientes": 6,
   "pct": 99.6
  },
- "origen": "Plugin QGIS"
+ "origen": "Plugin QGIS entrega"
 }
