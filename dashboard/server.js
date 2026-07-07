@@ -227,7 +227,7 @@ const server = http.createServer(async (req, res) => {
   }
   // --- FIN NUEVA RUTA ---
 
-  if (req.method === "POST" && req.url === "/mail") {
+  if (req.method === "POST" && (req.url === "/mail" || req.url === "//mail")) {
     let body = "";
     req.on("data", d => body += d);
     req.on("end", async () => {
