@@ -278,7 +278,7 @@
     "calle": 259,
     "no_geo": 97,
     "total": 1087,
-    "pct": 100.0
+    "pct": 100
    }
   },
   {
@@ -292,7 +292,7 @@
     "calle": 259,
     "no_geo": 97,
     "total": 1087,
-    "pct": 100.0
+    "pct": 100
    }
   },
   {
@@ -391,6 +391,17 @@
    "detalle": {
     "motivo": "",
     "conservo_avance": true
+   }
+  },
+  {
+   "ts": "2026-07-07T18:01:07Z",
+   "tipo": "mail",
+   "recinto": "01485",
+   "funcionario": "igarrido",
+   "detalle": {
+    "destinatario": "igarrido",
+    "asunto": "[SIGEA] Se te asignó el recinto 01485",
+    "enviado": false
    }
   }
  ]
