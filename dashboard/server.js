@@ -3,8 +3,8 @@
  * POST /mail  { destinatario, tipo, recinto, funcionario }
  *
  * Credenciales SMTP en variables de entorno:
- *   SIGEA_SMTP_HOST, SIGEA_SMTP_PORT, SIGEA_SMTP_USER, SIGEA_SMTP_PASS
- *   SIGEA_MAIL_FROM   (remitente, default: SIGEA_SMTP_USER)
+ * SIGEA_SMTP_HOST, SIGEA_SMTP_PORT, SIGEA_SMTP_USER, SIGEA_SMTP_PASS
+ * SIGEA_MAIL_FROM   (remitente, default: SIGEA_SMTP_USER)
  *
  * Sin SMTP configurado: simula el envío (log + evento con enviado:false).
  * Railway: agregar como proceso en Procfile o como start en package.json.
@@ -28,7 +28,7 @@ const MAIL_FROM = process.env.SIGEA_MAIL_FROM || SMTP_USER;
 // Repo GitHub donde viven estado.json / bitacora.json / qgis/ / sige/
 // Variable: SIGEA_REPO=SebaGeoZ92/sigea_estado  (owner/repo, sin slash final)
 // El servidor inyecta esta URL en el HTML al servir index.html.
-const SIGEA_REPO = process.env.SIGEA_REPO || "SebaGeoZ92/sigea_estado";
+const SIGEA_REPO = process.env.SIGEA_REPO || "direccionregionalix-star/sigea_estado";
 const GH_RAW_BASE = `https://raw.githubusercontent.com/${SIGEA_REPO}/main`;
 
 // Mapa funcionario → email (configurable por variable de entorno JSON)
@@ -203,6 +203,29 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") {
     res.writeHead(204); res.end(); return;
   }
+
+  // --- NUEVA RUTA: Proxy para estado.json (Anti-caché) ---
+  if (req.method === "GET" && req.url === "/estado.json") {
+    // Agregamos un timestamp a la URL de GitHub para obligarlo a dar la versión más reciente
+    const noCacheUrl = `${GH_RAW_BASE}/estado.json?t=${Date.now()}`;
+    
+    https.get(noCacheUrl, (githubRes) => {
+      let rawData = "";
+      githubRes.on("data", (chunk) => rawData += chunk);
+      githubRes.on("end", () => {
+        res.writeHead(githubRes.statusCode, { 
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*" 
+        });
+        res.end(rawData);
+      });
+    }).on("error", (e) => {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Fallo de conexión a GitHub", detalle: e.message }));
+    });
+    return;
+  }
+  // --- FIN NUEVA RUTA ---
 
   if (req.method === "POST" && req.url === "/mail") {
     let body = "";
