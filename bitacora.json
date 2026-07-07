@@ -487,6 +487,16 @@
    "detalle": {
     "asignado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-07-07T18:22:09+00:00",
+   "tipo": "devolucion",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "motivo": "",
+    "conservo_avance": false
+   }
   }
  ]
 }
