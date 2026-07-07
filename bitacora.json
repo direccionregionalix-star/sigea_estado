@@ -532,6 +532,19 @@
     "total": 1027,
     "pct": 7.3
    }
+  },
+  {
+   "ts": "2026-07-07T19:18:20+00:00",
+   "tipo": "avance",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "calle": 42,
+    "proximidad": 19,
+    "exacto": 32,
+    "total": 1027,
+    "pct": 9.1
+   }
   }
  ]
 }
