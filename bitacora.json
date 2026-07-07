@@ -506,6 +506,19 @@
    "detalle": {
     "asignado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-07-07T18:28:12+00:00",
+   "tipo": "avance",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "proximidad": 21,
+    "localidad": 37,
+    "no_geo": 3,
+    "total": 1027,
+    "pct": 5.9
+   }
   }
  ]
 }
