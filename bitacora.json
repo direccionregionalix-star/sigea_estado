@@ -468,6 +468,16 @@
     "motivo": "",
     "conservo_avance": true
    }
+  },
+  {
+   "ts": "2026-07-07T18:17:34+00:00",
+   "tipo": "devolucion",
+   "recinto": "01346",
+   "funcionario": "jmedina",
+   "detalle": {
+    "motivo": "",
+    "conservo_avance": false
+   }
   }
  ]
 }
