@@ -1,0 +1,78 @@
+name: Consolidar Avances SIGEA
+
+on:
+  push:
+    paths:
+      - 'qgis/*.json'
+
+permissions:
+  contents: write
+
+jobs:
+  actualizar-estado:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Ejecutar script consolidador
+        run: |
+          python -c "
+          import json, glob, datetime
+
+          # 1. Leer estado.json global
+          try:
+              with open('estado.json', 'r', encoding='utf-8') as f:
+                  estado = json.load(f)
+          except Exception as e:
+              print('Error leyendo estado.json:', e)
+              exit(1)
+
+          cambios = False
+
+          # 2. Iterar sobre todos los reportes individuales
+          for path in glob.glob('qgis/*.json'):
+              try:
+                  with open(path, 'r', encoding='utf-8') as f:
+                      reporte = json.load(f)
+                  
+                  usuario = reporte.get('usuario')
+                  if usuario and usuario in estado.get('funcionarios', {}):
+                      asig = estado['funcionarios'][usuario]
+                      
+                      # Validar que la asignación no sea nula y que el código de recinto coincida
+                      if asig and str(asig.get('codigo')) == str(reporte.get('recinto_cod')):
+                          nuevo_avance = reporte.get('avance', {}).get('confirmados_total', 0)
+                          
+                          # Actualizar solo si hay diferencias
+                          if asig.get('avance') != nuevo_avance:
+                              asig['avance'] = nuevo_avance
+                              cambios = True
+              except Exception as e:
+                  print(f'Error procesando {path}:', e)
+
+          # 3. Guardar estado.json si hubo modificaciones
+          if cambios:
+              # Formato ISO compatible con el datetime del plugin original
+              estado['generado'] = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat() + 'Z'
+              with open('estado.json', 'w', encoding='utf-8') as f:
+                  json.dump(estado, f, ensure_ascii=False, indent=1)
+              print('estado.json actualizado exitosamente.')
+          else:
+              print('Sin cambios en los avances.')
+          "
+
+      - name: Commit y Push del nuevo estado
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add estado.json
+          # Si hay diferencias en Git, crea el commit; si no, termina silenciosamente
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automatización: Consolidación de avance desde QGIS" && git push)
