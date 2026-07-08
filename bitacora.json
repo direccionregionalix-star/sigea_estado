@@ -712,6 +712,21 @@
     "asunto": "[SIGEA] Se te asignó el recinto 01393",
     "enviado": false
    }
+  },
+  {
+   "ts": "2026-07-08T15:44:51+00:00",
+   "tipo": "avance",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "calle": 133,
+    "exacto": 199,
+    "proximidad": 14,
+    "localidad": 21,
+    "no_geo": 2,
+    "total": 1027,
+    "pct": 35.9
+   }
   }
  ]
 }
