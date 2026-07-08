@@ -915,6 +915,21 @@
     "total": 1636,
     "pct": 38.8
    }
+  },
+  {
+   "ts": "2026-07-08T20:22:41+00:00",
+   "tipo": "avance",
+   "recinto": "01289",
+   "funcionario": "igarrido",
+   "detalle": {
+    "proximidad": 11,
+    "no_geo": 104,
+    "localidad": 54,
+    "fuera_comuna": 4,
+    "exacto": 1,
+    "total": 1270,
+    "pct": 13.7
+   }
   }
  ]
 }
