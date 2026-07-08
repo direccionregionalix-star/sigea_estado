@@ -701,6 +701,17 @@
     "asunto": "[SIGEA] Se te asignó el recinto 01393",
     "enviado": false
    }
+  },
+  {
+   "ts": "2026-07-08T14:27:03Z",
+   "tipo": "mail",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "destinatario": "jmedina",
+    "asunto": "[SIGEA] Se te asignó el recinto 01393",
+    "enviado": false
+   }
   }
  ]
 }
