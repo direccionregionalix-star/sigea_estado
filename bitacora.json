@@ -653,6 +653,21 @@
     "asunto": "[SIGEA] Se te asignó el recinto 01393",
     "enviado": false
    }
+  },
+  {
+   "ts": "2026-07-08T12:07:41+00:00",
+   "tipo": "avance",
+   "recinto": "01274",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "calle": 675,
+    "localidad": 129,
+    "no_geo": 455,
+    "exacto": 179,
+    "fuera_comuna": 13,
+    "total": 1650,
+    "pct": 87.9
+   }
   }
  ]
 }
