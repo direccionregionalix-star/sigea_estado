@@ -839,6 +839,15 @@
     "total": 1636,
     "pct": 37.2
    }
+  },
+  {
+   "ts": "2026-07-08T18:47:36+00:00",
+   "tipo": "asignacion",
+   "recinto": "01289",
+   "funcionario": "igarrido",
+   "detalle": {
+    "asignado_por": "mespinozan"
+   }
   }
  ]
 }
