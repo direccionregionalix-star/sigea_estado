@@ -768,6 +768,15 @@
     "resultado": "aprobado",
     "comentario": ""
    }
+  },
+  {
+   "ts": "2026-07-08T16:04:03+00:00",
+   "tipo": "cierre",
+   "recinto": "01485",
+   "funcionario": "igarrido",
+   "detalle": {
+    "cerrado_por": "igarrido"
+   }
   }
  ]
 }
