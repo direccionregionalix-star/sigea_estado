@@ -848,6 +848,19 @@
    "detalle": {
     "asignado_por": "mespinozan"
    }
+  },
+  {
+   "ts": "2026-07-08T18:56:00+00:00",
+   "tipo": "avance",
+   "recinto": "01289",
+   "funcionario": "igarrido",
+   "detalle": {
+    "proximidad": 11,
+    "no_geo": 104,
+    "exacto": 1,
+    "total": 1270,
+    "pct": 9.1
+   }
   }
  ]
 }
