@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-08T18:31:36+00:00",
+ "generado": "2026-07-08T18:47:35+00:00",
  "funcionarios": {
   "_qa_01485": {
    "asignacion_id": 12,
@@ -29,7 +29,32 @@
    "liberado": true,
    "estado_flujo": "en_qa"
   },
-  "igarrido": null,
+  "igarrido": {
+   "asignacion_id": 1783536455,
+   "codigo": "01289",
+   "unidad": "LICEO SAN FRANCISCO DE ASIS",
+   "comuna": "09121",
+   "n_electores": 1270,
+   "fecha_estimada": "2026-07-27",
+   "dias_restantes": 19,
+   "avance": 0,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 1783536455,
+     "codigo": "01289",
+     "unidad": "LICEO SAN FRANCISCO DE ASIS",
+     "comuna": "09121",
+     "n_electores": 1270,
+     "fecha_estimada": "2026-07-27",
+     "dias_restantes": 19,
+     "avance": 0,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
+  },
   "mespinozan": {
    "asignacion_id": 13,
    "codigo": "01274",
