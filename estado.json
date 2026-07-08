@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-08T18:47:35+00:00",
+ "generado": "2026-07-08T19:48:17+00:00Z",
  "funcionarios": {
   "_qa_01485": {
    "asignacion_id": 12,
@@ -37,7 +37,7 @@
    "n_electores": 1270,
    "fecha_estimada": "2026-07-27",
    "dias_restantes": 19,
-   "avance": 0,
+   "avance": 116,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
@@ -55,32 +55,7 @@
     }
    ]
   },
-  "mespinozan": {
-   "asignacion_id": 13,
-   "codigo": "01274",
-   "unidad": "ESCUELA BASICA NAHUELBUTA",
-   "comuna": "Angol",
-   "n_electores": 1650,
-   "fecha_estimada": "2026-07-07",
-   "dias_restantes": 14,
-   "avance": 996,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 13,
-     "codigo": "01274",
-     "unidad": "ESCUELA BASICA NAHUELBUTA",
-     "comuna": "Angol",
-     "n_electores": 1650,
-     "fecha_estimada": "2026-07-07",
-     "dias_restantes": 14,
-     "avance": 1289,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "mespinozan": null,
   "jmedina": {
    "asignacion_id": 1783448565,
    "codigo": "01393",
@@ -89,7 +64,7 @@
    "n_electores": 1027,
    "fecha_estimada": "2026-07-22",
    "dias_restantes": 15,
-   "avance": 216,
+   "avance": 530,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
@@ -115,7 +90,7 @@
    "n_electores": 1636,
    "fecha_estimada": "2026-07-31",
    "dias_restantes": 23,
-   "avance": 0,
+   "avance": 609,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
@@ -132,6 +107,33 @@
      "tipo_origen": "recinto"
     }
    ]
+  },
+  "_qa_01274": {
+   "asignacion_id": 13,
+   "codigo": "01274",
+   "unidad": "ESCUELA BASICA NAHUELBUTA",
+   "comuna": "Angol",
+   "n_electores": 1650,
+   "fecha_estimada": "2026-07-07",
+   "dias_restantes": 14,
+   "avance": 1650,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 13,
+     "codigo": "01274",
+     "unidad": "ESCUELA BASICA NAHUELBUTA",
+     "comuna": "Angol",
+     "n_electores": 1650,
+     "fecha_estimada": "2026-07-07",
+     "dias_restantes": 14,
+     "avance": 1289,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ],
+   "estado_flujo": "en_qa"
   }
  },
  "_t": "NCAzLTRQb0JXFS1QRCFWJy8qCwh3KiJhalp1ECMEOCgyMTNTJXgFFAtEQGFmUxwRMCcQLRg3Ih0yPzZ6dQF4EBMqEhMnBAcHBH1/BHJjBGhuJDclICIjNg5ZHiET",
