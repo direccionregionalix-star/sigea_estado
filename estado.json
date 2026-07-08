@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-07T20:25:54+00:00Z",
+ "generado": "2026-07-08T16:00:48+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 12,
@@ -25,7 +25,9 @@
      "herramienta": "qgis",
      "tipo_origen": "recinto"
     }
-   ]
+   ],
+   "liberado": true,
+   "estado_flujo": "en_qa"
   },
   "mespinozan": {
    "asignacion_id": 13,
