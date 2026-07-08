@@ -47,7 +47,7 @@ jobs:
                   if usuario and usuario in estado.get('funcionarios', {}) and estado['funcionarios'][usuario] is not None:
                       asig = estado['funcionarios'][usuario]
                       
-                      # Validar que la asignación no sea nula y que el código de recinto coincida
+                      # Validar que el código de recinto coincida
                       if asig and str(asig.get('codigo')) == str(reporte.get('recinto_cod')):
                           nuevo_avance = reporte.get('avance', {}).get('confirmados_total', 0)
                           
@@ -56,15 +56,15 @@ jobs:
                               asig['avance'] = nuevo_avance
                               cambios = True
                           
-                          # NUEVO: Interceptar la entrega para liberar al usuario (Dispara y Olvida)
+                          # Interceptar la entrega para liberar al usuario
                           if 'entrega' in reporte.get('origen', '').lower():
                               asig['estado_flujo'] = 'en_qa'
                               codigo_rec = asig.get('codigo')
                               
-                              # Archivar en la bandeja de QA para que el Admin no lo pierda
+                              # Archivar en la bandeja de QA
                               estado['funcionarios'][f'_qa_{codigo_rec}'] = asig.copy()
                               
-                              # Liberar al usuario inmediatamente poniéndolo en null
+                              # Liberar al usuario
                               estado['funcionarios'][usuario] = None
                               cambios = True
               except Exception as e:
@@ -72,7 +72,6 @@ jobs:
 
           # 3. Guardar estado.json si hubo modificaciones
           if cambios:
-              # Formato ISO compatible con el datetime del plugin original
               estado['generado'] = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat() + 'Z'
               with open('estado.json', 'w', encoding='utf-8') as f:
                   json.dump(estado, f, ensure_ascii=False, indent=1)
@@ -86,5 +85,4 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add estado.json
-          # Si hay diferencias en Git, crea el commit; si no, termina silenciosamente
           git diff --quiet && git diff --staged --quiet || (git commit -m "Automatización: Consolidación de avance y/o entrega desde QGIS" && git push)
