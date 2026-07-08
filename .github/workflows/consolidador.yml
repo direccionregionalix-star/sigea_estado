@@ -44,7 +44,7 @@ jobs:
                       reporte = json.load(f)
                   
                   usuario = reporte.get('usuario')
-                  if usuario and usuario in estado.get('funcionarios', {}):
+                  if usuario and usuario in estado.get('funcionarios', {}) and estado['funcionarios'][usuario] is not None:
                       asig = estado['funcionarios'][usuario]
                       
                       # Validar que la asignación no sea nula y que el código de recinto coincida
