@@ -818,6 +818,15 @@
     "total": 1027,
     "pct": 51.6
    }
+  },
+  {
+   "ts": "2026-07-08T18:31:38+00:00",
+   "tipo": "asignacion",
+   "recinto": "01476",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "asignado_por": "pfigueroa"
+   }
   }
  ]
 }
