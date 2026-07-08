@@ -1,17 +1,19 @@
 {
  "usuario": "igarrido",
  "recinto_cod": "01289",
- "timestamp": "2026-07-08T19:12:43+00:00",
+ "timestamp": "2026-07-08T20:22:39+00:00",
  "avance": {
   "total_registros": 1270,
   "confirmados": {
    "PROXIMIDAD": 11,
    "NO_GEO": 104,
+   "LOCALIDAD": 54,
+   "FUERA_COMUNA": 4,
    "EXACTO": 1
   },
-  "confirmados_total": 116,
-  "pendientes": 1154,
-  "pct": 9.1
+  "confirmados_total": 174,
+  "pendientes": 1096,
+  "pct": 13.7
  },
  "origen": "Plugin QGIS"
 }
