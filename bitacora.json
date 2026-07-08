@@ -827,6 +827,18 @@
    "detalle": {
     "asignado_por": "pfigueroa"
    }
+  },
+  {
+   "ts": "2026-07-08T18:36:19+00:00",
+   "tipo": "avance",
+   "recinto": "01476",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "no_geo": 608,
+    "proximidad": 1,
+    "total": 1636,
+    "pct": 37.2
+   }
   }
  ]
 }
