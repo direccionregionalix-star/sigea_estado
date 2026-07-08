@@ -738,6 +738,16 @@
     "asunto": "[SIGEA] entrega — recinto 01485",
     "enviado": false
    }
+  },
+  {
+   "ts": "2026-07-08T16:02:23+00:00",
+   "tipo": "qa",
+   "recinto": "01346",
+   "funcionario": "",
+   "detalle": {
+    "resultado": "aprobado",
+    "comentario": ""
+   }
   }
  ]
 }
