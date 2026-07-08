@@ -758,6 +758,16 @@
     "resultado": "aprobado",
     "comentario": ""
    }
+  },
+  {
+   "ts": "2026-07-08T16:03:39+00:00",
+   "tipo": "qa",
+   "recinto": "01485",
+   "funcionario": "igarrido",
+   "detalle": {
+    "resultado": "aprobado",
+    "comentario": ""
+   }
   }
  ]
 }
