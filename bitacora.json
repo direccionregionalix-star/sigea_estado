@@ -777,6 +777,17 @@
    "detalle": {
     "cerrado_por": "igarrido"
    }
+  },
+  {
+   "ts": "2026-07-08T16:14:59Z",
+   "tipo": "mail",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "destinatario": "jmedina",
+    "asunto": "[SIGEA] Se te asignó el recinto 01393",
+    "enviado": false
+   }
   }
  ]
 }
