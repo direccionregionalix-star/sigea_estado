@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría SIGEA - IX Región</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-size: 0.9rem; }
+        .navbar { background-color: #c62828; }
+        .table-responsive { background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 15px; }
+        .badge-pendiente { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .badge-trabajo { background-color: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; }
+        .badge-qa { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+        .badge-migrado { background-color: #ede7f6; color: #4527a0; border: 1px solid #d1c4e9; }
+        .row-modificada { background-color: #e8f5e9 !important; transition: 0.3s; }
+        .row-descartada { background-color: #ffebee !important; transition: 0.3s; }
+        .reserva-badge { background-color: #263238; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; margin-top: 4px; display: inline-block; }
+        #panel-envio { position: fixed; bottom: 0; width: 100%; background: white; border-top: 2px solid #ddd; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000; display: none; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">SIGEA | Panel de Auditoría de Recintos (Priorizados)</span>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4 mb-5 pb-5">
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label text-muted small mb-1">Buscar recinto</label>
+                <input type="text" id="buscador" class="form-control" placeholder="Ej: 01274 o Nahuelbuta...">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small mb-1">Filtro por Comuna</label>
+                <select id="filtro-comuna" class="form-select">
+                    <option value="">Todas las Comunas</option>
+                    </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label text-muted small mb-1">Filtro por Estado</label>
+                <select id="filtro-estado" class="form-select">
+                    <option value="">Todos los Estados</option>
+                    <option value="Pendiente">Pendientes</option>
+                    <option value="Migrado">Cerrados (Migrado)</option>
+                    <option value="Trabajo">En Trabajo</option>
+                </select>
+            </div>
+            <div class="col-md-3 text-end pb-1">
+                <span class="text-muted small">Haz clic en los botones para auditar un recinto.</span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="tabla-recintos">
+                <thead>
+                    <tr>
+                        <th width="8%">Cód</th>
+                        <th width="12%">Comuna</th>
+                        <th width="35%">Nombre del Recinto</th>
+                        <th width="10%">Electores</th>
+                        <th width="15%">Estado Actual</th>
+                        <th width="20%">Acciones de Auditoría</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-recintos">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="panel-envio" class="d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-0 text-success" id="contador-modificados">0 recintos auditados</h5>
+            <small class="text-muted">Cuando termines de revisar, genera el reporte.</small>
+        </div>
+        <div>
+            <button class="btn btn-primary btn-lg" onclick="copiarReporte()">📋 Copiar Reporte (Para WhatsApp)</button>
+        </div>
+    </div>
+
+    <script>
+        // Diccionario de Comunas (CUT 5 dígitos -> Glosa)
+        const dicComunas = {
+            "9101": "Temuco", "9102": "Carahue", "9103": "Cunco", "9104": "Curarrehue", "9105": "Freire",
+            "9106": "Galvarino", "9107": "Gorbea", "9108": "Lautaro", "9109": "Loncoche", "9110": "Melipeuco",
+            "9111": "Nueva Imperial", "9112": "Padre Las Casas", "9113": "Perquenco", "9114": "Pitrufquén",
+            "9115": "Pucón", "9116": "Saavedra", "9117": "Teodoro Schmidt", "9118": "Toltén", "9119": "Vilcún",
+            "9120": "Villarrica", "9121": "Cholchol", "9201": "Angol", "9202": "Collipulli", "9203": "Curacautín",
+            "9204": "Ercilla", "9205": "Lonquimay", "9206": "Los Sauces", "9207": "Lumaco", "9208": "Purén",
+            "9209": "Renaico", "9210": "Traiguén", "9211": "Victoria"
+        };
+
+        // Base de datos de los 107 recintos extraídos
+        const datos = [{"Codigo": "01274", "Nombre": "ESCUELA BASICA NAHUELBUTA", "Comuna": "9201", "Total_Electores": 1650, "Estado_Operativo": "En Trabajo", "Funcionario_Actual": "mespinozan"}, {"Codigo": "01393", "Nombre": "LICEO POLITECNICO DOMINGO SANTA MARIA", "Comuna": "9209", "Total_Electores": 1027, "Estado_Operativo": "En Trabajo", "Funcionario_Actual": "jmedina"}, {"Codigo": "01485", "Nombre": "ESCUELA PARTICULAR SAGRADA FAMILIA", "Comuna": "9120", "Total_Electores": 1587, "Estado_Operativo": "En Trabajo", "Funcionario_Actual": "igarrido"}, {"Codigo": "01380", "Nombre": "ESCUELA LAS AMERICAS", "Comuna": "9114", "Total_Electores": 1291, "Estado_Operativo": "Cerrado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01339", "Nombre": "ESCUELA ALBORADA", "Comuna": "9109", "Total_Electores": 1050, "Estado_Operativo": "Cerrado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01388", "Nombre": "LICEO BICENTENARIO DE HOTELERIA Y TURISMO", "Comuna": "9115", "Total_Electores": 1330, "Estado_Operativo": "Entregado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01333", "Nombre": "COMPLEJO EDUCACIONAL JUAN XXIII", "Comuna": "9109", "Total_Electores": 450, "Estado_Operativo": "Cerrado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01469", "Nombre": "ESCUELA HEROES DE IQUIQUE", "Comuna": "9211", "Total_Electores": 567, "Estado_Operativo": "Cerrado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01466", "Nombre": "COLEGIO IGNACIO CARRERA PINTO", "Comuna": "9211", "Total_Electores": 523, "Estado_Operativo": "Entregado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01383", "Nombre": "COLEGIO LIAHONA", "Comuna": "9115", "Total_Electores": 445, "Estado_Operativo": "Cerrado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01465", "Nombre": "ESCUELA SELVA OSCURA", "Comuna": "9211", "Total_Electores": 343, "Estado_Operativo": "Cerrado (Migrado)", "Funcionario_Actual": "Gestión anterior (Flask)"}, {"Codigo": "01273", "Nombre": "COLEGIO BASICO ARAGON", "Comuna": "9201", "Total_Electores": 607, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01275", "Nombre": "COLEGIO DIEGO DUBLE URRUTIA", "Comuna": "9201", "Total_Electores": 335, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01276", "Nombre": "COLEGIO HERMANOS CARRERA", "Comuna": "9201", "Total_Electores": 556, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01279", "Nombre": "LICEO BICENTENARIO ENRIQUE BALLACEY COTTEREAU", "Comuna": "9201", "Total_Electores": 1218, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01283", "Nombre": "ESCUELA VILLA HUEQUEN", "Comuna": "9201", "Total_Electores": 216, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01284", "Nombre": "ESCUELA PUBLICA KIM RUKA PABELLON A", "Comuna": "9102", "Total_Electores": 1813, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01286", "Nombre": "LICEO BICENTENARIO CLAUDIO ARRAU LEON", "Comuna": "9102", "Total_Electores": 1037, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01287", "Nombre": "ESCUELA PUBLICA NEHUENTUE", "Comuna": "9102", "Total_Electores": 307, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01288", "Nombre": "LICEO PUBLICO TROVOLHUE", "Comuna": "9102", "Total_Electores": 561, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01289", "Nombre": "LICEO SAN FRANCISCO DE ASIS", "Comuna": "9121", "Total_Electores": 1270, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01290", "Nombre": "LICEO BICENTENARIO JAMES MUNDELL", "Comuna": "9121", "Total_Electores": 664, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01291", "Nombre": "COMPLEJO EDUCACIONAL COLLIPULLI", "Comuna": "9202", "Total_Electores": 595, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01292", "Nombre": "ESCUELA BASICA VICTOR DURAN PEREZ", "Comuna": "9202", "Total_Electores": 1340, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01294", "Nombre": "ESCUELA THOMAS ALVA EDISON", "Comuna": "9202", "Total_Electores": 367, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01296", "Nombre": "ESCUELA F-90 RAUL CASTRO MARQUEZ", "Comuna": "9202", "Total_Electores": 362, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01299", "Nombre": "LICEO MUNICIPAL ATENEA", "Comuna": "9103", "Total_Electores": 1632, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01304", "Nombre": "ESCUELA OSVALDO FUENTES BARRERA", "Comuna": "9203", "Total_Electores": 701, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01305", "Nombre": "ESCUELA RAMON EDUARDO RAMIREZ HENRIQUEZ", "Comuna": "9203", "Total_Electores": 129, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01306", "Nombre": "COMPLEJO EDUCACIONAL MONSEÑOR FRANCISCO VALDES SUBERCASEAUX", "Comuna": "9104", "Total_Electores": 840, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01307", "Nombre": "COMPLEJO EDUCACIONAL RUKA NGEN", "Comuna": "9104", "Total_Electores": 802, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01308", "Nombre": "FUNDACION EDUCACIONAL ESCUELA SAN FRANCISCO DE ASIS DE ERCILLA", "Comuna": "9204", "Total_Electores": 1122, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01309", "Nombre": "LICEO ALONSO DE ERCILLA Y ZUÑIGA", "Comuna": "9204", "Total_Electores": 571, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01311", "Nombre": "COLEGIO SANTA CRUZ DE FREIRE", "Comuna": "9105", "Total_Electores": 698, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01312", "Nombre": "LICEO BICENTENARIO JUAN SCHLEYER", "Comuna": "9105", "Total_Electores": 1018, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01313", "Nombre": "ESCUELA JUAN SEGUEL", "Comuna": "9105", "Total_Electores": 1237, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01314", "Nombre": "ESCUELA JUAN SEGUEL ANEXO", "Comuna": "9105", "Total_Electores": 955, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01315", "Nombre": "ESCUELA RAIMAPU", "Comuna": "9105", "Total_Electores": 111, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01316", "Nombre": "ESCUELA LA ESPERANZA", "Comuna": "9105", "Total_Electores": 31, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01317", "Nombre": "ESCUELA MUNICIPAL GABRIELA MISTRAL", "Comuna": "9106", "Total_Electores": 1259, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01320", "Nombre": "ESCUELA PRESBITERO JOSE AGUSTIN GOMEZ", "Comuna": "9107", "Total_Electores": 1200, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01322", "Nombre": "COMPLEJO EDUCACIONAL JOSE VICTORINO LASTARRIA", "Comuna": "9107", "Total_Electores": 695, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01326", "Nombre": "ESCUELA IRENE FREI", "Comuna": "9108", "Total_Electores": 1290, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01330", "Nombre": "LICEO BICENTENARIO POLITECNICO EMA ESPINOZA CORREA", "Comuna": "9108", "Total_Electores": 1386, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01335", "Nombre": "COLEGIO SANTA CRUZ DE LONCOCHE", "Comuna": "9109", "Total_Electores": 1687, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01336", "Nombre": "LICEO BICENTENARIO PADRE ALBERTO HURTADO CRUCHAGA", "Comuna": "9109", "Total_Electores": 3, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01341", "Nombre": "ESCUELA BASICA LIUCURA", "Comuna": "9205", "Total_Electores": 6, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01342", "Nombre": "ESCUELA MUNICIPAL FRONTERIZA", "Comuna": "9205", "Total_Electores": 1185, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01344", "Nombre": "LICEO BICENTENARIO LONQUIMAY", "Comuna": "9205", "Total_Electores": 795, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01346", "Nombre": "ESCUELA GUSTAVO VASQUEZ DIAZ", "Comuna": "9206", "Total_Electores": 1087, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01347", "Nombre": "ESCUELA BASICA REPUBLICA DE ITALIA", "Comuna": "9207", "Total_Electores": 760, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01351", "Nombre": "ESCUELA BASICA VOLCAN LLAIMA", "Comuna": "9110", "Total_Electores": 539, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01352", "Nombre": "LICEO LOS ANDES", "Comuna": "9110", "Total_Electores": 1580, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01353", "Nombre": "ESCUELA PUBLICA ALEJANDRO GOROSTIAGA", "Comuna": "9111", "Total_Electores": 677, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01354", "Nombre": "ESCUELA ESPECIAL PUBLICA AVANCEMOS JUNTOS", "Comuna": "9111", "Total_Electores": 1209, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01362", "Nombre": "COMPLEJO EDUCACIONAL PADRE LAS CASAS", "Comuna": "9112", "Total_Electores": 270, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01366", "Nombre": "ESCUELA MONSEÑOR GUIDO DE RAMBERGA", "Comuna": "9112", "Total_Electores": 323, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01371", "Nombre": "ESCUELA PARTICULAR SAN BERNARDO", "Comuna": "9112", "Total_Electores": 172, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01372", "Nombre": "ESCUELA PARTICULAR SAN RAFAEL ARCANGEL", "Comuna": "9112", "Total_Electores": 39, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01375", "Nombre": "COLEGIO HABIT-ART", "Comuna": "9112", "Total_Electores": 187, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01378", "Nombre": "LICEO MUNICIPAL LA FRONTERA", "Comuna": "9114", "Total_Electores": 298, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01381", "Nombre": "ESCUELA UNION LATINOAMERICANA", "Comuna": "9114", "Total_Electores": 1747, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01386", "Nombre": "ESCUELA NUESTRA SEÑORA DE FATIMA", "Comuna": "9115", "Total_Electores": 85, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01387", "Nombre": "ESCUELA PARTICULAR 167 RAMON GUIÑEZ", "Comuna": "9115", "Total_Electores": 1527, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01390", "Nombre": "LICEO BICENTENARIO INDOMITO DE PUREN", "Comuna": "9208", "Total_Electores": 1221, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01394", "Nombre": "ESCUELA BASICA LOS NOGALES", "Comuna": "9209", "Total_Electores": 137, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01396", "Nombre": "ESCUELA PARTICULAR SAN SEBASTIAN", "Comuna": "9116", "Total_Electores": 1740, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01397", "Nombre": "LICEO PUBLICO REINO DE SUECIA", "Comuna": "9116", "Total_Electores": 1420, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01399", "Nombre": "COLEGIO CENTENARIO", "Comuna": "9101", "Total_Electores": 899, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01400", "Nombre": "COLEGIO SAINT PATRICK SCHOOL", "Comuna": "9101", "Total_Electores": 207, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01401", "Nombre": "COLEGIO SAN FRANCISCO", "Comuna": "9101", "Total_Electores": 2, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01403", "Nombre": "ESCUELA ARTISTICA ARMANDO DUFEY BLANC", "Comuna": "9101", "Total_Electores": 1320, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01406", "Nombre": "ESCUELA MILLARAY", "Comuna": "9101", "Total_Electores": 1199, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01407", "Nombre": "LICEO BICENTENARIO DE TEMUCO", "Comuna": "9101", "Total_Electores": 1257, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01410", "Nombre": "COLEGIO ALEMAN DE TEMUCO", "Comuna": "9101", "Total_Electores": 251, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01411", "Nombre": "LICEO PABLO NERUDA", "Comuna": "9101", "Total_Electores": 1456, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01420", "Nombre": "SUN FLOWER SCHOOL", "Comuna": "9101", "Total_Electores": 1, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01421", "Nombre": "ESCUELA PARTICULAR MONO PAINE", "Comuna": "9101", "Total_Electores": 128, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01424", "Nombre": "ESCUELA CAMPOS DEPORTIVOS", "Comuna": "9101", "Total_Electores": 451, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01433", "Nombre": "LICEO GABRIELA MISTRAL", "Comuna": "9101", "Total_Electores": 552, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01440", "Nombre": "COLEGIO ALONSO DE ERCILLA", "Comuna": "9101", "Total_Electores": 2, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01441", "Nombre": "COLEGIO AUGUSTO WINTER", "Comuna": "9101", "Total_Electores": 410, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01446", "Nombre": "COMPLEJO EDUCACIONAL UN AMANECER EN LA ARAUCANIA", "Comuna": "9101", "Total_Electores": 173, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01448", "Nombre": "LICEO CIENTIFICO HUMANISTA BRAINSTORM", "Comuna": "9101", "Total_Electores": 370, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "03167", "Nombre": "ESCUELA EPU NEWEN", "Comuna": "9101", "Total_Electores": 107, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "03620", "Nombre": "COLEGIO MANUEL MONTT", "Comuna": "9101", "Total_Electores": 149, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "03624", "Nombre": "COLEGIO CUMBRES DE LABRANZA", "Comuna": "9101", "Total_Electores": 1, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01452", "Nombre": "ESCUELA PUBLICA HORIZONTES", "Comuna": "9117", "Total_Electores": 1560, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01453", "Nombre": "COMPLEJO EDUCACIONAL PUBLICO NUEVA ALBORADA", "Comuna": "9117", "Total_Electores": 1333, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01454", "Nombre": "ESCUELA PARTICULAR N° 9 PADRE ALEJANDRO ORTEGA", "Comuna": "9117", "Total_Electores": 899, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01455", "Nombre": "LICEO BICENTENARIO MARTIN KLEINKNECHT PALMA", "Comuna": "9118", "Total_Electores": 1130, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01456", "Nombre": "ESCUELA PUBLICA AGUAS Y GAVIOTAS", "Comuna": "9118", "Total_Electores": 889, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01457", "Nombre": "ESCUELA PARTICULAR SUBVENCIONADA PADRE ISIDORO", "Comuna": "9118", "Total_Electores": 355, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01459", "Nombre": "COMPLEJO EDUCACIONAL LUIS DURAND DURAND", "Comuna": "9210", "Total_Electores": 356, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01460", "Nombre": "ESCUELA BASICA EMILIA ROMAGNA", "Comuna": "9210", "Total_Electores": 933, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01461", "Nombre": "ESCUELA REPUBLICA DE ISRAEL", "Comuna": "9210", "Total_Electores": 1162, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01462", "Nombre": "LICEO LUCILA GODOY ALCAYAGA", "Comuna": "9210", "Total_Electores": 130, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01464", "Nombre": "ESCUELA MUNICIPAL MONICA GEBERT MEIER", "Comuna": "9211", "Total_Electores": 72, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01476", "Nombre": "LICEO BICENTENARIO PADRE NICOLAS", "Comuna": "9119", "Total_Electores": 1636, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01479", "Nombre": "ESCUELA VOIPIR DE ÑANCUL", "Comuna": "9120", "Total_Electores": 359, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01480", "Nombre": "COLEGIO DE HUMANIDADES DEL SAGRADO CORAZON DE JESUS", "Comuna": "9120", "Total_Electores": 425, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01483", "Nombre": "ESCUELA JOSE ABELARDO NUÑEZ", "Comuna": "9120", "Total_Electores": 1668, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01484", "Nombre": "ESCUELA MARIANO LATORRE", "Comuna": "9120", "Total_Electores": 382, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01486", "Nombre": "ESCUELA VALENTIN LETELIER", "Comuna": "9120", "Total_Electores": 563, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01487", "Nombre": "LICEO BICENTENARIO ARAUCANIA", "Comuna": "9120", "Total_Electores": 1020, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01488", "Nombre": "LICEO BICENTENARIO ARTISTICO ALEXANDER GRAHAM BELL", "Comuna": "9120", "Total_Electores": 984, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}, {"Codigo": "01489", "Nombre": "LICEO BICENTENARIO POLITECNICO VILLARRICA", "Comuna": "9120", "Total_Electores": 1300, "Estado_Operativo": "Pendiente", "Funcionario_Actual": "Sin asignar"}];
+
+        let auditoria = {}; // Objeto para almacenar clics y correcciones
+
+        function initApp() {
+            // 1. Población del filtro de comunas usando el diccionario
+            const comunasPresentes = new Set(datos.map(d => d.Comuna));
+            const selectComuna = document.getElementById('filtro-comuna');
+            
+            // Ordenamos alfabéticamente por nombre de comuna
+            const comunasOrdenadas = Array.from(comunasPresentes)
+                .map(cut => ({ cut: cut, nombre: dicComunas[cut] || cut }))
+                .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+            comunasOrdenadas.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.cut;
+                opt.textContent = c.nombre;
+                selectComuna.appendChild(opt);
+            });
+
+            // 2. Render inicial de la tabla
+            renderTabla();
+        }
+
+        function getBadgeClass(estado) {
+            if (estado.includes('Migrado')) return 'badge-migrado badge rounded-pill';
+            if (estado.includes('QA')) return 'badge-qa badge rounded-pill';
+            if (estado.includes('Trabajo')) return 'badge-trabajo badge rounded-pill';
+            return 'badge-pendiente badge rounded-pill';
+        }
+
+        function renderTabla() {
+            const tbody = document.getElementById('tbody-recintos');
+            const filtroTexto = document.getElementById('buscador').value.toLowerCase();
+            const filtroComuna = document.getElementById('filtro-comuna').value;
+            const filtroEstado = document.getElementById('filtro-estado').value.toLowerCase();
+            tbody.innerHTML = '';
+
+            datos.forEach(r => {
+                const nombreComuna = dicComunas[r.Comuna] || r.Comuna;
+                
+                // Filtros
+                const textoBuscable = `${r.Codigo} ${r.Nombre.toLowerCase()} ${nombreComuna.toLowerCase()} ${r.Funcionario_Actual.toLowerCase()}`;
+                if (filtroTexto && !textoBuscable.includes(filtroTexto)) return;
+                if (filtroComuna && r.Comuna !== filtroComuna) return;
+                if (filtroEstado && !r.Estado_Operativo.toLowerCase().includes(filtroEstado)) return;
+
+                const tr = document.createElement('tr');
+                tr.id = `row-${r.Codigo}`;
+                
+                // Alertas de reserva territorial
+                let infoExtra = '';
+                if (nombreComuna === 'Temuco') {
+                    infoExtra = `<br><span class="reserva-badge" title="Jurisdicción de smardones">📌 Reservado (smardones)</span>`;
+                }
+
+                // Generación de botones o estado de auditoría
+                let accionesHtml = '';
+                if (auditoria[r.Codigo]) {
+                    if (auditoria[r.Codigo].accion === 'reclamado') {
+                        tr.classList.add('row-modificada');
+                        accionesHtml = `<strong>✅ Reclamado por: ${auditoria[r.Codigo].usuario}</strong> <br><button class="btn btn-sm btn-link text-danger p-0" onclick="deshacer('${r.Codigo}')">Deshacer</button>`;
+                    } else {
+                        tr.classList.add('row-descartada');
+                        accionesHtml = `<strong>🚫 Descartado: ${auditoria[r.Codigo].motivo}</strong> <br><button class="btn btn-sm btn-link text-danger p-0" onclick="deshacer('${r.Codigo}')">Deshacer</button>`;
+                    }
+                } else {
+                    accionesHtml = `
+                        <button class="btn btn-sm btn-outline-success me-1 mb-1" onclick="reclamar('${r.Codigo}', '${r.Nombre.replace(/'/g, "")}')">🙋‍♂️ Fui yo</button>
+                        <button class="btn btn-sm btn-outline-danger mb-1" onclick="descartar('${r.Codigo}', '${r.Nombre.replace(/'/g, "")}')">🚫 Descartar</button>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td><strong>${r.Codigo}</strong></td>
+                    <td>${nombreComuna}</td>
+                    <td>${r.Nombre} ${infoExtra} <br><small class="text-muted">Estado sistema: ${r.Funcionario_Actual}</small></td>
+                    <td>${r.Total_Electores}</td>
+                    <td><span class="${getBadgeClass(r.Estado_Operativo)}">${r.Estado_Operativo}</span></td>
+                    <td style="min-width: 220px;">${accionesHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            actualizarPanel();
+        }
+
+        function reclamar(codigo, nombre) {
+            const usuario = prompt(`¿Quién rectificó el recinto ${codigo} - ${nombre}?\n(Ingresa tu cuenta de usuario, ej: jmedina)`);
+            if (usuario && usuario.trim() !== '') {
+                auditoria[codigo] = { accion: 'reclamado', usuario: usuario.trim(), nombre: nombre };
+                renderTabla();
+            }
+        }
+
+        function descartar(codigo, nombre) {
+            if(confirm(`Estás marcando el recinto ${codigo} para excluirlo de la rectificación.\n¿Continuar?`)) {
+                const motivo = prompt('Por favor, indica un motivo breve (Ej: Local fusionado, Inhabilitado, etc):');
+                if (motivo && motivo.trim() !== '') {
+                    auditoria[codigo] = { accion: 'descartado', motivo: motivo.trim(), nombre: nombre };
+                    renderTabla();
+                }
+            }
+        }
+
+        function deshacer(codigo) {
+            delete auditoria[codigo];
+            renderTabla();
+        }
+
+        function actualizarPanel() {
+            const count = Object.keys(auditoria).length;
+            const panel = document.getElementById('panel-envio');
+            document.getElementById('contador-modificados').innerText = `${count} recinto(s) auditado(s) en esta sesión`;
+            panel.style.display = count > 0 ? 'flex' : 'none';
+        }
+
+        function copiarReporte() {
+            let texto = "📊 *REPORTE DE AUDITORÍA SIGEA (TERRENO)*\n\n";
+            Object.keys(auditoria).forEach(cod => {
+                const d = auditoria[cod];
+                if (d.accion === 'reclamado') {
+                    texto += `✅ *${cod}* (${d.nombre})\n   🙋‍♂️ Reclamado por: ${d.usuario}\n\n`;
+                } else {
+                    texto += `🚫 *${cod}* (${d.nombre})\n   ⛔ DESCARTAR: ${d.motivo}\n\n`;
+                }
+            });
+            
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("¡Reporte copiado al portapapeles!\n\nAbre WhatsApp Web o tu correo y pega el texto para enviarlo al Administrador.");
+            }).catch(err => {
+                alert("Error al copiar automáticamente. Selecciona el texto siguiente:\n\n" + texto);
+            });
+        }
+
+        // Listeners de los filtros
+        document.getElementById('buscador').addEventListener('input', renderTabla);
+        document.getElementById('filtro-comuna').addEventListener('change', renderTabla);
+        document.getElementById('filtro-estado').addEventListener('change', renderTabla);
+
+        // Inicializar la app
+        window.onload = initApp;
+    </script>
+</body>
+</html>
