@@ -727,6 +727,17 @@
     "total": 1027,
     "pct": 35.9
    }
+  },
+  {
+   "ts": "2026-07-08T16:00:45+00:00",
+   "tipo": "mail",
+   "recinto": "01485",
+   "funcionario": "igarrido",
+   "detalle": {
+    "destinatario": "igarrido",
+    "asunto": "[SIGEA] entrega — recinto 01485",
+    "enviado": false
+   }
   }
  ]
 }
