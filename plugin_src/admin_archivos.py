@@ -26,6 +26,7 @@ import shutil
 from datetime import datetime
 
 from . import settings
+from . import comunas
 from .sesion import copia_atomica_verificada, _hash_archivo, _asegurar_dir
 
 
@@ -188,7 +189,10 @@ def listar_recintos_central(estado=None):
             idx = 0
             codigo = str(row[idx]); idx += 1
             nombre = str(row[idx]) if col_nombre else "—"; idx += (1 if col_nombre else 0)
-            comuna = str(row[idx]) if col_comuna else "—"; idx += (1 if col_comuna else 0)
+            comuna_bruta = str(row[idx]) if col_comuna else "—"; idx += (1 if col_comuna else 0)
+            # central.gpkg guarda el código CUT (ej. "09121"), no el nombre.
+            # Resolver a nombre legible; si no se reconoce, queda el crudo.
+            comuna = comunas.nombre_de(comuna_bruta) if col_comuna else "—"
             n_electores = row[idx]; idx += 1
             n_sin_revisar = row[idx] if col_tipo_geo else n_electores
 
