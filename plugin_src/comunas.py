@@ -69,8 +69,12 @@ def codigo_sigec(valor):
 
 
 def nombre_de(codigo):
-    """Nombre de comuna desde su código de 4 dígitos."""
-    return COMUNAS.get(str(codigo).strip(), str(codigo))
+    """Nombre de comuna desde su código, acepta 4 dígitos ('9121') o 5 con
+    cero a la izquierda ('09121', formato CUT que usa central.gpkg). Si no
+    se reconoce, devuelve el código tal cual se recibió."""
+    bruto = str(codigo).strip()
+    candidato = bruto.lstrip("0")
+    return COMUNAS.get(candidato, bruto)
 
 
 def opciones_ordenadas():
