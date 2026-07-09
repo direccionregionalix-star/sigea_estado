@@ -1,12 +1,12 @@
 {
  "usuario": "pfigueroa",
  "recinto_cod": "01476",
- "timestamp": "2026-07-09T15:52:01+00:00",
+ "timestamp": "2026-07-09T16:26:29+00:00",
  "avance": {
   "total_registros": 1636,
   "confirmados": {
-   "NO_GEO": 592,
-   "CALLE": 123,
+   "NO_GEO": 593,
+   "CALLE": 122,
    "LOCALIDAD": 5
   },
   "confirmados_total": 720,
