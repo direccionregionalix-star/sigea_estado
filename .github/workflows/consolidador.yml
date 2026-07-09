@@ -63,13 +63,10 @@ jobs:
                           
                           # Interceptar la entrega para liberar al usuario
                           if 'entrega' in reporte.get('origen', '').lower():
-                              asig['estado_flujo'] = 'en_qa'
-                              codigo_rec = asig.get('codigo')
-                              
-                              # Archivar en la bandeja de QA
-                              estado['funcionarios'][f'_qa_{codigo_rec}'] = asig.copy()
-                              
-                              # Liberar al usuario
+                              # Liberar al usuario (lo demás -- archivo real
+                              # en QA_pendiente/ + evento en bitacora.json --
+                              # ya queda registrado por otros mecanismos que
+                              # SÍ se leen; no duplicar aquí una copia muerta).
                               estado['funcionarios'][usuario] = None
                               cambios = True
               except Exception as e:
