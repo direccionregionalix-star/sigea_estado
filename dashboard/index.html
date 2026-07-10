@@ -176,6 +176,40 @@
   .bita-alerta_tipo { background: #fef9e7; color: #7d6608; border: 1px solid #f9e79f; }
   .bita-otro        { background: var(--gris-borde); color: var(--negro); }
 
+  /* ─── Historial ─── */
+  #hist-filtros { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: flex-end; }
+  #hist-filtros label { font-size: .78rem; color: var(--gris-texto); display: flex; flex-direction: column; gap: .25rem; }
+  #hist-filtros select, #hist-filtros input { padding: .4rem .6rem; border: 1px solid var(--gris-borde); border-radius: 6px; font-size: .85rem; }
+  #hist-filtros button { padding: .45rem .9rem; background: var(--rojo); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: .85rem; font-weight: 600; }
+
+  .hist-card { background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: hidden; }
+  .hist-card-header { padding: .85rem 1.1rem; display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; flex-wrap: wrap; }
+  .hist-card-header h2 { font-size: .98rem; font-weight: 700; }
+  .hist-card-header .sub { font-size: .78rem; color: var(--gris-texto); margin-top: .2rem; line-height: 1.5; }
+  .hist-pills { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
+
+  .hist-card details { border-top: 1px solid var(--gris-borde); }
+  .hist-card summary { cursor: pointer; padding: .5rem 1.1rem; font-size: .78rem; color: var(--gris-texto); font-weight: 600; user-select: none; }
+  .hist-card summary:hover { color: var(--negro); }
+
+  .hist-timeline { list-style: none; padding: .4rem 1.1rem 1rem 1.6rem; margin: 0; border-left: none; }
+  .hist-timeline li { position: relative; padding: .28rem 0 .28rem 1.1rem; border-left: 2px solid var(--gris-borde); font-size: .8rem; }
+  .hist-timeline li::before { content: ""; position: absolute; left: -6px; top: .55rem; width: 10px; height: 10px; border-radius: 50%; background: var(--gris-borde); }
+  .hist-timeline li.ht-asignacion::before { background: var(--azul); }
+  .hist-timeline li.ht-avance::before     { background: var(--amarillo); }
+  .hist-timeline li.ht-entrega::before    { background: var(--morado); }
+  .hist-timeline li.ht-qa::before         { background: var(--verde); }
+  .hist-timeline li.ht-cierre::before     { background: var(--negro); }
+  .hist-timeline li.ht-devolucion::before { background: var(--naranja); }
+  .hist-timeline li.ht-mail::before       { background: var(--celeste); }
+  .hist-timeline .ht-ts { color: var(--gris-texto); white-space: nowrap; margin-right: .5rem; }
+  .hist-timeline .ht-det { color: var(--gris-texto); }
+
+  .hist-func-tabla { width: 100%; border-collapse: collapse; font-size: .8rem; }
+  .hist-func-tabla th { background: var(--gris-fondo); color: var(--gris-texto); font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; padding: .5rem .8rem; text-align: left; border-bottom: 1px solid var(--gris-borde); }
+  .hist-func-tabla td { padding: .45rem .8rem; border-bottom: 1px solid var(--gris-fondo); vertical-align: top; }
+  .hist-func-tabla tr:last-child td { border-bottom: none; }
+
   #bita-paginacion { display: flex; gap: .5rem; justify-content: center; margin-top: 1rem; }
   #bita-paginacion button { padding: .35rem .75rem; border: 1px solid var(--gris-borde); border-radius: 6px; background: var(--blanco); cursor: pointer; font-size: .82rem; }
   #bita-paginacion button.activo-pg { background: var(--rojo); color: #fff; border-color: var(--rojo); }
@@ -231,6 +265,7 @@
 <nav class="tabs">
   <button class="activo" onclick="cambiarTab('estado', this)">Estado</button>
   <button onclick="cambiarTab('bitacora', this)">Bitácora</button>
+  <button onclick="cambiarTab('historial', this)">Historial</button>
   <button onclick="cambiarTab('correos', this)">Correos</button>
   <button onclick="cambiarTab('admin', this)">Admin</button>
 </nav>
@@ -275,6 +310,28 @@
       <tbody id="bita-body"><tr><td colspan="5" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando bitácora…</td></tr></tbody>
     </table>
     <div id="bita-paginacion"></div>
+  </div>
+
+  <!-- ══ TAB HISTORIAL ═══════════════════════════════════════════════════ -->
+  <div id="tab-historial" class="tab-panel">
+    <div id="hist-filtros">
+      <label>Vista
+        <select id="hist-vista" onchange="renderHistorial()">
+          <option value="recinto">Por recinto</option>
+          <option value="funcionario">Por funcionario</option>
+        </select>
+      </label>
+      <label>Desde
+        <input type="date" id="hist-desde" onchange="renderHistorial()">
+      </label>
+      <label>Hasta
+        <input type="date" id="hist-hasta" onchange="renderHistorial()">
+      </label>
+      <button onclick="limpiarFiltroHist()">Limpiar</button>
+    </div>
+    <div id="hist-contenido">
+      <div style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando historial…</div>
+    </div>
   </div>
 
   <!-- ══ TAB CORREOS ════════════════════════════════════════════════════ -->
@@ -417,6 +474,7 @@ function cambiarTab(id, btn) {
   btn.classList.add("activo");
 
   if (id === "bitacora" && _bitaData.length === 0) cargarBitacora();
+  if (id === "historial") cargarHistorial();
   if (id === "correos")  cargarCorreos();
   if (id === "admin")    renderMailLista();
 }
@@ -433,14 +491,19 @@ async function fetchJSON(url) {
 }
 
 function fmt(n)  { return (n ?? 0).toLocaleString("es-CL"); }
+// El consolidador escribe timestamps con offset Y sufijo Z ("…+00:00Z"),
+// que new Date() rechaza. Sanear antes de parsear.
+function parseFecha(isoStr) {
+  return new Date(String(isoStr).replace(/\+00:00Z$/, "Z"));
+}
 function fmtFecha(isoStr) {
   if (!isoStr) return "—";
-  return new Date(isoStr).toLocaleString("es-CL",
+  return parseFecha(isoStr).toLocaleString("es-CL",
     { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
 }
 function tsRelativo(isoStr) {
   if (!isoStr) return "";
-  const diff = Math.floor((Date.now() - new Date(isoStr)) / 1000);
+  const diff = Math.floor((Date.now() - parseFecha(isoStr)) / 1000);
   if (diff < 60)    return "hace un momento";
   if (diff < 3600)  return `hace ${Math.floor(diff/60)} min`;
   if (diff < 86400) return `hace ${Math.floor(diff/3600)} h`;
@@ -582,7 +645,7 @@ async function cargar() {
     loadEl.style.display = "none";
     errEl.style.display  = "none";
     document.getElementById("ts-generado").textContent =
-      "Estado: " + (_estado.generado ? new Date(_estado.generado).toLocaleString("es-CL") : "—");
+      "Estado: " + (_estado.generado ? parseFecha(_estado.generado).toLocaleString("es-CL") : "—");
     document.getElementById("ts-lectura").textContent =
       "Lectura: " + new Date().toLocaleTimeString("es-CL");
 
@@ -642,6 +705,7 @@ function renderBitacora() {
     if (det.comentario)     detStr += `"${det.comentario}" `;
     if (det.asignado_por)   detStr += `por: ${det.asignado_por} `;
     if (det.enviado !== undefined) detStr += det.enviado ? "✓ enviado" : "simulado";
+    if (det.nota)           detStr += ` [${det.nota}]`;
     return `
       <tr>
         <td style="white-space:nowrap;color:var(--gris-texto)">${fmtFecha(ev.ts)}</td>
@@ -680,6 +744,229 @@ function limpiarFiltroBita() {
   _bitaFilt = _bitaData;
   _bitaPag  = 0;
   renderBitacora();
+}
+
+// ─── Historial (Hallazgo 5: vista sobre bitacora.json, solo lectura) ─────────
+async function cargarHistorial() {
+  const cont = document.getElementById("hist-contenido");
+  if (_bitaData.length === 0) {
+    try {
+      const data = await fetchJSON(BITA_URL);
+      _bitaData = (data.eventos || []).slice().reverse();
+    } catch (e) {
+      cont.innerHTML = `<div style="color:var(--rojo);padding:2rem;text-align:center">Error cargando bitácora: ${e.message}</div>`;
+      return;
+    }
+  }
+  renderHistorial();
+}
+
+function limpiarFiltroHist() {
+  document.getElementById("hist-desde").value = "";
+  document.getElementById("hist-hasta").value = "";
+  renderHistorial();
+}
+
+function fmtFechaCompleta(isoStr) {
+  if (!isoStr) return "—";
+  return parseFecha(isoStr).toLocaleString("es-CL",
+    { day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit" });
+}
+
+function fmtDuracion(ms) {
+  if (ms == null || ms < 0) return "—";
+  const min = Math.floor(ms / 60000);
+  const d = Math.floor(min / 1440), h = Math.floor((min % 1440) / 60), m = min % 60;
+  if (d > 0) return `${d}d ${h}h`;
+  if (h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+
+// Eventos filtrados por rango de fechas, en orden cronológico ascendente
+function _histEventos() {
+  const desde = document.getElementById("hist-desde").value;   // YYYY-MM-DD
+  const hasta = document.getElementById("hist-hasta").value;
+  const tDesde = desde ? new Date(desde + "T00:00:00").getTime() : -Infinity;
+  const tHasta = hasta ? new Date(hasta + "T23:59:59").getTime() : Infinity;
+  return _bitaData.slice().reverse().filter(ev => {
+    const t = new Date(ev.ts).getTime();
+    return t >= tDesde && t <= tHasta;
+  });
+}
+
+function _histDetalleEvento(ev) {
+  const det = ev.detalle || {};
+  switch (ev.tipo) {
+    case "asignacion": return det.asignado_por ? `asignado por ${det.asignado_por}` : "";
+    case "avance":     return det.pct != null ? `avance ${det.pct}%` : "";
+    case "entrega":    return det.pct != null ? `entrega con ${det.pct}%` : "entrega";
+    case "qa":         return `QA: ${det.resultado || "—"}` + (det.comentario ? ` — "${det.comentario}"` : "");
+    case "cierre":     return det.cerrado_por ? `cerrado por ${det.cerrado_por}` : "cierre";
+    case "devolucion": return "devolución" + (det.motivo ? `: ${det.motivo}` : "") +
+                              (det.conservo_avance ? " (conservó avance)" : "");
+    case "mail":       return (det.enviado ? "mail ✓ enviado" : "mail simulado") +
+                              (det.asunto ? ` — ${det.asunto}` : "") +
+                              (det.nota ? ` [${det.nota}]` : "");
+    default:           return "";
+  }
+}
+
+// Resumen por recinto a partir de sus eventos (ya en orden ascendente)
+function _histResumenRecinto(evs) {
+  const avances  = evs.filter(e => e.tipo === "avance");
+  const cierre   = evs.filter(e => e.tipo === "cierre").pop() || null;
+  const qas      = evs.filter(e => e.tipo === "qa");
+  const mails    = evs.filter(e => e.tipo === "mail");
+  const entregas = evs.filter(e => e.tipo === "entrega");
+  const funcionarios = [...new Set(evs.map(e => e.funcionario).filter(f => f))];
+
+  const primerAvance = avances[0] || null;
+  let duracion = null;
+  if (primerAvance && cierre)
+    duracion = new Date(cierre.ts) - new Date(primerAvance.ts);
+
+  const ultimoQa = qas[qas.length - 1] || null;
+  return {
+    funcionarios,
+    nAvances: avances.length,
+    nEntregas: entregas.length,
+    ultimoPct: avances.length ? (avances[avances.length - 1].detalle || {}).pct : null,
+    primerAvance, cierre, duracion,
+    qa: ultimoQa ? (ultimoQa.detalle || {}) : null,
+    nObservados: qas.filter(q => (q.detalle || {}).resultado === "observado").length,
+    mailsEnviados: mails.filter(m => (m.detalle || {}).enviado).length,
+    mailsSimulados: mails.filter(m => !(m.detalle || {}).enviado).length,
+  };
+}
+
+function renderHistorial() {
+  const cont = document.getElementById("hist-contenido");
+  if (!cont) return;
+  const vista = document.getElementById("hist-vista").value;
+  const evs = _histEventos();
+  if (evs.length === 0) {
+    cont.innerHTML = `<div style="color:var(--gris-texto);padding:2rem;text-align:center">Sin eventos en el rango seleccionado.</div>`;
+    return;
+  }
+  cont.innerHTML = vista === "funcionario"
+    ? _renderHistFuncionarios(evs)
+    : _renderHistRecintos(evs);
+}
+
+function _renderHistRecintos(evs) {
+  const porRecinto = {};
+  for (const ev of evs) {
+    if (!ev.recinto) continue;
+    (porRecinto[ev.recinto] = porRecinto[ev.recinto] || []).push(ev);
+  }
+  const codigos = Object.keys(porRecinto).sort((a, b) => {
+    // Más recientes primero (por último evento)
+    const ua = porRecinto[a][porRecinto[a].length - 1].ts;
+    const ub = porRecinto[b][porRecinto[b].length - 1].ts;
+    return ua < ub ? 1 : -1;
+  });
+
+  return codigos.map(cod => {
+    const revs = porRecinto[cod];
+    const r = _histResumenRecinto(revs);
+    const estado = r.cierre ? "cerrado" : (r.nEntregas ? "entregado / en QA" : "en curso");
+    const pillEstado = r.cierre
+      ? `<span class="pill ok">cerrado</span>`
+      : (r.nEntregas ? `<span class="pill sige">en QA</span>` : `<span class="pill qgis">en curso</span>`);
+    const pillQa = r.qa
+      ? `<span class="pill ${r.qa.resultado === "aprobado" ? "ok" : "alerta"}" title="${(r.qa.comentario || "").replace(/"/g, "'")}">QA ${r.qa.resultado || "—"}</span>`
+      : "";
+    const pillMail = (r.mailsEnviados + r.mailsSimulados) > 0
+      ? `<span class="pill ${r.mailsEnviados ? "ok" : "alerta"}">✉ ${r.mailsEnviados} enviados · ${r.mailsSimulados} simulados</span>`
+      : "";
+
+    const timeline = revs.map(ev => `
+      <li class="ht-${ev.tipo || "otro"}">
+        <span class="ht-ts">${fmtFechaCompleta(ev.ts)}</span>
+        <strong>${ev.tipo || "—"}</strong>
+        ${ev.funcionario ? `· ${ev.funcionario}` : ""}
+        <span class="ht-det">${_histDetalleEvento(ev)}</span>
+      </li>`).join("");
+
+    const qaComent = r.qa && r.qa.comentario
+      ? `<br>QA: ${r.qa.resultado} — "${r.qa.comentario}"` : (r.qa ? `<br>QA: ${r.qa.resultado}` : "");
+
+    return `
+      <div class="hist-card">
+        <div class="hist-card-header">
+          <div>
+            <h2>Recinto ${cod}</h2>
+            <div class="sub">
+              ${r.funcionarios.join(", ") || "—"} · ${r.nAvances} avances
+              ${r.ultimoPct != null ? `· último ${r.ultimoPct}%` : ""}
+              <br>Duración total (primer avance → cierre):
+              <strong>${r.duracion != null ? fmtDuracion(r.duracion) : (r.primerAvance ? "en curso" : "—")}</strong>
+              ${qaComent}
+            </div>
+          </div>
+          <div class="hist-pills">${pillEstado}${pillQa}${pillMail}</div>
+        </div>
+        <details>
+          <summary>Timeline — ${revs.length} eventos (${estado})</summary>
+          <ul class="hist-timeline">${timeline}</ul>
+        </details>
+      </div>`;
+  }).join("");
+}
+
+function _renderHistFuncionarios(evs) {
+  const porFunc = {};
+  for (const ev of evs) {
+    if (!ev.funcionario) continue;
+    (porFunc[ev.funcionario] = porFunc[ev.funcionario] || []).push(ev);
+  }
+  const nombres = Object.keys(porFunc).sort();
+
+  return nombres.map(f => {
+    const fevs = porFunc[f];
+    const porRecinto = {};
+    for (const ev of fevs) {
+      if (!ev.recinto) continue;
+      (porRecinto[ev.recinto] = porRecinto[ev.recinto] || []).push(ev);
+    }
+    const filas = Object.keys(porRecinto).map(cod => {
+      const r = _histResumenRecinto(porRecinto[cod]);
+      const obs = porRecinto[cod]
+        .filter(e => e.tipo === "qa" && (e.detalle || {}).resultado === "observado")
+        .map(e => (e.detalle || {}).comentario).filter(c => c);
+      return `
+        <tr>
+          <td><strong>${cod}</strong></td>
+          <td>${r.duracion != null ? fmtDuracion(r.duracion) : (r.primerAvance ? "en curso" : "—")}</td>
+          <td>${r.nAvances}${r.ultimoPct != null ? ` (último ${r.ultimoPct}%)` : ""}</td>
+          <td>${r.nEntregas}</td>
+          <td>${r.nObservados === 0 ? "—"
+                : `${r.nObservados}${obs.length ? `: "${obs.join('" · "')}"` : ""}`}</td>
+          <td>${r.cierre ? "cerrado" : (r.nEntregas ? "en QA" : "en curso")}</td>
+        </tr>`;
+    }).join("");
+
+    const nEntregasTot = fevs.filter(e => e.tipo === "entrega").length;
+    const nObsTot = fevs.filter(e => e.tipo === "qa" && (e.detalle || {}).resultado === "observado").length;
+
+    return `
+      <div class="hist-card">
+        <div class="hist-card-header">
+          <div>
+            <h2>${f}</h2>
+            <div class="sub">${Object.keys(porRecinto).length} recintos trabajados ·
+              ${nEntregasTot} entregas · ${nObsTot} observaciones QA</div>
+          </div>
+        </div>
+        <table class="hist-func-tabla">
+          <thead><tr>
+            <th>Recinto</th><th>Tiempo (1er avance → cierre)</th><th>Avances</th>
+            <th>Entregas</th><th>Observaciones QA</th><th>Estado</th>
+          </tr></thead>
+          <tbody>${filas}</tbody>
+        </table>
+      </div>`;
+  }).join("");
 }
 
 // ─── Correos ─────────────────────────────────────────────────────────────────
