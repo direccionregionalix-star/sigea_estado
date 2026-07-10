@@ -1373,6 +1373,19 @@
     "total": 1636,
     "pct": 54.5
    }
+  },
+  {
+   "ts": "2026-07-10T19:22:53+00:00",
+   "tipo": "entrega",
+   "recinto": "01476",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "localidad": 28,
+    "calle": 218,
+    "no_geo": 645,
+    "total": 1636,
+    "pct": 54.5
+   }
   }
  ]
 }
