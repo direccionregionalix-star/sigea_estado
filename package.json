@@ -6,9 +6,6 @@
   "scripts": {
     "start": "node dashboard/server.js"
   },
-  "optionalDependencies": {
-    "nodemailer": "^6.9.0"
-  },
   "engines": {
     "node": ">=18"
   }

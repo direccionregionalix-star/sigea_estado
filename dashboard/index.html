@@ -830,7 +830,8 @@ async function enviarMail(usuario, recinto, tipo) {
       body: JSON.stringify({ destinatario: usuario, tipo, recinto, funcionario: usuario }),
     });
     const d = await r.json();
-    if (stEl) stEl.textContent = d.enviado ? "✓ Enviado" : (d.simulado ? "⚠ Simulado (sin SMTP)" : "✗ Error");
+    if (stEl) stEl.textContent = d.enviado ? "✓ Enviado"
+      : (d.simulado ? "⚠ Simulado (sin RESEND_API_KEY)" : "✗ Error: " + (d.nota || "desconocido"));
   } catch (e) {
     if (stEl) stEl.textContent = "✗ " + e.message;
   }
