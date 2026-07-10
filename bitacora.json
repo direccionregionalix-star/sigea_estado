@@ -1347,6 +1347,19 @@
     "motivo": "",
     "conservo_avance": false
    }
+  },
+  {
+   "ts": "2026-07-10T19:07:03+00:00",
+   "tipo": "avance",
+   "recinto": "01476",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "localidad": 28,
+    "calle": 215,
+    "no_geo": 645,
+    "total": 1636,
+    "pct": 54.3
+   }
   }
  ]
 }
