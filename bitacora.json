@@ -1324,6 +1324,19 @@
    "detalle": {
     "asignado_por": "mespinozan"
    }
+  },
+  {
+   "ts": "2026-07-10T18:48:11+00:00",
+   "tipo": "avance",
+   "recinto": "01476",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "calle": 215,
+    "no_geo": 645,
+    "localidad": 20,
+    "total": 1636,
+    "pct": 53.8
+   }
   }
  ]
 }
