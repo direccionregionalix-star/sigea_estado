@@ -1315,6 +1315,15 @@
     "total": 1027,
     "pct": 82.8
    }
+  },
+  {
+   "ts": "2026-07-10T18:46:36+00:00",
+   "tipo": "asignacion",
+   "recinto": "01452",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "asignado_por": "mespinozan"
+   }
   }
  ]
 }
