@@ -1337,6 +1337,16 @@
     "total": 1636,
     "pct": 53.8
    }
+  },
+  {
+   "ts": "2026-07-10T19:05:49+00:00",
+   "tipo": "devolucion",
+   "recinto": "01452",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "motivo": "",
+    "conservo_avance": false
+   }
   }
  ]
 }
