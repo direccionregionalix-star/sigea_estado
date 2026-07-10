@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-10T19:18:48+00:00Z",
+ "generado": "2026-07-10T19:22:28+00:00Z",
  "funcionarios": {
   "_qa_01485": {
    "asignacion_id": 12,
@@ -82,32 +82,7 @@
     }
    ]
   },
-  "pfigueroa": {
-   "asignacion_id": 1783535496,
-   "codigo": "01476",
-   "unidad": "LICEO BICENTENARIO PADRE NICOLAS",
-   "comuna": "09119",
-   "n_electores": 1636,
-   "fecha_estimada": "2026-07-31",
-   "dias_restantes": 23,
-   "avance": 891,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1783535496,
-     "codigo": "01476",
-     "unidad": "LICEO BICENTENARIO PADRE NICOLAS",
-     "comuna": "09119",
-     "n_electores": 1636,
-     "fecha_estimada": "2026-07-31",
-     "dias_restantes": 23,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "pfigueroa": null,
   "_qa_01274": {
    "asignacion_id": 13,
    "codigo": "01274",
