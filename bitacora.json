@@ -1261,6 +1261,19 @@
     "total": 1636,
     "pct": 52.8
    }
+  },
+  {
+   "ts": "2026-07-10T16:44:21+00:00",
+   "tipo": "avance",
+   "recinto": "01476",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "calle": 207,
+    "no_geo": 643,
+    "localidad": 20,
+    "total": 1636,
+    "pct": 53.2
+   }
   }
  ]
 }
