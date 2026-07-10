@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-10T18:47:47+00:00Z",
+ "generado": "2026-07-10T19:05:47+00:00",
  "funcionarios": {
   "_qa_01485": {
    "asignacion_id": 12,
@@ -55,32 +55,7 @@
     }
    ]
   },
-  "mespinozan": {
-   "asignacion_id": 1783709195,
-   "codigo": "01452",
-   "unidad": "ESCUELA PUBLICA HORIZONTES",
-   "comuna": "Teodoro Schmidt",
-   "n_electores": 1560,
-   "fecha_estimada": "2026-08-03",
-   "dias_restantes": 24,
-   "avance": 0,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1783709195,
-     "codigo": "01452",
-     "unidad": "ESCUELA PUBLICA HORIZONTES",
-     "comuna": "Teodoro Schmidt",
-     "n_electores": 1560,
-     "fecha_estimada": "2026-08-03",
-     "dias_restantes": 24,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "mespinozan": null,
   "jmedina": {
    "asignacion_id": 1783448565,
    "codigo": "01393",
