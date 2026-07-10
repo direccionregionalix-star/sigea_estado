@@ -1,19 +1,19 @@
 {
  "usuario": "jmedina",
  "recinto_cod": "01393",
- "timestamp": "2026-07-10T16:30:00+00:00",
+ "timestamp": "2026-07-10T17:01:08+00:00",
  "avance": {
   "total_registros": 1027,
   "confirmados": {
-   "CALLE": 277,
-   "EXACTO": 378,
-   "NO_GEO": 52,
-   "LOCALIDAD": 111,
-   "PROXIMIDAD": 8
+   "CALLE": 288,
+   "EXACTO": 387,
+   "NO_GEO": 56,
+   "LOCALIDAD": 115,
+   "PROXIMIDAD": 4
   },
-  "confirmados_total": 826,
-  "pendientes": 201,
-  "pct": 80.4
+  "confirmados_total": 850,
+  "pendientes": 177,
+  "pct": 82.8
  },
  "origen": "Plugin QGIS"
 }
