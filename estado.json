@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-10T19:28:27+00:00Z",
+ "generado": "2026-07-10T19:39:36+00:00Z",
  "funcionarios": {
   "_qa_01485": {
    "asignacion_id": 12,
@@ -37,7 +37,7 @@
    "n_electores": 1270,
    "fecha_estimada": "2026-07-27",
    "dias_restantes": 19,
-   "avance": 358,
+   "avance": 824,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
