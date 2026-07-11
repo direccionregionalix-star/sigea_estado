@@ -2,12 +2,20 @@
  * SIGEA — servidor de notificaciones por mail.
  * POST /mail  { destinatario, tipo, recinto, funcionario }
  *
- * Credenciales SMTP en variables de entorno:
- * SIGEA_SMTP_HOST, SIGEA_SMTP_PORT, SIGEA_SMTP_USER, SIGEA_SMTP_PASS
- * SIGEA_MAIL_FROM   (remitente, default: SIGEA_SMTP_USER)
+ * Envío vía API HTTP de Resend (https://resend.com) — puerto 443.
+ * Railway bloquea los puertos SMTP (587/465); la versión anterior con
+ * nodemailer hacía timeout en silencio y ningún correo salió jamás.
  *
- * Sin SMTP configurado: simula el envío (log + evento con enviado:false).
- * Railway: agregar como proceso en Procfile o como start en package.json.
+ * Variables de entorno (configurar en Railway):
+ *   RESEND_API_KEY   — API key de Resend. NUNCA en el código.
+ *   SIGEA_MAIL_FROM  — remitente. Debe ser un dominio verificado en Resend,
+ *                      o el remitente de prueba onboarding@resend.dev si aún
+ *                      no hay dominio propio verificado.
+ *                      Default: "SIGEA <onboarding@resend.dev>".
+ *
+ * Sin RESEND_API_KEY configurada: simula el envío (log + evento con
+ * enviado:false), sin romper el flujo de entrega. Todo fallo de envío
+ * registra su causa en el campo "nota" del evento de bitácora.
  *
  * REGLA: el cuerpo del mail nunca lleva RUTs, coordenadas ni direcciones.
  * Solo metadata de proceso (recinto, funcionario, tipo de evento).
@@ -19,11 +27,8 @@ const fs = require("fs");
 const path = require("path");
 
 const PORT = process.env.PORT || 3001;
-const SMTP_HOST = process.env.SIGEA_SMTP_HOST || "";
-const SMTP_PORT = parseInt(process.env.SIGEA_SMTP_PORT || "587", 10);
-const SMTP_USER = process.env.SIGEA_SMTP_USER || "";
-const SMTP_PASS = process.env.SIGEA_SMTP_PASS || "";
-const MAIL_FROM = process.env.SIGEA_MAIL_FROM || SMTP_USER;
+const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
+const MAIL_FROM = process.env.SIGEA_MAIL_FROM || "SIGEA <onboarding@resend.dev>";
 
 // Repo GitHub donde viven estado.json / bitacora.json / qgis/ / sige/
 // Variable: SIGEA_REPO=SebaGeoZ92/sigea_estado  (owner/repo, sin slash final)
@@ -66,33 +71,62 @@ const CUERPOS = {
     `El recinto ${r} fue cerrado formalmente.\n\nSIGEA DR Araucanía`,
 };
 
-// ─── Envío SMTP (sin dependencias externas — usa net/tls de Node) ─────────────
+// ─── Envío vía API de Resend (HTTPS puerto 443 — evade el bloqueo SMTP) ──────
 
-function enviarSMTP(destinatario, asunto, cuerpo) {
-  return new Promise((resolve, reject) => {
-    if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-      resolve({ simulado: true });
+function escapeHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Nunca rechaza: resuelve siempre { enviado, simulado, nota }.
+// nota = "" si el envío salió bien; causa del fallo en caso contrario.
+function enviarResend(destinatario, asunto, cuerpo) {
+  return new Promise((resolve) => {
+    if (!RESEND_API_KEY) {
+      resolve({ enviado: false, simulado: true,
+                nota: "RESEND_API_KEY no configurada — envío simulado" });
       return;
     }
-    // Usamos nodemailer si está disponible, si no fallback a simulación
-    try {
-      const nodemailer = require("nodemailer");
-      const transporter = nodemailer.createTransport({
-        host: SMTP_HOST, port: SMTP_PORT,
-        secure: SMTP_PORT === 465,
-        auth: { user: SMTP_USER, pass: SMTP_PASS },
+    const payload = JSON.stringify({
+      from: MAIL_FROM,
+      to: [destinatario],
+      subject: asunto,
+      html: escapeHtml(cuerpo).replace(/\n/g, "<br>\n"),
+      text: cuerpo,
+    });
+    const req = https.request({
+      hostname: "api.resend.com",
+      path: "/emails",
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(payload),
+      },
+      timeout: 15000,
+    }, res => {
+      let raw = "";
+      res.on("data", d => raw += d);
+      res.on("end", () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve({ enviado: true, simulado: false, nota: "" });
+        } else {
+          let detalle = raw;
+          try { detalle = JSON.parse(raw).message || raw; } catch (_) {}
+          resolve({ enviado: false, simulado: false,
+                    nota: `Resend HTTP ${res.statusCode}: ${String(detalle).slice(0, 300)}` });
+        }
       });
-      transporter.sendMail({
-        from: MAIL_FROM, to: destinatario,
-        subject: asunto, text: cuerpo,
-      }, (err, info) => {
-        if (err) reject(err);
-        else resolve(info);
-      });
-    } catch (_) {
-      // nodemailer no instalado — simular
-      resolve({ simulado: true });
-    }
+    });
+    req.on("timeout", () => {
+      req.destroy(new Error("timeout de 15s"));
+    });
+    req.on("error", e => {
+      resolve({ enviado: false, simulado: false,
+                nota: `Error de red hacia Resend: ${e.message}` });
+    });
+    req.write(payload);
+    req.end();
   });
 }
 
@@ -121,7 +155,7 @@ function deofuscar(b64, key = "SIGEA2026araucania") {
   return buf.map((b, i) => b ^ keyBuf[i % keyBuf.length]).toString();
 }
 
-async function registrarEventoMail(recinto, funcionario, destinatario, asunto, enviado) {
+async function registrarEventoMail(recinto, funcionario, destinatario, asunto, enviado, nota) {
   try {
     const estado = await fetchEstado();
     if (!estado) return;
@@ -159,7 +193,7 @@ async function registrarEventoMail(recinto, funcionario, destinatario, asunto, e
       ts: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
       tipo: "mail",
       recinto, funcionario,
-      detalle: { destinatario, asunto, enviado },
+      detalle: { destinatario, asunto, enviado, nota: nota || "" },
     });
 
     const contenidoB64 = Buffer.from(JSON.stringify(bitacora, null, 1)).toString("base64");
@@ -259,26 +293,25 @@ const server = http.createServer(async (req, res) => {
       const asunto = buildAsunto(recinto, funcionario || "");
       const cuerpo = buildCuerpo(recinto, funcionario || "");
 
-      let enviado = false;
-      let info = {};
-      try {
-        info = await enviarSMTP(emailDest, asunto, cuerpo);
-        enviado = !info.simulado;
-        if (info.simulado) {
-          console.log(`[mail simulado] → ${emailDest} | ${asunto}`);
-        } else {
-          console.log(`[mail enviado] → ${emailDest} | ${asunto}`);
-        }
-      } catch (e) {
-        console.error(`[mail error] ${e.message}`);
+      // enviarResend nunca rechaza: siempre { enviado, simulado, nota }
+      const info = await enviarResend(emailDest, asunto, cuerpo);
+      if (info.enviado) {
+        console.log(`[mail enviado] → ${emailDest} | ${asunto}`);
+      } else if (info.simulado) {
+        console.log(`[mail simulado] → ${emailDest} | ${asunto} | ${info.nota}`);
+      } else {
+        console.error(`[mail error] → ${emailDest} | ${asunto} | ${info.nota}`);
       }
 
-      // Registrar en bitácora (async, no bloquea la respuesta)
-      registrarEventoMail(recinto, funcionario || "", destKey, asunto, enviado)
+      // Registrar en bitácora con la causa del fallo si lo hubo
+      // (async, no bloquea la respuesta)
+      registrarEventoMail(recinto, funcionario || "", destKey, asunto,
+                          info.enviado, info.nota)
         .catch(e => console.error("[bitacora mail]", e.message));
 
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ ok: true, enviado, simulado: !!info.simulado }));
+      res.end(JSON.stringify({ ok: true, enviado: info.enviado,
+                               simulado: !!info.simulado, nota: info.nota }));
     });
     return;
   }
@@ -300,9 +333,8 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  const smtpOk = SMTP_HOST && SMTP_USER && SMTP_PASS;
   console.log(`SIGEA mail server en :${PORT}`);
-  console.log(smtpOk
-    ? `SMTP: ${SMTP_HOST}:${SMTP_PORT} (usuario: ${SMTP_USER})`
-    : "SMTP no configurado — modo simulación");
+  console.log(RESEND_API_KEY
+    ? `Mail: API Resend (remitente: ${MAIL_FROM})`
+    : "RESEND_API_KEY no configurada — modo simulación");
 });
