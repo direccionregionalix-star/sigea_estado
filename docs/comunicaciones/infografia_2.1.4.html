@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGEA 2.1.4 — Cómo operar la nueva versión</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --rojo: #c0392b; --rojo-osc: #922b21; --fondo: #f4f5f7;
+    --borde: #dde1e7; --texto: #1a1d23; --gris: #5a6270;
+    --verde: #27ae60; --azul: #2980b9; --amarillo: #f39c12; --morado: #8e44ad;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--fondo); color: var(--texto);
+    display: flex; justify-content: center; padding: 1rem;
+  }
+  .hoja { max-width: 780px; width: 100%; }
+
+  header {
+    background: linear-gradient(135deg, var(--rojo), var(--rojo-osc));
+    color: #fff; border-radius: 16px; padding: 1.6rem 1.8rem; margin-bottom: 1rem;
+  }
+  header .kicker { font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
+  header h1 { font-size: 1.7rem; margin: .25rem 0 .35rem; }
+  header p { font-size: .95rem; opacity: .92; }
+  header .version { display: inline-block; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4);
+    border-radius: 99px; padding: .2rem .8rem; font-weight: 700; margin-top: .6rem; }
+
+  h2 { font-size: 1.02rem; margin: 1.4rem 0 .7rem; display: flex; align-items: center; gap: .5rem; }
+  h2 .n { background: var(--rojo); color: #fff; width: 26px; height: 26px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; flex-shrink: 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; }
+  .tarjeta {
+    background: #fff; border: 1px solid var(--borde); border-radius: 12px;
+    padding: 1rem 1.1rem; box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .tarjeta .icono { font-size: 1.6rem; }
+  .tarjeta h3 { font-size: .92rem; margin: .4rem 0 .3rem; }
+  .tarjeta p { font-size: .82rem; color: var(--gris); line-height: 1.5; }
+  .tarjeta.borde-verde { border-top: 4px solid var(--verde); }
+  .tarjeta.borde-azul { border-top: 4px solid var(--azul); }
+  .tarjeta.borde-amarillo { border-top: 4px solid var(--amarillo); }
+  .tarjeta.borde-morado { border-top: 4px solid var(--morado); }
+
+  .flujo { display: flex; flex-wrap: wrap; gap: .5rem; align-items: stretch; }
+  .paso {
+    background: #fff; border: 1px solid var(--borde); border-radius: 12px;
+    padding: .8rem .9rem; flex: 1 1 130px; min-width: 130px; position: relative;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .paso .num { font-size: .68rem; font-weight: 800; color: var(--rojo); letter-spacing: .08em; }
+  .paso .icono { font-size: 1.35rem; margin: .15rem 0; }
+  .paso h3 { font-size: .84rem; margin-bottom: .2rem; }
+  .paso p { font-size: .74rem; color: var(--gris); line-height: 1.45; }
+
+  .lista-check { background: #fff; border: 1px solid var(--borde); border-radius: 12px; padding: 1rem 1.2rem; }
+  .lista-check li { list-style: none; font-size: .86rem; padding: .35rem 0 .35rem 1.7rem; position: relative; }
+  .lista-check li::before { content: "✓"; position: absolute; left: .2rem; color: var(--verde); font-weight: 800; }
+  .lista-check li.alerta::before { content: "⚠"; color: var(--amarillo); }
+
+  .nota {
+    background: #fdf6ec; border: 1px solid #f5d9a8; border-radius: 12px;
+    padding: .8rem 1rem; font-size: .82rem; color: #7a5a1e; margin-top: 1rem; line-height: 1.5;
+  }
+  footer { text-align: center; font-size: .72rem; color: var(--gris); margin: 1.6rem 0 .6rem; }
+  @media print { body { background: #fff; padding: 0; } .hoja { max-width: 100%; } }
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <header>
+    <div class="kicker">SERVEL · Dirección Regional La Araucanía</div>
+    <h1>SIGEA se actualiza 🛰️</h1>
+    <p>Rectificación de geolocalización electoral — qué cambia y cómo operar la nueva versión en la nube.</p>
+    <span class="version">Plugin QGIS 2.1.4 · Dashboard con Historial</span>
+  </header>
+
+  <h2><span class="n">1</span> Qué mejora esta versión</h2>
+  <div class="grid">
+    <div class="tarjeta borde-verde">
+      <div class="icono">🗺️</div>
+      <h3>Compatible con ArcGIS Pro</h3>
+      <p>Los recintos nuevos se generan con el estándar GeoPackage completo:
+      abren como <b>capa de puntos</b> directo en ArcGIS Pro. Se acabó convertir a GDB.</p>
+    </div>
+    <div class="tarjeta borde-azul">
+      <div class="icono">🏘️</div>
+      <h3>Comunas con nombre</h3>
+      <p>Donde antes decía <b>09121</b> ahora dice <b>Cholchol</b>. En el listado
+      de recintos, las asignaciones y el dashboard.</p>
+    </div>
+    <div class="tarjeta borde-morado">
+      <div class="icono">📊</div>
+      <h3>Pestaña Historial</h3>
+      <p>El dashboard ahora cuenta la historia completa: cada recinto con su línea
+      de tiempo y cada funcionario con sus tiempos y entregas.</p>
+    </div>
+    <div class="tarjeta borde-amarillo">
+      <div class="icono">✉️</div>
+      <h3>Correos preparados</h3>
+      <p>Sistema de notificaciones renovado. Cuando falle un envío, la causa queda
+      registrada — se acabaron los fallos silenciosos.</p>
+    </div>
+  </div>
+
+  <h2><span class="n">2</span> Cómo actualizar (una sola vez)</h2>
+  <div class="flujo">
+    <div class="paso"><div class="num">PASO 1</div><div class="icono">🖥️</div>
+      <h3>Abre QGIS</h3><p>Como todos los días.</p></div>
+    <div class="paso"><div class="num">PASO 2</div><div class="icono">🧩</div>
+      <h3>Complementos</h3><p>Administrar e instalar complementos → pestaña <b>Actualizables</b>.</p></div>
+    <div class="paso"><div class="num">PASO 3</div><div class="icono">⬆️</div>
+      <h3>SIGEA Panel 2.1.4</h3><p>Botón <b>Actualizar</b>. Listo — tu configuración se conserva.</p></div>
+  </div>
+
+  <h2><span class="n">3</span> Tu flujo diario (no cambia)</h2>
+  <div class="flujo">
+    <div class="paso"><div class="num">1</div><div class="icono">▶</div>
+      <h3>Cargar recinto</h3><p>El plugin copia tu gpkg a la carpeta local — OneDrive nunca ve el archivo abierto.</p></div>
+    <div class="paso"><div class="num">2</div><div class="icono">📍</div>
+      <h3>Rectificar</h3><p>Selecciona puntos y asigna tipo geo con la botonera (EXACTO, CALLE, LOCALIDAD…).</p></div>
+    <div class="paso"><div class="num">3</div><div class="icono">↑</div>
+      <h3>Registrar avance</h3><p>Publica tus conteos — el dashboard se actualiza solo.</p></div>
+    <div class="paso"><div class="num">4</div><div class="icono">⏸</div>
+      <h3>Pausar y sincronizar</h3><p>Al terminar la jornada. Respaldo automático incluido.</p></div>
+    <div class="paso"><div class="num">5</div><div class="icono">✓</div>
+      <h3>Entregar</h3><p>Cuando el recinto esté listo: pasa a QA y quedas libre para el siguiente.</p></div>
+  </div>
+
+  <h2><span class="n">4</span> El dashboard en la nube</h2>
+  <ul class="lista-check">
+    <li><b>Estado</b>: avance global y tarjeta por funcionario, se refresca solo cada 5 minutos.</li>
+    <li><b>Bitácora</b>: todos los eventos del proceso, filtrables.</li>
+    <li><b>Historial</b> <i>(nuevo)</i>: por recinto — línea de tiempo con duración total; por funcionario — recintos, tiempos y observaciones de QA. Filtro por fechas.</li>
+    <li><b>Correos</b>: estado de cada notificación (enviada o simulada, con motivo).</li>
+    <li class="alerta">Tus datos siguen protegidos: la nube solo ve <b>conteos y metadata</b> — nunca RUT, direcciones ni coordenadas individuales.</li>
+  </ul>
+
+  <div class="nota">
+    <b>¿Algo no funciona?</b> Avisa por el canal de Teams con un pantallazo.
+    Volver a la versión anterior toma minutos y tu trabajo nunca corre riesgo:
+    los respaldos automáticos (últimos 5) siguen operando igual que siempre.
+  </div>
+
+  <footer>SIGEA · Rectificación Electoral La Araucanía · julio 2026</footer>
+</div>
+</body>
+</html>

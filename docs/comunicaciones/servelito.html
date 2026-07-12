@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servelito presenta: SIGEA 2.1.4</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --rojo:#c0392b; --rojo-osc:#922b21; --fondo:#f4f5f7; --borde:#dde1e7;
+          --texto:#1a1d23; --gris:#5a6270; --verde:#27ae60; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(180deg, #fdf0ee, var(--fondo) 40%);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;
+  }
+  .escena { max-width: 720px; width: 100%; }
+  .titulo { text-align: center; margin-bottom: .8rem; }
+  .titulo .kicker { font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gris); }
+  .titulo h1 { font-size: 1.35rem; color: var(--rojo-osc); }
+
+  .tarima { display: flex; gap: 1.2rem; align-items: flex-end; }
+  #avatar { flex-shrink: 0; width: 190px; filter: drop-shadow(0 6px 14px rgba(0,0,0,.18)); }
+
+  .globo {
+    position: relative; background: #fff; border: 2px solid var(--borde);
+    border-radius: 18px; padding: 1.2rem 1.3rem; flex: 1; min-height: 172px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.08); display: flex; flex-direction: column;
+  }
+  .globo::after {
+    content: ""; position: absolute; left: -14px; bottom: 34px;
+    border: 12px solid transparent; border-right-color: #fff;
+  }
+  .globo h2 { font-size: .95rem; color: var(--rojo); margin-bottom: .45rem; }
+  .globo p { font-size: .95rem; line-height: 1.6; color: var(--texto); flex: 1; }
+  .globo .paso-n { font-size: .7rem; color: var(--gris); letter-spacing: .1em; text-transform: uppercase; margin-top: .8rem; }
+
+  .controles { display: flex; gap: .6rem; justify-content: center; margin-top: 1.1rem; flex-wrap: wrap; }
+  button {
+    border: none; border-radius: 10px; padding: .6rem 1.2rem; font-size: .9rem;
+    font-weight: 700; cursor: pointer; transition: transform .08s;
+  }
+  button:active { transform: scale(.96); }
+  .btn-rojo { background: var(--rojo); color: #fff; }
+  .btn-gris { background: #fff; border: 1.5px solid var(--borde); color: var(--texto); }
+  .btn-verde { background: var(--verde); color: #fff; }
+  button:disabled { opacity: .4; cursor: default; }
+
+  .puntos { display: flex; gap: .4rem; justify-content: center; margin-top: .8rem; }
+  .puntos span { width: 9px; height: 9px; border-radius: 50%; background: var(--borde); transition: background .2s; }
+  .puntos span.activo { background: var(--rojo); }
+
+  /* Animaciones del avatar */
+  @keyframes flotar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes hablar { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(.35); } }
+  #avatar.flotando { animation: flotar 3.2s ease-in-out infinite; }
+  #boca.hablando { animation: hablar .28s ease-in-out infinite; transform-origin: center; }
+  @media (max-width: 560px) {
+    .tarima { flex-direction: column; align-items: center; }
+    #avatar { width: 140px; }
+    .globo::after { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="escena">
+  <div class="titulo">
+    <div class="kicker">SERVEL DR La Araucanía · SIGEA</div>
+    <h1>¡Hola! Soy <b>Servelito</b> 📍 y te presento la nueva versión</h1>
+  </div>
+
+  <div class="tarima">
+    <!-- Servelito: un pin de mapa amistoso con urna -->
+    <svg id="avatar" class="flotando" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Servelito, mascota de SIGEA">
+      <!-- sombra -->
+      <ellipse cx="100" cy="228" rx="52" ry="9" fill="#00000018"/>
+      <!-- cuerpo pin -->
+      <path d="M100 8 C 52 8, 22 44, 22 88 C 22 140, 78 176, 96 216 C 98 221, 102 221, 104 216 C 122 176, 178 140, 178 88 C 178 44, 148 8, 100 8 Z"
+            fill="#c0392b" stroke="#922b21" stroke-width="4"/>
+      <!-- brillo -->
+      <path d="M52 42 C 62 28, 82 20, 96 20" fill="none" stroke="#ffffff55" stroke-width="8" stroke-linecap="round"/>
+      <!-- cara -->
+      <circle cx="100" cy="84" r="52" fill="#fff"/>
+      <!-- ojos -->
+      <g id="ojos">
+        <circle cx="82" cy="76" r="7" fill="#1a1d23"/>
+        <circle cx="118" cy="76" r="7" fill="#1a1d23"/>
+        <circle cx="84.5" cy="73.5" r="2.2" fill="#fff"/>
+        <circle cx="120.5" cy="73.5" r="2.2" fill="#fff"/>
+      </g>
+      <!-- cejas -->
+      <path d="M72 62 Q 82 56 92 61" fill="none" stroke="#1a1d23" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M108 61 Q 118 56 128 62" fill="none" stroke="#1a1d23" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- mejillas -->
+      <circle cx="72" cy="92" r="6.5" fill="#f5b7ae"/>
+      <circle cx="128" cy="92" r="6.5" fill="#f5b7ae"/>
+      <!-- boca -->
+      <g id="boca">
+        <path d="M84 100 Q 100 116 116 100" fill="#922b21"/>
+      </g>
+      <!-- urna que sostiene -->
+      <g transform="translate(63 148)">
+        <rect x="0" y="14" width="74" height="46" rx="7" fill="#fff" stroke="#922b21" stroke-width="3.5"/>
+        <rect x="24" y="6" width="26" height="7" rx="3.5" fill="#922b21"/>
+        <path d="M30 30 l7 8 l14 -16" fill="none" stroke="#27ae60" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>
+
+    <div class="globo">
+      <h2 id="globo-titulo">—</h2>
+      <p id="globo-texto">—</p>
+      <div class="paso-n" id="globo-paso">—</div>
+    </div>
+  </div>
+
+  <div class="controles">
+    <button class="btn-gris" id="btn-prev">← Anterior</button>
+    <button class="btn-verde" id="btn-voz" title="Servelito lee el mensaje en voz alta">🔊 Escuchar</button>
+    <button class="btn-rojo" id="btn-next">Siguiente →</button>
+  </div>
+  <div class="puntos" id="puntos"></div>
+</div>
+
+<script>
+// ─── Guion de Servelito ───────────────────────────────────────────────────────
+const GUION = [
+  { t: "¡Bienvenido a la nueva versión!",
+    p: "Soy Servelito, tu asistente de SIGEA. Este fin de semana actualizamos la plataforma: plugin QGIS 2.1.4 y dashboard renovado. Te cuento en un minuto lo que cambia — dale a «Siguiente», o aprieta el parlante para que te lo lea." },
+  { t: "ArcGIS Pro ya no pelea con tus recintos 🗺️",
+    p: "Los recintos nuevos se generan con el estándar GeoPackage completo, con índice espacial incluido. Ahora abren directo en ArcGIS Pro como capa de puntos. Se acabó eso de convertir a GDB antes de trabajar." },
+  { t: "Las comunas hablan tu idioma 🏘️",
+    p: "Donde antes veías el código 09121, ahora verás Cholchol. Donde decía 09209, dirá Renaico. En el listado de recintos, en las asignaciones y en el dashboard." },
+  { t: "Pestaña nueva: Historial 📊",
+    p: "El dashboard ahora cuenta la historia completa de cada recinto: asignación, avances, entrega, control de calidad y cierre, con la duración total del trabajo. Y también tu historia: recintos trabajados, tiempos y entregas. Con filtro por fechas." },
+  { t: "Correos que avisan de verdad ✉️",
+    p: "Renovamos el sistema de notificaciones. Cuando esté activada la llave de envío, los avisos de asignación y entrega llegarán a tu correo. Y si un envío falla, quedará registrado el motivo — nada de fallos silenciosos." },
+  { t: "Tu rutina no cambia ✓",
+    p: "Cargar recinto, rectificar con la botonera, registrar avance, pausar y sincronizar, entregar. Igual que siempre, con tus respaldos automáticos funcionando. Solo acepta la actualización del plugin cuando QGIS te la ofrezca. ¡Buen trabajo en terreno!" },
+];
+
+let paso = 0;
+let hablando = false;
+
+const $ = id => document.getElementById(id);
+
+function render() {
+  $("globo-titulo").textContent = GUION[paso].t;
+  $("globo-texto").textContent = GUION[paso].p;
+  $("globo-paso").textContent = `Servelito · mensaje ${paso + 1} de ${GUION.length}`;
+  $("btn-prev").disabled = paso === 0;
+  $("btn-next").disabled = paso === GUION.length - 1;
+  document.querySelectorAll("#puntos span").forEach((el, i) =>
+    el.classList.toggle("activo", i === paso));
+}
+
+function detenerVoz() {
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  hablando = false;
+  $("boca").classList.remove("hablando");
+  $("btn-voz").textContent = "🔊 Escuchar";
+}
+
+function hablar() {
+  if (!("speechSynthesis" in window)) {
+    alert("Tu navegador no soporta voz — pero puedes leer el mensaje 😉");
+    return;
+  }
+  if (hablando) { detenerVoz(); return; }
+  const u = new SpeechSynthesisUtterance(GUION[paso].t + ". " + GUION[paso].p);
+  // Preferir una voz en español (es-CL si existe, si no cualquier es-*)
+  const voces = window.speechSynthesis.getVoices();
+  u.voice = voces.find(v => v.lang === "es-CL")
+         || voces.find(v => v.lang && v.lang.startsWith("es")) || null;
+  u.lang = (u.voice && u.voice.lang) || "es-ES";
+  u.rate = 1.02; u.pitch = 1.15;   // Servelito es joven y entusiasta
+  u.onstart = () => { hablando = true; $("boca").classList.add("hablando"); $("btn-voz").textContent = "⏹ Detener"; };
+  u.onend = detenerVoz;
+  u.onerror = detenerVoz;
+  window.speechSynthesis.speak(u);
+}
+
+$("btn-next").onclick = () => { detenerVoz(); if (paso < GUION.length - 1) { paso++; render(); } };
+$("btn-prev").onclick = () => { detenerVoz(); if (paso > 0) { paso--; render(); } };
+$("btn-voz").onclick = hablar;
+
+// Puntos de progreso
+GUION.forEach(() => $("puntos").appendChild(document.createElement("span")));
+// Algunas plataformas cargan las voces async
+if ("speechSynthesis" in window) window.speechSynthesis.getVoices();
+render();
+</script>
+</body>
+</html>
