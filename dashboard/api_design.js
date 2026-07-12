@@ -111,12 +111,41 @@ const API_ESTADO = [
          "(techo(n_electores/100) días hábiles, _calcular_fecha_estimada) " +
          "y la advertencia de doble asignación",
     reglas: [
+      "FLUJO INSIGNIA (contrato §2.1): la asignación nace con " +
+      "estado_asignacion:'pendiente_extraccion' + asignada_en (timestamp). " +
+      "El funcionario la VE pero no puede cargar hasta que el plugin la " +
+      "prepare (POST /api/preparacion). El dashboard muestra la antigüedad " +
+      "('pendiente hace N días') para que ninguna intención quede olvidada",
+      "valida contra recintos_catalogo.json: recinto existente y no asignado",
       "fecha_estimada ausente → la calcula el backend con la regla de hoy",
       "asignacion_id generado por el backend (hoy: timestamp)",
       "avance inicial = 0",
       "si el recinto está 'devuelto_con_avance', responde con " +
       "origen_gpkg:'devuelto' para que el agente local continúe desde " +
       "Devueltos/ (preparar_gpkg_asignacion)",
+    ],
+  },
+
+  {
+    ruta: "POST /api/preparacion",                              // (§2.1)
+    hace: "Segundo tiempo del flujo insignia: el PLUGIN informa que extrajo " +
+          "el gpkg del recinto a la carpeta OneDrive del funcionario. La " +
+          "asignación pasa de 'pendiente_extraccion' a 'activa' con el hash " +
+          "del archivo generado. Doble vía: lo llama el plugin del " +
+          "funcionario ('Preparar mi recinto') o el modo admin ('preparar " +
+          "en nombre de'). La copia de trabajo local NO cambia: sigue " +
+          "siendo sesion.py al cargar el recinto.",
+    recibe: "{ usuario, recinto, sha256, n_electores_extraidos, " +
+            "preparado_por }",
+    devuelve: "{ ok, estado_asignacion: 'activa' }",
+    bitacora: "preparacion { sha256, preparado_por }",
+    hoy: "no existe — Fase 2. La extracción física es " +
+         "admin_archivos.preparar_gpkg_asignacion() (ARCHIVOS, se mantiene " +
+         "en el plugin); este endpoint solo registra la transición",
+    reglas: [
+      "rechaza si la asignación no está en 'pendiente_extraccion'",
+      "el conteo extraído debe cuadrar con n_electores del catálogo",
+      "sha256 obligatorio — sin hash no hay transición a 'activa'",
     ],
   },
 
@@ -223,20 +252,23 @@ const API_ESTADO = [
     ],
   },
 
-  // ── Futuro habilitante (requiere que el agente local publique catálogo) ─
+  // ── Catálogo (Fase 1: la fuente ya existe — recintos_catalogo.json) ────
 
   {
-    ruta: "GET /api/recintos",                                  // (4.14)
-    hace: "Catálogo de recintos con estado (pendiente/asignado/devuelto/" +
-          "cerrado), electores y sin-revisar. HOY es imposible como endpoint " +
-          "puro: la lista vive en central.gpkg (ARCHIVOS). Entra al contrato " +
-          "condicionado a que el agente local publique recintos.json " +
-          "(conteos agregados, sin datos sensibles) tras cada cambio.",
+    ruta: "GET /api/recintos",                                  // (4.14, §2.2)
+    hace: "Catálogo de recintos con estado derivado (pendiente / " +
+          "pendiente_extraccion / activo / devuelto / en_qa / cerrado). " +
+          "Fase 1 lo resuelve SIN backend: el plugin 2.1.5 publica " +
+          "recintos_catalogo.json (catalogo.publicar_catalogo, lista blanca " +
+          "de campos) y la pestaña Recintos del dashboard lo cruza con " +
+          "estado.json + bitácora. Este endpoint queda para cuando la API " +
+          "quiera servir la vista ya cruzada a otros clientes.",
     recibe: "query: ?comuna&estado&orden",
-    devuelve: "{ ok, recintos: [{codigo, nombre, comuna, n_electores, " +
-              "n_sin_revisar, estado_recinto, asignado_a}] }",
+    devuelve: "{ ok, generado, recintos: [{codigo, nombre, comuna, " +
+              "n_electores, estado_recinto, detalle}] }",
     bitacora: null,
-    hoy: "admin_archivos.listar_recintos_central() — SOLO dentro de QGIS",
+    hoy: "plugin: catalogo.py (generación) + dashboard: pestaña Recintos " +
+         "(consumo). Dentro de QGIS: admin_archivos.listar_recintos_central()",
   },
 ];
 

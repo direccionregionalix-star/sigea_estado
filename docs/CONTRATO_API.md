@@ -1,6 +1,10 @@
 # CONTRATO DE OPERACIONES SIGEA
 
-**Documento de diseño — rama `claude/sigea-api-contract` — NO mergear sin revisión del Director.**
+**Documento de diseño — NO mergear sin revisión del Director.**
+
+Actualizado 2026-07-11: incorpora el flujo insignia de asignación en dos tiempos (diseño
+de Seba, §2.1), el catálogo de recintos (§2.2, Fase 1 construida) y el ciclo de vida del
+gpkg (§5).
 
 Fecha: 2026-07-10 · Fuente: código real del zip `sigea_panel.2.1.4.zip` (no `plugin_src/`, eliminada),
 `dashboard/server.js`, `dashboard/index.html` y `.github/workflows/consolidador.yml`.
@@ -35,6 +39,58 @@ copiarlos, extraerlos o respaldarlos. De ahí las dos familias:
 El software nuevo podrá hacer **todo** lo de ESTADO. Lo de ARCHIVOS seguirá necesitando un
 componente local, coordinado por el estado (ej.: la API registra una asignación; el agente
 local ve la asignación nueva y extrae el gpkg).
+
+### 2.1 El flujo insignia: asignación en dos tiempos (diseño del Director)
+
+Esta es la aplicación concreta de la regla, y el patrón que ordena toda la arquitectura:
+**el dashboard declara intenciones; el plugin —que ya corre en cada máquina— las ejecuta.**
+El canal entre ambos es `estado.json`, que los dos ya leen y escriben. No se construye
+ningún agente nuevo.
+
+1. **El admin asigna desde el dashboard**: elige recinto (del catálogo, ver §2.2) y
+   funcionario. El dashboard valida (recinto no asignado, funcionario existente) y escribe
+   la asignación en `estado.json` con estado **`pendiente_extraccion`**, más el evento
+   `asignacion` en bitácora.
+2. **El plugin del funcionario detecta la intención** al abrir/refrescar: tiene una
+   asignación en `pendiente_extraccion`. La VE, pero aún no puede cargar el recinto.
+   Aparece un botón claro: **"Preparar mi recinto"**. Al pulsarlo, el plugin extrae del
+   `central.gpkg` el gpkg del recinto hacia su carpeta OneDrive — la operación de archivos
+   que el navegador no puede hacer.
+3. **Extracción verificada → asignación `activa`**: con el SHA-256 de siempre, el plugin
+   actualiza `estado.json` (la asignación pasa a `activa`, con el hash del archivo
+   generado) y registra el evento de preparación en bitácora. El dashboard lo ve reflejado.
+4. **La copia de trabajo local NO cambia**: OneDrive → `sigea_work` la sigue haciendo
+   `sesion.py` en la máquina del funcionario al cargar el recinto, exactamente como hoy.
+   Ese mecanismo no se toca.
+
+**Regla de doble vía (decisión del Director):** el botón "Preparar" existe en el plugin del
+FUNCIONARIO (su recinto, su máquina) **y** en el modo ADMIN ("preparar en nombre de" un
+colega que no puede). Si el admin prepara en nombre de otro, la extracción va igual a la
+carpeta OneDrive del funcionario; la copia de trabajo local queda pendiente hasta que el
+funcionario cargue el recinto en SU plugin.
+
+**Estados de la asignación (explícitos):**
+- `pendiente_extraccion` — asignada en papel, sin archivo aún. Visible, no trabajable.
+- `activa` — archivo extraído y verificado; se puede trabajar.
+- (entrega, QA y cierre no cambian.)
+
+**Expiración visible:** el dashboard muestra las asignaciones en `pendiente_extraccion`
+con su antigüedad ("pendiente hace N días") para que ninguna intención quede olvidada.
+
+**Fases de construcción:** Fase 1 (hecha en esta rama) es solo lectura: catálogo +
+vista de decisión. Fase 2 (escritura desde el navegador) tiene un **prerequisito
+bloqueante**: mover la validación del candado admin del dashboard a server-side (Railway).
+Hoy es client-side, es decir cosmética; si el dashboard va a ESCRIBIR asignaciones, el
+candado tiene que ser real. No construir la escritura sin esto.
+
+### 2.2 recintos_catalogo.json — el panorama del central sin tocar el gpkg
+
+Para que el dashboard vea los 282 recintos sin poder leer `central.gpkg`, el plugin (modo
+admin, v2.1.5) genera un catálogo liviano y lo publica a la raíz del repo con el mecanismo
+de escritura existente: `[{codigo, nombre, comuna, n_electores}]` — ~282 filas de texto.
+Lista blanca de campos explícita en el código: **jamás datos de electores**. Publicación
+por botón ("Publicar catálogo") y refresco automático al abrir el modo admin si el
+publicado tiene más de 3 días. Con esto, la operación 4.14 pasa de ARCHIVOS a ESTADO.
 
 ## 3. Los datos del sistema
 
@@ -208,15 +264,16 @@ dominio se **alerta** (evento `alerta_tipo`), nunca se propaga en silencio.
 - **Entrada:** usuario, recinto, conservar_avance (bool), motivo. **Salida:** recinto
   pendiente o devuelto-con-avance; funcionario liberado.
 
-### 4.14 Listar recintos del central
-- **Familia:** ARCHIVOS (hoy) — **candidata a catálogo publicado**
-- **Hoy:** `admin_archivos.listar_recintos_central()` lee `central.gpkg` directamente:
-  código, nombre, comuna (resuelta a nombre desde 2.1.4), n_electores, n_sin_revisar,
-  y estado del recinto cruzando con `estado.json` (pendiente/asignado/devuelto/cerrado).
-- **Nota de diseño:** la lista en sí son **conteos agregados** — no hay datos sensibles.
-  Si el agente local publicara un `recintos.json` (catálogo) a GitHub tras cada cambio,
-  esta consulta pasaría a la familia ESTADO y el software nuevo podría asignar sin ver
-  el central. Es la pieza que le falta al contrato para que "asignar" sea 100 % remoto.
+### 4.14 Listar recintos del central → catálogo publicado (Fase 1: HECHO)
+- **Familia:** era ARCHIVOS; con el catálogo (§2.2) la consulta pasa a ESTADO.
+- **Generación (ARCHIVOS, plugin 2.1.5):** `catalogo.generar_catalogo()` +
+  `catalogo.publicar_catalogo()` — lee el central vía `listar_recintos_central()` y
+  publica `recintos_catalogo.json` con lista blanca de campos.
+- **Consumo (ESTADO, dashboard):** la pestaña "Recintos" cruza catálogo + `estado.json` +
+  bitácora: los 282 con estado derivado (pendiente / pendiente_extraccion / activo /
+  devuelto / en QA / cerrado), filtros por comuna y estado, contadores globales y
+  "comunas por colega" (eventos `asignacion`/`cierre`). Los recintos reabiertos tras un
+  cierre se marcan con advertencia para no reasignarlos por accidente.
 
 ### 4.15 Importar entrega SIGE
 - **Familia:** **MIXTA**
@@ -248,7 +305,29 @@ dominio se **alerta** (evento `alerta_tipo`), nunca se propaga en silencio.
 
 ---
 
-## 5. Tabla resumen — qué puede migrar y qué se queda local
+## 5. Ciclo de vida del gpkg — tramo por tramo (base del manual de usuario)
+
+El dato geográfico viaja por cinco estaciones. Cada tramo tiene UN mecanismo responsable,
+UNA verificación y UN respaldo previo. Si un tramo falla, el trabajo nunca se pierde:
+siempre queda la copia de la estación anterior.
+
+| # | Tramo | Quién lo mueve | Verificación | Respaldo previo |
+|---|---|---|---|---|
+| 1 | `central.gpkg` → `funcionarios/{usuario}/R{codigo}.gpkg` (OneDrive) | `extraer_recinto_para_funcionario()` — GDAL/OGR, hoy desde el modo admin; con el flujo insignia, desde el botón "Preparar mi recinto" | Conteo de electores 1:1 contra el central + copia atómica con **SHA-256** (`copia_atomica_verificada`) | No aplica (archivo nuevo; si existía, se sobrescribe tras verificar) |
+| 1b | `Devueltos/R{codigo}.gpkg` → OneDrive del funcionario (reasignación con avance) | `preparar_gpkg_asignacion()` — continúa el trabajo devuelto en vez de re-extraer | Copia atómica + **SHA-256** | El devuelto previo va a `Devueltos/_respaldos/` |
+| 2 | OneDrive → **copia de trabajo local** (`sigea_work/R{codigo}.gpkg`) | `sesion.abrir_sesion()` — copia **binaria** (la geometría viaja intacta, jamás se reconstruye desde lat/lon) | Manifest `.listo` (bytes + **SHA-256**): confirma que OneDrive terminó de bajar el archivo antes de copiarlo | Si hay copia local más nueva, se respeta (trabajo sin sincronizar) |
+| 3 | Edición en QGIS | El funcionario, sobre la copia LOCAL — OneDrive nunca ve el archivo abierto (cero conflictos WAL/SHM) | — | Botón "Respaldar ahora" → `_historico/` en cualquier momento |
+| 4 | Copia local → OneDrive ("Pausar y sincronizar") | `sesion.sincronizar()` — sobrescritura atómica con nombre estable | Tamaño + **SHA-256** + manifest `.listo` nuevo | **Doble**: respaldo local a `_historico/` (últimos 5) ANTES de tocar OneDrive, y el archivo anterior de OneDrive a `_respaldos/` (últimos 3). **Regla jmedina (NO SE TOCA):** `limpiar_local()` respalda SIEMPRE antes de borrar |
+| 5 | OneDrive funcionario → `QA_pendiente/R{codigo}.gpkg` (entrega) | `entregar_a_qa()` — modo admin | Copia atómica + **SHA-256**; si falla, el gpkg del funcionario queda intacto | El QA previo va a `QA_pendiente/_respaldos/` |
+| 6 | `QA_pendiente/` → `central.gpkg` (reimporte) | `reimportar_al_central()` — **NEUTRALIZADO** (`PIEZA4_HABILITADA=False`) hasta pasar la prueba de 6 pasos | UPDATE preciso por `fid_central`; si el conteo no cuadra 1:1 → **rollback total**; rechaza gpkg sin `fid_central` | El central completo va a `_historico_central/` ANTES de escribir |
+| 7 | `QA_pendiente/` → `QA_cerrado/R{codigo}_{ts}.gpkg` (archivo) | `mover_qa_a_cerrado()` tras QA aprobado | — | Es el archivo histórico en sí |
+| 8 | `central.gpkg` → `recintos_catalogo.json` (GitHub) | `catalogo.publicar_catalogo()` — solo metadata pública (codigo, nombre, comuna, n_electores) | Lista blanca de campos en el código | El anterior queda en el historial de git |
+
+**Lectura para el manual:** el funcionario solo ve los tramos 2–4 (cargar, trabajar,
+pausar); el admin ve 1, 5–8. Ningún tramo mueve datos de electores hacia la web: GitHub
+solo recibe conteos, estados y el catálogo público.
+
+## 6. Tabla resumen — qué puede migrar y qué se queda local
 
 | ESTADO — puede vivir en el backend | ARCHIVOS — siempre agente local |
 |---|---|
@@ -270,7 +349,7 @@ la derecha necesita un proceso en la máquina que ve OneDrive — hoy el plugin 
 contrato solo exige que ese agente **reaccione al estado** (ej.: asignación nueva → extraer
 gpkg) en vez de ser quien decide.
 
-## 6. Cambios de fondo que la API haría posibles (para conversación, no para este encargo)
+## 7. Cambios de fondo que la API haría posibles (para conversación, no para este encargo)
 
 1. **Un solo escritor.** Hoy cuatro actores escriben a GitHub con el mismo token ofuscado
    (`_t` público en `estado.json`). Con API, solo el backend escribe; el token deja de ser
