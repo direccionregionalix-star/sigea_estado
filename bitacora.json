@@ -1673,6 +1673,15 @@
     "total": 1027,
     "pct": 100.0
    }
+  },
+  {
+   "ts": "2026-07-13T14:42:14+00:00",
+   "tipo": "asignacion",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "smardones"
+   }
   }
  ]
 }
