@@ -228,6 +228,27 @@
   .rec-devuelto              { background: #ffe0b2; color: #8a4c0f; }
   .rec-en_qa                 { background: #e8daef; color: #6c3483; }
   .rec-cerrado               { background: #d5f5e3; color: #1e8449; }
+  /* Cerrado por auditoría de terreno (SIGEA antiguo): mismo "no asignable"
+     que cerrado, pero visualmente distinto — no pasó por el ciclo digital. */
+  .rec-cerrado_antiguo       { background: #e0e7e9; color: #37545c; border: 1px dashed #90a8ae; }
+
+  .btn-marcar { padding: .18rem .55rem; border: 1px solid var(--gris-borde); border-radius: 6px;
+    background: var(--blanco); color: var(--gris-texto); cursor: pointer; font-size: .68rem; font-weight: 600; }
+  .btn-marcar:hover { border-color: var(--rojo); color: var(--rojo); }
+
+  /* Modal de auditoría de terreno */
+  #modal-audit-fondo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 50;
+    align-items: center; justify-content: center; padding: 1rem; }
+  #modal-audit { background: var(--blanco); border-radius: 14px; max-width: 460px; width: 100%;
+    padding: 1.3rem 1.4rem; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+  #modal-audit h3 { font-size: 1rem; margin-bottom: .3rem; }
+  #modal-audit .sub { font-size: .8rem; color: var(--gris-texto); margin-bottom: .9rem; line-height: 1.5; }
+  #modal-audit label { display: block; font-size: .78rem; color: var(--gris-texto); margin: .55rem 0 .2rem; }
+  #modal-audit select, #modal-audit input, #modal-audit textarea { width: 100%; padding: .45rem .6rem;
+    border: 1px solid var(--gris-borde); border-radius: 6px; font-size: .85rem; font-family: inherit; }
+  #modal-audit .resumen { background: var(--gris-fondo); border-radius: 8px; padding: .6rem .8rem;
+    font-size: .8rem; margin-top: .8rem; line-height: 1.55; display: none; }
+  #modal-audit .botones { display: flex; gap: .6rem; justify-content: flex-end; margin-top: 1rem; }
 
   #rec-colegas { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .8rem; margin-top: 1rem; }
   .colega-card { background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 12px; padding: .9rem 1.05rem; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
@@ -324,6 +345,7 @@
           <option value="devuelto">Devuelto c/avance</option>
           <option value="en_qa">En QA</option>
           <option value="cerrado">Cerrado</option>
+          <option value="cerrado_antiguo">Cerrado SIGEA antiguo</option>
         </select>
       </label>
       <label>Buscar
@@ -337,6 +359,31 @@
         </tr></thead>
         <tbody id="rec-body"><tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando catálogo…</td></tr></tbody>
       </table>
+    </div>
+
+    <!-- Modal: Marcar como ya trabajado (auditoría de terreno) -->
+    <div id="modal-audit-fondo">
+      <div id="modal-audit">
+        <h3>Marcar como ya trabajado (auditoría de terreno)</h3>
+        <div class="sub">
+          Recinto <b id="ma-recinto">—</b>. Registra un cierre directo con
+          <code>origen: auditoria_terreno</code> — para trabajo ya hecho y
+          cargado al Nivel Central <b>fuera del sistema actual</b>. No pasa
+          por asignar/QA/entregar y el recinto queda excluido de asignación.
+        </div>
+        <label>Funcionario que lo trabajó</label>
+        <select id="ma-funcionario"></select>
+        <label>Fecha del reporte</label>
+        <input type="date" id="ma-fecha">
+        <label>Comentario (opcional)</label>
+        <textarea id="ma-comentario" rows="2" placeholder="Ej: confirmado por reporte de terreno…"></textarea>
+        <div class="resumen" id="ma-resumen"></div>
+        <div id="ma-msg" style="font-size:.8rem;margin-top:.5rem;color:var(--rojo)"></div>
+        <div class="botones">
+          <button class="btn btn-gris" onclick="cerrarModalAudit()">Cancelar</button>
+          <button class="btn btn-rojo" id="ma-btn-continuar" onclick="confirmarAudit()">Continuar</button>
+        </div>
+      </div>
     </div>
 
     <h2 style="font-size:1rem;margin-top:1.6rem;">Comunas por colega</h2>
@@ -882,8 +929,19 @@ function _estadoDeRecinto(codigo) {
   // 3) Bitácora: último evento estructural del recinto
   for (let i = eventos.length - 1; i >= 0; i--) {
     const ev = eventos[i];
-    if (ev.tipo === "cierre")
+    if (ev.tipo === "cierre") {
+      const det = ev.detalle || {};
+      // Cierre por auditoría de terreno: trabajo hecho FUERA del sistema
+      // actual (SIGEA antiguo / reportes de terreno), ya en el Nivel
+      // Central. No asignable, pero visualmente distinto del cierre que
+      // pasó por el ciclo digital completo.
+      if (det.origen === "auditoria_terreno")
+        return { estado: "cerrado_antiguo",
+                 detalle: `ya trabajado por ${ev.funcionario || "—"} · ` +
+                          `reportado ${det.fecha_reportada || fmtFecha(ev.ts)} (${det.fuente || "auditoría"})` +
+                          (det.comentario ? ` — "${det.comentario}"` : "") };
       return { estado: "cerrado", detalle: `cerrado el ${fmtFecha(ev.ts)}` };
+    }
     if (ev.tipo === "entrega") {
       const dias = Math.floor((Date.now() - parseFecha(ev.ts)) / 86400000);
       return { estado: "en_qa", detalle: `entregado por ${ev.funcionario || "—"} hace ${dias} día(s)` };
@@ -900,7 +958,10 @@ function _estadoDeRecinto(codigo) {
 }
 
 const _REC_LABEL = { pendiente: "Pendiente", pendiente_extraccion: "Pend. extracción",
-                     activo: "Activo", devuelto: "Devuelto", en_qa: "En QA", cerrado: "Cerrado" };
+                     activo: "Activo", devuelto: "Devuelto", en_qa: "En QA", cerrado: "Cerrado",
+                     cerrado_antiguo: "Cerrado SIGEA antiguo" };
+// Estados NO asignables: cualquier lista/dropdown de asignación debe excluirlos.
+const _REC_NO_ASIGNABLES = new Set(["activo", "pendiente_extraccion", "en_qa", "cerrado", "cerrado_antiguo"]);
 
 function renderRecintos() {
   if (!_catalogo) return;
@@ -914,11 +975,14 @@ function renderRecintos() {
   const cnt = {};
   filas.forEach(f => cnt[f.estado] = (cnt[f.estado] || 0) + 1);
   const total = filas.length;
-  const cerrados = cnt.cerrado || 0;
+  // Los cerrados por auditoría de terreno cuentan como LISTOS (el trabajo
+  // existe y está en el Nivel Central) pero se muestran aparte.
+  const cerrados = (cnt.cerrado || 0) + (cnt.cerrado_antiguo || 0);
   const enCurso = (cnt.activo || 0) + (cnt.en_qa || 0) + (cnt.pendiente_extraccion || 0) + (cnt.devuelto || 0);
   const cards = [
     { val: Math.round(1000 * cerrados / (total || 1)) / 10 + "%", lbl: "Listos (cerrados)", cls: "destacado" },
-    { val: fmt(cerrados), lbl: "Cerrados", cls: "" },
+    { val: fmt(cnt.cerrado || 0), lbl: "Cerrados (ciclo digital)", cls: "" },
+    { val: fmt(cnt.cerrado_antiguo || 0), lbl: "Cerrado SIGEA antiguo", cls: "" },
     { val: fmt(enCurso), lbl: "En curso", cls: "" },
     { val: fmt(cnt.pendiente || 0), lbl: "Sin empezar", cls: "" },
     { val: fmt(total), lbl: "Recintos en catálogo", cls: "" },
@@ -938,9 +1002,129 @@ function renderRecintos() {
       <td>${f.comuna || "—"}</td>
       <td>${fmt(f.n_electores)}</td>
       <td><span class="rec-pill rec-${f.estado}">${_REC_LABEL[f.estado]}</span></td>
-      <td style="color:var(--gris-texto)">${f.detalle}</td>
+      <td style="color:var(--gris-texto)">${f.detalle}
+        ${f.estado === "pendiente"
+          ? `<br><button class="btn-marcar" onclick="abrirModalAudit('${f.codigo}')"
+               title="Registrar que este recinto ya fue trabajado fuera del sistema (SIGEA antiguo / reporte de terreno)">✓ Marcar como ya trabajado (auditoría de terreno)</button>`
+          : ""}
+      </td>
     </tr>`).join("")
     : `<tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Sin recintos para este filtro.</td></tr>`;
+}
+
+// ─── Marcar como ya trabajado (auditoría de terreno) ────────────────────────
+// Escribe el MISMO evento cierre/origen:auditoria_terreno que la
+// reconciliación inicial de los 19 — esa fue el primer uso de esta función.
+let _maRecinto = null;
+let _maConfirmando = false;
+
+function abrirModalAudit(codigo) {
+  _maRecinto = codigo;
+  _maConfirmando = false;
+  document.getElementById("ma-recinto").textContent = codigo;
+  const sel = document.getElementById("ma-funcionario");
+  sel.innerHTML = "";
+  Object.keys((_estado || {}).funcionarios || {})
+    .filter(u => !u.startsWith("_")).sort()
+    .forEach(u => { const o = document.createElement("option"); o.value = o.textContent = u; sel.appendChild(o); });
+  document.getElementById("ma-fecha").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("ma-comentario").value = "";
+  document.getElementById("ma-resumen").style.display = "none";
+  document.getElementById("ma-msg").textContent = "";
+  document.getElementById("ma-btn-continuar").textContent = "Continuar";
+  document.getElementById("ma-btn-continuar").disabled = false;
+  document.getElementById("modal-audit-fondo").style.display = "flex";
+}
+
+function cerrarModalAudit() {
+  document.getElementById("modal-audit-fondo").style.display = "none";
+  _maRecinto = null;
+}
+
+async function confirmarAudit() {
+  const msg = document.getElementById("ma-msg");
+  const funcionario = document.getElementById("ma-funcionario").value;
+  const fecha = document.getElementById("ma-fecha").value;
+  const comentario = document.getElementById("ma-comentario").value.trim();
+
+  if (!funcionario || !fecha) { msg.textContent = "Completa funcionario y fecha."; return; }
+  if (!_tokenDesc) {
+    msg.innerHTML = "Esta acción escribe a la bitácora: primero desbloquea el " +
+                    "modo <b>Admin</b> (pestaña Admin) y vuelve a intentar.";
+    return;
+  }
+
+  // Paso 1: mostrar el resumen y exigir una SEGUNDA pulsación (confirmación
+  // explícita — cierra un recinto sin pasar por el flujo normal).
+  if (!_maConfirmando) {
+    const res = document.getElementById("ma-resumen");
+    res.innerHTML = `<b>Vas a registrar:</b><br>
+      Recinto <b>${_maRecinto}</b> → cierre por auditoría de terreno<br>
+      Trabajado por: <b>${funcionario}</b> · Fecha del reporte: <b>${fecha}</b><br>
+      ${comentario ? `Comentario: "${comentario}"<br>` : ""}
+      Quedará <b>"Cerrado SIGEA antiguo"</b> y excluido de asignación.
+      Esta acción NO pasa por asignar/QA/entregar.`;
+    res.style.display = "block";
+    document.getElementById("ma-btn-continuar").textContent = "✓ Confirmar y escribir";
+    _maConfirmando = true;
+    return;
+  }
+
+  // Paso 2: escribir a bitácora (GET+PUT con reintento en conflicto de SHA)
+  document.getElementById("ma-btn-continuar").disabled = true;
+  msg.style.color = "var(--gris-texto)";
+  msg.textContent = "Escribiendo a bitácora…";
+  try {
+    await escribirCierreAuditoria(_maRecinto, funcionario, fecha, comentario);
+    msg.style.color = "var(--verde)";
+    msg.textContent = "✓ Registrado. El recinto quedó 'Cerrado SIGEA antiguo'.";
+    setTimeout(() => { cerrarModalAudit(); renderRecintos(); renderColegas(); }, 900);
+  } catch (e) {
+    msg.style.color = "var(--rojo)";
+    msg.textContent = "✗ No se pudo escribir: " + e.message;
+    document.getElementById("ma-btn-continuar").disabled = false;
+  }
+}
+
+async function escribirCierreAuditoria(recinto, funcionario, fecha, comentario) {
+  const repo = _estado._r, branch = _estado._b || "main";
+  const url = `https://api.github.com/repos/${repo}/contents/bitacora.json`;
+  const headers = { Authorization: `Bearer ${_tokenDesc}`, Accept: "application/vnd.github+json" };
+
+  for (let intento = 0; intento < 3; intento++) {
+    const getR = await fetch(`${url}?ref=${branch}&_=${Date.now()}`, { headers });
+    if (!getR.ok) throw new Error("GET bitácora: HTTP " + getR.status);
+    const getD = await getR.json();
+    const bitacora = JSON.parse(new TextDecoder().decode(
+      Uint8Array.from(atob(getD.content.replace(/\n/g, "")), c => c.charCodeAt(0))));
+
+    const evento = {
+      ts: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
+      tipo: "cierre",
+      recinto, funcionario,
+      detalle: { origen: "auditoria_terreno", fuente: "dashboard_admin",
+                 fecha_reportada: fecha, comentario: comentario || "" },
+    };
+    bitacora.eventos.push(evento);
+
+    const cuerpo = JSON.stringify(bitacora, null, 1);
+    const b64 = btoa(String.fromCharCode(...new TextEncoder().encode(cuerpo)));
+    const putR = await fetch(url, {
+      method: "PUT", headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: `auditoria terreno: cierre ${recinto} (${funcionario})`,
+        content: b64, branch, sha: getD.sha,
+      }),
+    });
+    if (putR.ok) {
+      _bitaData.unshift(evento);   // reflejar sin re-descargar
+      return;
+    }
+    if (putR.status === 409 && intento < 2) continue;   // SHA viejo — reintentar
+    const err = await putR.json().catch(() => ({}));
+    throw new Error(err.message || ("HTTP " + putR.status));
+  }
+  throw new Error("conflicto persistente escribiendo la bitácora");
 }
 
 // Comunas por colega: eventos asignacion/cierre de bitácora × comuna del catálogo
@@ -1030,7 +1214,11 @@ function _histDetalleEvento(ev) {
     case "avance":     return det.pct != null ? `avance ${det.pct}%` : "";
     case "entrega":    return det.pct != null ? `entrega con ${det.pct}%` : "entrega";
     case "qa":         return `QA: ${det.resultado || "—"}` + (det.comentario ? ` — "${det.comentario}"` : "");
-    case "cierre":     return det.cerrado_por ? `cerrado por ${det.cerrado_por}` : "cierre";
+    case "cierre":
+      if (det.origen === "auditoria_terreno")
+        return `cierre por auditoría de terreno (${det.fuente || "—"}, reportado ${det.fecha_reportada || "—"})` +
+               (det.comentario ? ` — "${det.comentario}"` : "");
+      return det.cerrado_por ? `cerrado por ${det.cerrado_por}` : "cierre";
     case "devolucion": return "devolución" + (det.motivo ? `: ${det.motivo}` : "") +
                               (det.conservo_avance ? " (conservó avance)" : "");
     case "mail":       return (det.enviado ? "mail ✓ enviado" : "mail simulado") +
