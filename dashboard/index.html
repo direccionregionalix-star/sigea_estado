@@ -210,6 +210,33 @@
   .hist-func-tabla td { padding: .45rem .8rem; border-bottom: 1px solid var(--gris-fondo); vertical-align: top; }
   .hist-func-tabla tr:last-child td { border-bottom: none; }
 
+  /* ─── Recintos (vista de decisión) ─── */
+  #rec-filtros { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1rem 0; align-items: flex-end; }
+  #rec-filtros label { font-size: .78rem; color: var(--gris-texto); display: flex; flex-direction: column; gap: .25rem; }
+  #rec-filtros select, #rec-filtros input { padding: .4rem .6rem; border: 1px solid var(--gris-borde); border-radius: 6px; font-size: .85rem; }
+
+  #rec-tabla { width: 100%; border-collapse: collapse; font-size: .82rem; background: var(--blanco); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  #rec-tabla th { background: var(--gris-fondo); color: var(--gris-texto); font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; padding: .55rem .8rem; text-align: left; border-bottom: 1px solid var(--gris-borde); position: sticky; top: 0; }
+  #rec-tabla td { padding: .45rem .8rem; border-bottom: 1px solid var(--gris-fondo); }
+  #rec-tabla tr:hover td { background: #fafafa; }
+  #rec-tabla-wrap { max-height: 520px; overflow-y: auto; border-radius: 10px; }
+
+  .rec-pill { display: inline-block; padding: .16rem .55rem; border-radius: 99px; font-size: .7rem; font-weight: 700; white-space: nowrap; }
+  .rec-pendiente             { background: #fde8e6; color: #922b21; }
+  .rec-pendiente_extraccion  { background: #fff3cd; color: #856404; border: 1px solid #f9e79f; }
+  .rec-activo                { background: #d6eaf8; color: #1a5276; }
+  .rec-devuelto              { background: #ffe0b2; color: #8a4c0f; }
+  .rec-en_qa                 { background: #e8daef; color: #6c3483; }
+  .rec-cerrado               { background: #d5f5e3; color: #1e8449; }
+
+  #rec-colegas { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .8rem; margin-top: 1rem; }
+  .colega-card { background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 12px; padding: .9rem 1.05rem; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+  .colega-card h3 { font-size: .92rem; margin-bottom: .15rem; }
+  .colega-card .tot { font-size: .74rem; color: var(--gris-texto); margin-bottom: .5rem; }
+  .colega-card ul { list-style: none; }
+  .colega-card li { font-size: .8rem; padding: .18rem 0; display: flex; justify-content: space-between; }
+  .colega-card li .n { font-weight: 700; color: var(--rojo); }
+
   #bita-paginacion { display: flex; gap: .5rem; justify-content: center; margin-top: 1rem; }
   #bita-paginacion button { padding: .35rem .75rem; border: 1px solid var(--gris-borde); border-radius: 6px; background: var(--blanco); cursor: pointer; font-size: .82rem; }
   #bita-paginacion button.activo-pg { background: var(--rojo); color: #fff; border-color: var(--rojo); }
@@ -264,6 +291,7 @@
 
 <nav class="tabs">
   <button class="activo" onclick="cambiarTab('estado', this)">Estado</button>
+  <button onclick="cambiarTab('recintos', this)">Recintos</button>
   <button onclick="cambiarTab('bitacora', this)">Bitácora</button>
   <button onclick="cambiarTab('historial', this)">Historial</button>
   <button onclick="cambiarTab('correos', this)">Correos</button>
@@ -277,6 +305,45 @@
     <div id="error-msg" style="display:none"></div>
     <div id="totales" style="display:none"></div>
     <div id="funcionarios" style="display:none"></div>
+  </div>
+
+  <!-- ══ TAB RECINTOS (vista de decisión) ═══════════════════════════════ -->
+  <div id="tab-recintos" class="tab-panel">
+    <div id="rec-aviso" style="display:none;background:#fdf6ec;border:1px solid #f5d9a8;border-radius:12px;padding:.9rem 1.1rem;font-size:.85rem;color:#7a5a1e;margin-bottom:1rem;"></div>
+    <div id="rec-totales" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-bottom:.5rem;"></div>
+    <div id="rec-filtros">
+      <label>Comuna
+        <select id="rec-comuna-fil" onchange="renderRecintos()"><option value="">(todas)</option></select>
+      </label>
+      <label>Estado
+        <select id="rec-estado-fil" onchange="renderRecintos()">
+          <option value="">(todos)</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="pendiente_extraccion">Pendiente extracción</option>
+          <option value="activo">Activo</option>
+          <option value="devuelto">Devuelto c/avance</option>
+          <option value="en_qa">En QA</option>
+          <option value="cerrado">Cerrado</option>
+        </select>
+      </label>
+      <label>Buscar
+        <input type="text" id="rec-buscar" placeholder="código o nombre…" oninput="renderRecintos()">
+      </label>
+    </div>
+    <div id="rec-tabla-wrap">
+      <table id="rec-tabla">
+        <thead><tr>
+          <th>Código</th><th>Recinto</th><th>Comuna</th><th>Electores</th><th>Estado</th><th>Detalle</th>
+        </tr></thead>
+        <tbody id="rec-body"><tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando catálogo…</td></tr></tbody>
+      </table>
+    </div>
+
+    <h2 style="font-size:1rem;margin-top:1.6rem;">Comunas por colega</h2>
+    <p style="font-size:.78rem;color:var(--gris-texto);margin:.2rem 0 .4rem;">
+      Derivado de la bitácora (asignaciones y cierres) cruzada con el catálogo —
+      para asignar recintos de la misma zona a quien ya la conoce.</p>
+    <div id="rec-colegas"></div>
   </div>
 
   <!-- ══ TAB BITÁCORA ════════════════════════════════════════════════════ -->
@@ -443,6 +510,7 @@
 const _GH_RAW = "__GH_RAW_BASE__";
 const ESTADO_URL = _GH_RAW + "/estado.json";
 const BITA_URL   = _GH_RAW + "/bitacora.json";
+const CATALOGO_URL = _GH_RAW + "/recintos_catalogo.json";
 const QGIS_BASE  = _GH_RAW + "/qgis/";
 const SIGE_BASE  = _GH_RAW + "/sige/";
 const REFRESH_MS = 5 * 60 * 1000;
@@ -473,6 +541,7 @@ function cambiarTab(id, btn) {
   document.getElementById("tab-" + id).classList.add("activo");
   btn.classList.add("activo");
 
+  if (id === "recintos") cargarRecintos();
   if (id === "bitacora" && _bitaData.length === 0) cargarBitacora();
   if (id === "historial") cargarHistorial();
   if (id === "correos")  cargarCorreos();
@@ -744,6 +813,166 @@ function limpiarFiltroBita() {
   _bitaFilt = _bitaData;
   _bitaPag  = 0;
   renderBitacora();
+}
+
+// ─── Recintos: vista de decisión (Fase 1, diseño Seba) ──────────────────────
+// Cruza recintos_catalogo.json (publicado por el plugin desde central.gpkg)
+// con estado.json y bitacora.json. Solo lectura.
+let _catalogo = null;      // {generado, n_recintos, recintos:[...]}
+
+async function cargarRecintos() {
+  const aviso = document.getElementById("rec-aviso");
+  try {
+    if (!_catalogo) _catalogo = await fetchJSON(CATALOGO_URL);
+    aviso.style.display = "none";
+  } catch (e) {
+    aviso.style.display = "block";
+    aviso.innerHTML = "<b>Catálogo aún no publicado.</b> Ábrelo desde QGIS: " +
+      "Modo Admin → pestaña Estado global → <b>Publicar catálogo de recintos</b> " +
+      "(plugin 2.1.5+). El resto del dashboard funciona igual.";
+    document.getElementById("rec-body").innerHTML =
+      `<tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Sin catálogo (${e.message}).</td></tr>`;
+    return;
+  }
+  try {
+    if (!_estado) _estado = await fetchJSON(ESTADO_URL);
+    if (_bitaData.length === 0) {
+      const data = await fetchJSON(BITA_URL);
+      _bitaData = (data.eventos || []).slice().reverse();
+    }
+  } catch (e) {
+    aviso.style.display = "block";
+    aviso.textContent = "Catálogo cargado, pero no pude leer estado/bitácora: " + e.message;
+  }
+  // Poblar filtro de comunas una sola vez
+  const sel = document.getElementById("rec-comuna-fil");
+  if (sel.options.length === 1) {
+    [...new Set(_catalogo.recintos.map(r => r.comuna))].sort()
+      .forEach(c => { const o = document.createElement("option"); o.value = o.textContent = c; sel.appendChild(o); });
+  }
+  renderRecintos();
+  renderColegas();
+}
+
+// Estado derivado de un recinto. Precedencia: estado.json manda sobre bitácora.
+function _estadoDeRecinto(codigo) {
+  const funcs = (_estado || {}).funcionarios || {};
+  const eventos = _bitaData.slice().reverse().filter(ev => ev.recinto === codigo); // asc
+
+  // 1) Cierres registrados en estado.json (_cerrado_* o estado:'cerrado')
+  for (const [u, asig] of Object.entries(funcs)) {
+    if (asig && String(asig.codigo) === String(codigo) && asig.estado === "cerrado")
+      return { estado: "cerrado", detalle: "cerrado" + (asig.motivo ? ` (${asig.motivo})` : "") };
+  }
+  // 2) Asignación vigente en estado.json
+  for (const [u, asig] of Object.entries(funcs)) {
+    if (!asig || String(asig.codigo) !== String(codigo) || u.startsWith("_")) continue;
+    if (asig.estado_asignacion === "pendiente_extraccion" || asig.estado_flujo === "pendiente_extraccion") {
+      const ev = eventos.filter(e => e.tipo === "asignacion").pop();
+      const ref = asig.asignada_en || (ev && ev.ts);
+      const dias = ref ? Math.floor((Date.now() - parseFecha(ref)) / 86400000) : null;
+      return { estado: "pendiente_extraccion",
+               detalle: `para ${u}` + (dias != null ? ` · pendiente hace ${dias} día(s)` : "") };
+    }
+    if (asig.estado_flujo === "devuelto_con_avance")
+      return { estado: "devuelto", detalle: `devuelto c/avance por ${u} — reasignable` };
+    const pct = asig.n_electores ? Math.round(1000 * (asig.avance || 0) / asig.n_electores) / 10 : 0;
+    return { estado: "activo", detalle: `asignado a ${u} · ${fmt(asig.avance || 0)}/${fmt(asig.n_electores || 0)} (${pct}%)` };
+  }
+  // 3) Bitácora: último evento estructural del recinto
+  for (let i = eventos.length - 1; i >= 0; i--) {
+    const ev = eventos[i];
+    if (ev.tipo === "cierre")
+      return { estado: "cerrado", detalle: `cerrado el ${fmtFecha(ev.ts)}` };
+    if (ev.tipo === "entrega") {
+      const dias = Math.floor((Date.now() - parseFecha(ev.ts)) / 86400000);
+      return { estado: "en_qa", detalle: `entregado por ${ev.funcionario || "—"} hace ${dias} día(s)` };
+    }
+    if (ev.tipo === "devolucion" || ev.tipo === "asignacion") break; // devuelto sin avance / ciclo nuevo
+  }
+  // Pendiente — pero si alguna vez se cerró, advertirlo: reasignar un recinto
+  // ya corregido debe ser una decisión consciente, no un accidente.
+  const cierrePrevio = eventos.filter(e => e.tipo === "cierre").pop();
+  if (cierrePrevio)
+    return { estado: "pendiente",
+             detalle: `⚠ reabierto — tuvo cierre el ${fmtFecha(cierrePrevio.ts)}; verificar antes de reasignar` };
+  return { estado: "pendiente", detalle: "—" };
+}
+
+const _REC_LABEL = { pendiente: "Pendiente", pendiente_extraccion: "Pend. extracción",
+                     activo: "Activo", devuelto: "Devuelto", en_qa: "En QA", cerrado: "Cerrado" };
+
+function renderRecintos() {
+  if (!_catalogo) return;
+  const comunaFil = document.getElementById("rec-comuna-fil").value;
+  const estadoFil = document.getElementById("rec-estado-fil").value;
+  const q = (document.getElementById("rec-buscar").value || "").trim().toLowerCase();
+
+  const filas = _catalogo.recintos.map(r => ({ ...r, ..._estadoDeRecinto(r.codigo) }));
+
+  // Contadores globales (sobre TODO el catálogo, sin filtros)
+  const cnt = {};
+  filas.forEach(f => cnt[f.estado] = (cnt[f.estado] || 0) + 1);
+  const total = filas.length;
+  const cerrados = cnt.cerrado || 0;
+  const enCurso = (cnt.activo || 0) + (cnt.en_qa || 0) + (cnt.pendiente_extraccion || 0) + (cnt.devuelto || 0);
+  const cards = [
+    { val: Math.round(1000 * cerrados / (total || 1)) / 10 + "%", lbl: "Listos (cerrados)", cls: "destacado" },
+    { val: fmt(cerrados), lbl: "Cerrados", cls: "" },
+    { val: fmt(enCurso), lbl: "En curso", cls: "" },
+    { val: fmt(cnt.pendiente || 0), lbl: "Sin empezar", cls: "" },
+    { val: fmt(total), lbl: "Recintos en catálogo", cls: "" },
+  ];
+  document.getElementById("rec-totales").innerHTML = cards.map(c =>
+    `<div class="total-card ${c.cls}"><div class="val">${c.val}</div><div class="lbl">${c.lbl}</div></div>`).join("");
+
+  const visibles = filas.filter(f =>
+    (!comunaFil || f.comuna === comunaFil) &&
+    (!estadoFil || f.estado === estadoFil) &&
+    (!q || String(f.codigo).toLowerCase().includes(q) || String(f.nombre).toLowerCase().includes(q)));
+
+  document.getElementById("rec-body").innerHTML = visibles.length ? visibles.map(f => `
+    <tr>
+      <td><b>${f.codigo}</b></td>
+      <td>${f.nombre || "—"}</td>
+      <td>${f.comuna || "—"}</td>
+      <td>${fmt(f.n_electores)}</td>
+      <td><span class="rec-pill rec-${f.estado}">${_REC_LABEL[f.estado]}</span></td>
+      <td style="color:var(--gris-texto)">${f.detalle}</td>
+    </tr>`).join("")
+    : `<tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Sin recintos para este filtro.</td></tr>`;
+}
+
+// Comunas por colega: eventos asignacion/cierre de bitácora × comuna del catálogo
+function renderColegas() {
+  const cont = document.getElementById("rec-colegas");
+  if (!_catalogo || _bitaData.length === 0) { cont.innerHTML = ""; return; }
+  const comunaDe = {};
+  _catalogo.recintos.forEach(r => comunaDe[r.codigo] = r.comuna);
+
+  const porColega = {};   // usuario → { comuna → Set(recintos) }
+  for (const ev of _bitaData) {
+    if (!["asignacion", "cierre"].includes(ev.tipo)) continue;
+    const u = ev.funcionario;
+    if (!u || u.startsWith("_")) continue;
+    const comuna = comunaDe[ev.recinto];
+    if (!comuna) continue;
+    porColega[u] = porColega[u] || {};
+    (porColega[u][comuna] = porColega[u][comuna] || new Set()).add(ev.recinto);
+  }
+
+  cont.innerHTML = Object.keys(porColega).sort().map(u => {
+    const comunas = Object.entries(porColega[u])
+      .map(([c, s]) => ({ comuna: c, n: s.size }))
+      .sort((a, b) => b.n - a.n);
+    const totRec = comunas.reduce((s, c) => s + c.n, 0);
+    return `
+      <div class="colega-card">
+        <h3>${u}</h3>
+        <div class="tot">${totRec} recinto(s) en ${comunas.length} comuna(s)</div>
+        <ul>${comunas.map(c => `<li><span>${c.comuna}</span><span class="n">${c.n}</span></li>`).join("")}</ul>
+      </div>`;
+  }).join("") || `<span style="font-size:.82rem;color:var(--gris-texto)">Aún no hay asignaciones ni cierres en la bitácora.</span>`;
 }
 
 // ─── Historial (Hallazgo 5: vista sobre bitacora.json, solo lectura) ─────────
