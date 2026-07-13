@@ -1682,6 +1682,19 @@
    "detalle": {
     "asignado_por": "smardones"
    }
+  },
+  {
+   "ts": "2026-07-13T14:57:54+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 204,
+    "localidad": 9,
+    "exacto": 3,
+    "total": 1221,
+    "pct": 17.7
+   }
   }
  ]
 }
