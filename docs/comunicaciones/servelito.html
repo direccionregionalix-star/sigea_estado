@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Servelito presenta: SIGEA 2.1.4</title>
+<title>Servelito presenta: SIGEA 2.1.4 + 2.1.5</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --rojo:#c0392b; --rojo-osc:#922b21; --fondo:#f4f5f7; --borde:#dde1e7;
@@ -65,7 +65,7 @@
 <div class="escena">
   <div class="titulo">
     <div class="kicker">SERVEL DR La Araucanía · SIGEA</div>
-    <h1>¡Hola! Soy <b>Servelito</b> 📍 y te presento la nueva versión</h1>
+    <h1>¡Hola! Soy <b>Servelito</b> 📍 — novedades 2.1.4 y 2.1.5, todo en uno</h1>
   </div>
 
   <div class="tarima">
@@ -123,17 +123,28 @@
 <script>
 // ─── Guion de Servelito ───────────────────────────────────────────────────────
 const GUION = [
-  { t: "¡Bienvenido a la nueva versión!",
-    p: "Soy Servelito, tu asistente de SIGEA. Este fin de semana actualizamos la plataforma: plugin QGIS 2.1.4 y dashboard renovado. Te cuento en un minuto lo que cambia — dale a «Siguiente», o aprieta el parlante para que te lo lea." },
-  { t: "ArcGIS Pro ya no pelea con tus recintos 🗺️",
+  { v: "",
+    t: "¡Bienvenido!",
+    p: "Soy Servelito, tu asistente de SIGEA. Tenemos DOS actualizaciones seguidas: el plugin 2.1.4 y ahora el 2.1.5, más un dashboard renovado. Si te saltaste alguna, tranquilo: aquí te explico todo, en orden. Dale a «Siguiente», o aprieta el parlante para que te lo lea." },
+  { v: "2.1.4", t: "ArcGIS Pro ya no pelea con tus recintos 🗺️",
     p: "Los recintos nuevos se generan con el estándar GeoPackage completo, con índice espacial incluido. Ahora abren directo en ArcGIS Pro como capa de puntos. Se acabó eso de convertir a GDB antes de trabajar." },
-  { t: "Las comunas hablan tu idioma 🏘️",
+  { v: "2.1.4", t: "Las comunas hablan tu idioma 🏘️",
     p: "Donde antes veías el código 09121, ahora verás Cholchol. Donde decía 09209, dirá Renaico. En el listado de recintos, en las asignaciones y en el dashboard." },
-  { t: "Pestaña nueva: Historial 📊",
+  { v: "2.1.4", t: "Pestaña nueva: Historial 📊",
     p: "El dashboard ahora cuenta la historia completa de cada recinto: asignación, avances, entrega, control de calidad y cierre, con la duración total del trabajo. Y también tu historia: recintos trabajados, tiempos y entregas. Con filtro por fechas." },
-  { t: "Correos que avisan de verdad ✉️",
+  { v: "2.1.4", t: "Correos que avisan de verdad ✉️",
     p: "Renovamos el sistema de notificaciones. Cuando esté activada la llave de envío, los avisos de asignación y entrega llegarán a tu correo. Y si un envío falla, quedará registrado el motivo — nada de fallos silenciosos." },
-  { t: "Tu rutina no cambia ✓",
+  { v: "2.1.5",
+    t: "El dashboard ahora ve los 282 recintos 🗂️",
+    p: "El plugin publica un catálogo liviano de recintos desde el central — solo código, nombre, comuna y electores, nada sensible. Con eso, el dashboard estrena la pestaña «Recintos»: el panorama regional completo, sin abrir QGIS." },
+  { v: "2.1.5",
+    t: "Vista de decisión para asignar mejor 🎯",
+    p: "En la pestaña Recintos puedes filtrar por comuna y por estado, ver contadores globales — cuántos listos, cuántos en curso, cuántos sin empezar — y la sección «comunas por colega»: quién ya conoce cada zona, para asignar recintos a quien ya la trabajó." },
+  { v: "2.1.5",
+    t: "El trabajo antiguo también cuenta ✅",
+    p: "Los recintos que se trabajaron antes de este sistema — en el SIGEA antiguo o confirmados por auditoría de terreno — ahora aparecen como «Cerrado SIGEA antiguo» y no se pueden asignar por error. Y hay una función para registrar los que aparezcan: «Marcar como ya trabajado», con confirmación antes de escribir." },
+  { v: "",
+    t: "Tu rutina no cambia ✓",
     p: "Cargar recinto, rectificar con la botonera, registrar avance, pausar y sincronizar, entregar. Igual que siempre, con tus respaldos automáticos funcionando. Solo acepta la actualización del plugin cuando QGIS te la ofrezca. ¡Buen trabajo en terreno!" },
 ];
 
@@ -145,7 +156,8 @@ const $ = id => document.getElementById(id);
 function render() {
   $("globo-titulo").textContent = GUION[paso].t;
   $("globo-texto").textContent = GUION[paso].p;
-  $("globo-paso").textContent = `Servelito · mensaje ${paso + 1} de ${GUION.length}`;
+  $("globo-paso").textContent = `Servelito · mensaje ${paso + 1} de ${GUION.length}` +
+    (GUION[paso].v ? ` · nuevo en ${GUION[paso].v}` : "");
   $("btn-prev").disabled = paso === 0;
   $("btn-next").disabled = paso === GUION.length - 1;
   document.querySelectorAll("#puntos span").forEach((el, i) =>
