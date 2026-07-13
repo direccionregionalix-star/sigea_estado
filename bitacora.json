@@ -1417,6 +1417,234 @@
     "total": 1270,
     "pct": 64.9
    }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01284",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01290",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01291",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01315",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01335",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01336",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01342",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01351",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01381",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01387",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01452",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01459",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01462",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01465",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "BD vieja",
+    "fecha_reportada": "2026-06-09",
+    "comentario": "Sin problemas graves identificados, QA pasado a la base del nivel central"
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01466",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "BD vieja",
+    "fecha_reportada": "2026-06-23",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01469",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "BD vieja",
+    "fecha_reportada": "2026-06-24",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01483",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01486",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01487",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
   }
  ]
 }
