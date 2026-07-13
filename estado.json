@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-13T14:15:00+00:00Z",
+ "generado": "2026-07-13T14:18:49+00:00Z",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1783536455,
@@ -28,32 +28,7 @@
    ]
   },
   "mespinozan": null,
-  "jmedina": {
-   "asignacion_id": 1783448565,
-   "codigo": "01393",
-   "unidad": "LICEO POLITECNICO DOMINGO SANTA MARIA",
-   "comuna": "Renaico",
-   "n_electores": 1027,
-   "fecha_estimada": "2026-07-22",
-   "dias_restantes": 15,
-   "avance": 1027,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1783448565,
-     "codigo": "01393",
-     "unidad": "LICEO POLITECNICO DOMINGO SANTA MARIA",
-     "comuna": "Renaico",
-     "n_electores": 1027,
-     "fecha_estimada": "2026-07-22",
-     "dias_restantes": 15,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "jmedina": null,
   "pfigueroa": null
  },
  "_t": "NCAzLTRQb0JXFS1QRCFWJy8qCwh3KiJhalp1ECMEOCgyMTNTJXgFFAtEQGFmUxwRMCcQLRg3Ih0yPzZ6dQF4EBMqEhMnBAcHBH1/BHJjBGhuJDclICIjNg5ZHiET",
