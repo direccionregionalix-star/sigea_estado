@@ -2,18 +2,16 @@
  * SIGEA — servidor de notificaciones por mail.
  * POST /mail  { destinatario, tipo, recinto, funcionario }
  *
- * Envío vía API HTTP de Resend (https://resend.com) — puerto 443.
- * Railway bloquea los puertos SMTP (587/465); la versión anterior con
- * nodemailer hacía timeout en silencio y ningún correo salió jamás.
+ * Envío vía API de Gmail con OAuth2 (HTTPS puerto 443 — no bloqueado por
+ * Railway). Historia: SMTP crudo (nodemailer) hacía timeout porque Railway
+ * bloquea 587/465; Resend exigía verificar un dominio propio. Gmail API
+ * envía desde la cuenta @gmail.com del Director sin ninguna de esas trabas.
+ * La lógica de envío vive en ./mailer_gmail.js.
  *
- * Variables de entorno (configurar en Railway):
- *   RESEND_API_KEY   — API key de Resend. NUNCA en el código.
- *   SIGEA_MAIL_FROM  — remitente. Debe ser un dominio verificado en Resend,
- *                      o el remitente de prueba onboarding@resend.dev si aún
- *                      no hay dominio propio verificado.
- *                      Default: "SIGEA <onboarding@resend.dev>".
+ * Variables de entorno (configurar en Railway) — ver mailer_gmail.js:
+ *   GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN, GMAIL_SENDER.
  *
- * Sin RESEND_API_KEY configurada: simula el envío (log + evento con
+ * Sin credenciales Gmail configuradas: simula el envío (log + evento con
  * enviado:false), sin romper el flujo de entrega. Todo fallo de envío
  * registra su causa en el campo "nota" del evento de bitácora.
  *
@@ -26,9 +24,10 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
+const { enviarGmail, credencialesOk: gmailListo, GMAIL_SENDER } =
+  require("./mailer_gmail");
+
 const PORT = process.env.PORT || 3001;
-const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
-const MAIL_FROM = process.env.SIGEA_MAIL_FROM || "SIGEA <onboarding@resend.dev>";
 
 // Repo GitHub donde viven estado.json / bitacora.json / qgis/ / sige/
 // Variable: SIGEA_REPO=SebaGeoZ92/sigea_estado  (owner/repo, sin slash final)
@@ -71,64 +70,9 @@ const CUERPOS = {
     `El recinto ${r} fue cerrado formalmente.\n\nSIGEA DR Araucanía`,
 };
 
-// ─── Envío vía API de Resend (HTTPS puerto 443 — evade el bloqueo SMTP) ──────
-
-function escapeHtml(s) {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-                  .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-// Nunca rechaza: resuelve siempre { enviado, simulado, nota }.
-// nota = "" si el envío salió bien; causa del fallo en caso contrario.
-function enviarResend(destinatario, asunto, cuerpo) {
-  return new Promise((resolve) => {
-    if (!RESEND_API_KEY) {
-      resolve({ enviado: false, simulado: true,
-                nota: "RESEND_API_KEY no configurada — envío simulado" });
-      return;
-    }
-    const payload = JSON.stringify({
-      from: MAIL_FROM,
-      to: [destinatario],
-      subject: asunto,
-      html: escapeHtml(cuerpo).replace(/\n/g, "<br>\n"),
-      text: cuerpo,
-    });
-    const req = https.request({
-      hostname: "api.resend.com",
-      path: "/emails",
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-        "Content-Length": Buffer.byteLength(payload),
-      },
-      timeout: 15000,
-    }, res => {
-      let raw = "";
-      res.on("data", d => raw += d);
-      res.on("end", () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve({ enviado: true, simulado: false, nota: "" });
-        } else {
-          let detalle = raw;
-          try { detalle = JSON.parse(raw).message || raw; } catch (_) {}
-          resolve({ enviado: false, simulado: false,
-                    nota: `Resend HTTP ${res.statusCode}: ${String(detalle).slice(0, 300)}` });
-        }
-      });
-    });
-    req.on("timeout", () => {
-      req.destroy(new Error("timeout de 15s"));
-    });
-    req.on("error", e => {
-      resolve({ enviado: false, simulado: false,
-                nota: `Error de red hacia Resend: ${e.message}` });
-    });
-    req.write(payload);
-    req.end();
-  });
-}
+// El envío real vive en ./mailer_gmail.js (enviarGmail), con el mismo
+// contrato que usaba enviarResend: nunca lanza, resuelve
+// { enviado, simulado, nota }.
 
 // ─── Escritura a bitácora en GitHub ──────────────────────────────────────────
 // Reutiliza el mecanismo del plugin: lee _r, _t, _b del estado.json publicado.
@@ -293,8 +237,8 @@ const server = http.createServer(async (req, res) => {
       const asunto = buildAsunto(recinto, funcionario || "");
       const cuerpo = buildCuerpo(recinto, funcionario || "");
 
-      // enviarResend nunca rechaza: siempre { enviado, simulado, nota }
-      const info = await enviarResend(emailDest, asunto, cuerpo);
+      // enviarGmail nunca rechaza: siempre { enviado, simulado, nota }
+      const info = await enviarGmail(emailDest, asunto, cuerpo);
       if (info.enviado) {
         console.log(`[mail enviado] → ${emailDest} | ${asunto}`);
       } else if (info.simulado) {
@@ -334,7 +278,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`SIGEA mail server en :${PORT}`);
-  console.log(RESEND_API_KEY
-    ? `Mail: API Resend (remitente: ${MAIL_FROM})`
-    : "RESEND_API_KEY no configurada — modo simulación");
+  console.log(gmailListo()
+    ? `Mail: API Gmail (remitente: ${GMAIL_SENDER || "cuenta del refresh token"})`
+    : "Credenciales Gmail no configuradas — modo simulación");
 });
