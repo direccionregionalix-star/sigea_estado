@@ -1887,7 +1887,7 @@
     "no_geo": 319,
     "proximidad": 20,
     "total": 1130,
-    "pct": 30.0
+    "pct": 30
    }
   },
   {
@@ -1900,6 +1900,18 @@
     "calle": 8,
     "total": 1130,
     "pct": 28.9
+   }
+  },
+  {
+   "ts": "2026-07-14T20:18:02Z",
+   "tipo": "mail",
+   "recinto": "01455",
+   "funcionario": "jmedina",
+   "detalle": {
+    "destinatario": "jmedina",
+    "asunto": "[SIGEA] Se te asignó el recinto 01455",
+    "enviado": true,
+    "nota": ""
    }
   }
  ]
