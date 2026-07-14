@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Servelito presenta: SIGEA 2.1.4 + 2.1.5</title>
+<title>Servelito presenta: SIGEA 2.1.4 → 2.1.6</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --rojo:#c0392b; --rojo-osc:#922b21; --fondo:#f4f5f7; --borde:#dde1e7;
@@ -65,7 +65,7 @@
 <div class="escena">
   <div class="titulo">
     <div class="kicker">SERVEL DR La Araucanía · SIGEA</div>
-    <h1>¡Hola! Soy <b>Servelito</b> 📍 — novedades 2.1.4 y 2.1.5, todo en uno</h1>
+    <h1>¡Hola! Soy <b>Servelito</b> 📍 — novedades 2.1.4 a 2.1.6, todo en uno</h1>
   </div>
 
   <div class="tarima">
@@ -125,7 +125,7 @@
 const GUION = [
   { v: "",
     t: "¡Bienvenido!",
-    p: "Soy Servelito, tu asistente de SIGEA. Tenemos DOS actualizaciones seguidas: el plugin 2.1.4 y ahora el 2.1.5, más un dashboard renovado. Si te saltaste alguna, tranquilo: aquí te explico todo, en orden. Dale a «Siguiente», o aprieta el parlante para que te lo lea." },
+    p: "Soy Servelito, tu asistente de SIGEA. Venimos con varias actualizaciones seguidas del plugin — 2.1.4, 2.1.5 y la más reciente, 2.1.6 — más un dashboard renovado. Si te saltaste alguna, tranquilo: aquí te explico todo, en orden. Dale a «Siguiente», o aprieta el parlante para que te lo lea." },
   { v: "2.1.4", t: "ArcGIS Pro ya no pelea con tus recintos 🗺️",
     p: "Los recintos nuevos se generan con el estándar GeoPackage completo, con índice espacial incluido. Ahora abren directo en ArcGIS Pro como capa de puntos. Se acabó eso de convertir a GDB antes de trabajar." },
   { v: "2.1.4", t: "Las comunas hablan tu idioma 🏘️",
@@ -143,6 +143,9 @@ const GUION = [
   { v: "2.1.5",
     t: "El trabajo antiguo también cuenta ✅",
     p: "Los recintos que se trabajaron antes de este sistema — en el SIGEA antiguo o confirmados por auditoría de terreno — ahora aparecen como «Cerrado SIGEA antiguo» y no se pueden asignar por error. Y hay una función para registrar los que aparezcan: «Marcar como ya trabajado», con confirmación antes de escribir." },
+  { v: "2.1.6",
+    t: "Menús de asignación más limpios 🧹",
+    p: "En el modo admin, cuando eliges a quién asignar un recinto, la lista ahora muestra SOLO personas. Los recintos cerrados o marcados como «ya trabajados» dejaron de colarse como si fueran funcionarios — un detalle chico que evita confusiones al asignar. Esta es la versión más reciente del plugin, la 2.1.6." },
   { v: "",
     t: "Tu rutina no cambia ✓",
     p: "Cargar recinto, rectificar con la botonera, registrar avance, pausar y sincronizar, entregar. Igual que siempre, con tus respaldos automáticos funcionando. Solo acepta la actualización del plugin cuando QGIS te la ofrezca. ¡Buen trabajo en terreno!" },
