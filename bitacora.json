@@ -1863,6 +1863,20 @@
    "detalle": {
     "asignado_por": "smardones"
    }
+  },
+  {
+   "ts": "2026-07-14T20:12:09+00:00",
+   "tipo": "avance",
+   "recinto": "01455",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 320,
+    "proximidad": 20,
+    "fuera_comuna": 14,
+    "localidad": 1,
+    "total": 1130,
+    "pct": 31.4
+   }
   }
  ]
 }
