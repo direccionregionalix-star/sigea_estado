@@ -801,7 +801,7 @@
     "no_geo": 12,
     "proximidad": 10,
     "total": 1027,
-    "pct": 48.0
+    "pct": 48
    }
   },
   {
@@ -901,7 +901,7 @@
     "fuera_comuna": 13,
     "tipo_33": 1,
     "total": 1650,
-    "pct": 100.0
+    "pct": 100
    }
   },
   {
@@ -997,7 +997,7 @@
     "calle": 123,
     "localidad": 5,
     "total": 1636,
-    "pct": 44.0
+    "pct": 44
    }
   },
   {
@@ -1010,7 +1010,7 @@
     "calle": 123,
     "localidad": 5,
     "total": 1636,
-    "pct": 44.0
+    "pct": 44
    }
   },
   {
@@ -1023,7 +1023,7 @@
     "calle": 122,
     "localidad": 5,
     "total": 1636,
-    "pct": 44.0
+    "pct": 44
    }
   },
   {
@@ -1036,7 +1036,7 @@
     "calle": 122,
     "localidad": 5,
     "total": 1636,
-    "pct": 44.0
+    "pct": 44
    }
   },
   {
@@ -1657,7 +1657,7 @@
     "no_geo": 143,
     "localidad": 145,
     "total": 1027,
-    "pct": 100.0
+    "pct": 100
    }
   },
   {
@@ -1671,7 +1671,7 @@
     "no_geo": 143,
     "localidad": 145,
     "total": 1027,
-    "pct": 100.0
+    "pct": 100
    }
   },
   {
@@ -1814,7 +1814,7 @@
     "calle": 795,
     "exacto": 61,
     "total": 1221,
-    "pct": 100.0
+    "pct": 100
    }
   },
   {
@@ -1828,7 +1828,19 @@
     "calle": 795,
     "exacto": 61,
     "total": 1221,
-    "pct": 100.0
+    "pct": 100
+   }
+  },
+  {
+   "ts": "2026-07-14T18:36:38Z",
+   "tipo": "mail",
+   "recinto": "01289",
+   "funcionario": "igarrido",
+   "detalle": {
+    "destinatario": "igarrido",
+    "asunto": "[SIGEA] Se te asignó el recinto 01289",
+    "enviado": false,
+    "nota": "Resend HTTP 403: The gmail.com domain is not verified. Please, add and verify your domain on https://resend.com/domains"
    }
   }
  ]
