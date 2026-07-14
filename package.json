@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node dashboard/server.js"
   },
+  "dependencies": {
+    "googleapis": "^140.0.1"
+  },
   "engines": {
     "node": ">=18"
   }
