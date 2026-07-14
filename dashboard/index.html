@@ -754,7 +754,10 @@ async function cargar() {
   try {
     _estado = await fetchJSON(ESTADO_URL);
     const funcionarios = _estado.funcionarios || {};
-    USUARIOS = Object.keys(funcionarios);
+    // Solo personas reales: las claves con guion bajo (_cerrado_{codigo} y
+    // similares) son marcadores de proceso, no funcionarios — no deben
+    // generar tarjetas ni entrar en los totales.
+    USUARIOS = Object.keys(funcionarios).filter(u => !u.startsWith("_"));
 
     const avances = await cargarAvances(USUARIOS);
 
@@ -906,10 +909,23 @@ function _estadoDeRecinto(codigo) {
   const funcs = (_estado || {}).funcionarios || {};
   const eventos = _bitaData.slice().reverse().filter(ev => ev.recinto === codigo); // asc
 
-  // 1) Cierres registrados en estado.json (_cerrado_* o estado:'cerrado')
+  // 1) Cierres registrados en estado.json (marcadores _cerrado_{codigo} que
+  //    escribe el botón "Cerrar recinto" / la reconciliación de auditoría).
   for (const [u, asig] of Object.entries(funcs)) {
-    if (asig && String(asig.codigo) === String(codigo) && asig.estado === "cerrado")
-      return { estado: "cerrado", detalle: "cerrado" + (asig.motivo ? ` (${asig.motivo})` : "") };
+    if (!asig || String(asig.codigo) !== String(codigo) || asig.estado !== "cerrado") continue;
+    // Marcador de auditoría de terreno: misma etiqueta y detalle rico que la
+    // ruta por bitácora — el marcador de estado.json no debe degradarlo a
+    // "Cerrado" normal (regresaría la distinción visual de la Parte A).
+    if (asig.motivo === "auditoria_terreno") {
+      const ev = eventos.filter(e => e.tipo === "cierre" &&
+                 (e.detalle || {}).origen === "auditoria_terreno").pop();
+      const d = (ev && ev.detalle) || {};
+      return { estado: "cerrado_antiguo",
+               detalle: `ya trabajado por ${(ev && ev.funcionario) || "—"} · ` +
+                        `reportado ${d.fecha_reportada || (asig.cerrado_en ? fmtFecha(asig.cerrado_en) : "—")} (${d.fuente || "auditoría"})` +
+                        (d.comentario ? ` — "${d.comentario}"` : "") };
+    }
+    return { estado: "cerrado", detalle: "cerrado" + (asig.motivo ? ` (${asig.motivo})` : "") };
   }
   // 2) Asignación vigente en estado.json
   for (const [u, asig] of Object.entries(funcs)) {
@@ -1498,7 +1514,9 @@ function renderMailLista() {
 
   const funs = _estado.funcionarios || {};
   const rows = Object.entries(funs)
-    .filter(([, asig]) => asig && asig.codigo && !asig.liberado)
+    // Excluir marcadores con guion bajo (_cerrado_{codigo}): no son personas
+    // a las que enviar correo.
+    .filter(([u, asig]) => !u.startsWith("_") && asig && asig.codigo && !asig.liberado)
     .map(([usuario, asig]) => ({ usuario, asig }));
 
   if (rows.length === 0) {
