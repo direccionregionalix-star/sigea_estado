@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIGEA 2.1.4 — Cómo operar la nueva versión</title>
+<title>SIGEA 2.1.4 + 2.1.5 — Cómo operar la nueva versión</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -76,7 +76,7 @@
     <div class="kicker">SERVEL · Dirección Regional La Araucanía</div>
     <h1>SIGEA se actualiza 🛰️</h1>
     <p>Rectificación de geolocalización electoral — qué cambia y cómo operar la nueva versión en la nube.</p>
-    <span class="version">Plugin QGIS 2.1.4 · Dashboard con Historial</span>
+    <span class="version">Plugin QGIS 2.1.5 · Dashboard con Recintos e Historial</span>
   </header>
 
   <h2><span class="n">1</span> Qué mejora esta versión</h2>
@@ -105,6 +105,24 @@
       <p>Sistema de notificaciones renovado. Cuando falle un envío, la causa queda
       registrada — se acabaron los fallos silenciosos.</p>
     </div>
+    <div class="tarjeta borde-verde">
+      <div class="icono">🗂️</div>
+      <h3>Pestaña Recintos <small style="color:var(--gris);font-weight:600">(nuevo 2.1.5)</small></h3>
+      <p>El plugin publica un catálogo de los 282 recintos (solo código, nombre,
+      comuna y electores) y el dashboard muestra el panorama regional completo.</p>
+    </div>
+    <div class="tarjeta borde-azul">
+      <div class="icono">🎯</div>
+      <h3>Vista de decisión <small style="color:var(--gris);font-weight:600">(nuevo 2.1.5)</small></h3>
+      <p>Filtros por comuna y estado, contadores globales (listos / en curso / sin
+      empezar) y "comunas por colega" para asignar zona conocida.</p>
+    </div>
+    <div class="tarjeta borde-morado">
+      <div class="icono">✅</div>
+      <h3>Trabajo antiguo reconocido <small style="color:var(--gris);font-weight:600">(nuevo 2.1.5)</small></h3>
+      <p>Recintos trabajados fuera del sistema quedan como <b>"Cerrado SIGEA antiguo"</b>,
+      sin riesgo de reasignarlos. Función "Marcar como ya trabajado" con confirmación.</p>
+    </div>
   </div>
 
   <h2><span class="n">2</span> Cómo actualizar (una sola vez)</h2>
@@ -114,7 +132,7 @@
     <div class="paso"><div class="num">PASO 2</div><div class="icono">🧩</div>
       <h3>Complementos</h3><p>Administrar e instalar complementos → pestaña <b>Actualizables</b>.</p></div>
     <div class="paso"><div class="num">PASO 3</div><div class="icono">⬆️</div>
-      <h3>SIGEA Panel 2.1.4</h3><p>Botón <b>Actualizar</b>. Listo — tu configuración se conserva.</p></div>
+      <h3>SIGEA Panel 2.1.5</h3><p>Botón <b>Actualizar</b>. Listo — tu configuración se conserva.</p></div>
   </div>
 
   <h2><span class="n">3</span> Tu flujo diario (no cambia)</h2>
@@ -134,10 +152,21 @@
   <h2><span class="n">4</span> El dashboard en la nube</h2>
   <ul class="lista-check">
     <li><b>Estado</b>: avance global y tarjeta por funcionario, se refresca solo cada 5 minutos.</li>
+    <li><b>Recintos</b> <i>(nuevo)</i>: los 282 con su estado, filtros por comuna/estado y comunas por colega.</li>
     <li><b>Bitácora</b>: todos los eventos del proceso, filtrables.</li>
     <li><b>Historial</b> <i>(nuevo)</i>: por recinto — línea de tiempo con duración total; por funcionario — recintos, tiempos y observaciones de QA. Filtro por fechas.</li>
     <li><b>Correos</b>: estado de cada notificación (enviada o simulada, con motivo).</li>
     <li class="alerta">Tus datos siguen protegidos: la nube solo ve <b>conteos y metadata</b> — nunca RUT, direcciones ni coordenadas individuales.</li>
+  </ul>
+
+  <h2><span class="n">5</span> Verifica tu configuración (autochequeo)</h2>
+  <ul class="lista-check">
+    <li><b>Repositorio de plugins (QGIS)</b> — debe responder y declarar la versión vigente:<br>
+      <a href="https://direccionregionalix-star.github.io/sigea_estado/plugins.xml" style="word-break:break-all">https://direccionregionalix-star.github.io/sigea_estado/plugins.xml</a></li>
+    <li><b>URL de estado online (⚙ Configuración SIGEA en el plugin)</b> — debe mostrar el JSON con tu asignación:<br>
+      <a href="https://web-production-17ce60.up.railway.app/estado.json" style="word-break:break-all">https://web-production-17ce60.up.railway.app/estado.json</a></li>
+    <li><b>Dashboard</b> — debe cargar con las pestañas Estado / Recintos / Bitácora / Historial:<br>
+      <a href="https://web-production-17ce60.up.railway.app" style="word-break:break-all">https://web-production-17ce60.up.railway.app</a></li>
   </ul>
 
   <div class="nota">

@@ -29,7 +29,140 @@
   },
   "mespinozan": null,
   "jmedina": null,
-  "pfigueroa": null
+  "pfigueroa": null,
+  "_cerrado_01284": {
+   "codigo": "01284",
+   "unidad": "01284",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01290": {
+   "codigo": "01290",
+   "unidad": "01290",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01291": {
+   "codigo": "01291",
+   "unidad": "01291",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01315": {
+   "codigo": "01315",
+   "unidad": "01315",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01335": {
+   "codigo": "01335",
+   "unidad": "01335",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01336": {
+   "codigo": "01336",
+   "unidad": "01336",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01342": {
+   "codigo": "01342",
+   "unidad": "01342",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01351": {
+   "codigo": "01351",
+   "unidad": "01351",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01381": {
+   "codigo": "01381",
+   "unidad": "01381",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01387": {
+   "codigo": "01387",
+   "unidad": "01387",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01452": {
+   "codigo": "01452",
+   "unidad": "01452",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01459": {
+   "codigo": "01459",
+   "unidad": "01459",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01462": {
+   "codigo": "01462",
+   "unidad": "01462",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01465": {
+   "codigo": "01465",
+   "unidad": "01465",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01466": {
+   "codigo": "01466",
+   "unidad": "01466",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01469": {
+   "codigo": "01469",
+   "unidad": "01469",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01483": {
+   "codigo": "01483",
+   "unidad": "01483",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01486": {
+   "codigo": "01486",
+   "unidad": "01486",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01487": {
+   "codigo": "01487",
+   "unidad": "01487",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-14T11:28:43+00:00"
+  }
  },
  "_t": "NCAzLTRQb0JXFS1QRCFWJy8qCwh3KiJhalp1ECMEOCgyMTNTJXgFFAtEQGFmUxwRMCcQLRg3Ih0yPzZ6dQF4EBMqEhMnBAcHBH1/BHJjBGhuJDclICIjNg5ZHiET",
  "_r": "direccionregionalix-star/sigea_estado",

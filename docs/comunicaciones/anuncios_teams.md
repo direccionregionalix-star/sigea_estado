@@ -1,6 +1,31 @@
-# Textos para Teams — SIGEA Panel 2.1.4 + Dashboard
+# Textos para Teams — SIGEA Panel 2.1.4 / 2.1.5 + Dashboard
 
-Listos para copiar y pegar. Tres piezas: anuncio corto, anuncio detallado y mini-FAQ.
+Listos para copiar y pegar. El bloque 2.1.5 va primero (lo vigente); el de 2.1.4 se
+mantiene abajo por si alguien se lo saltó.
+
+---
+
+## 0. Anuncio 2.1.5 (canal general)
+
+> 📢 **SIGEA 2.1.5: el panorama completo de recintos, en el dashboard**
+>
+> Nueva actualización del plugin (acéptala en QGIS: Complementos → Actualizables →
+> **SIGEA Panel 2.1.5**) y novedades en el dashboard:
+>
+> - 🗂️ **Pestaña "Recintos"**: los 282 recintos de la región con su estado
+>   (pendiente / activo / en QA / cerrado), filtros por comuna y estado,
+>   y contadores del avance regional de un vistazo.
+> - 🎯 **"Comunas por colega"**: quién ya trabajó cada zona, para asignar
+>   recintos a quien la conoce.
+> - ✅ **Trabajo antiguo reconocido**: los recintos trabajados antes de este
+>   sistema (SIGEA antiguo / auditorías de terreno) ahora aparecen como
+>   **"Cerrado SIGEA antiguo"** y no se pueden asignar por error. Se
+>   normalizaron 19 recintos que figuraban como pendientes y en realidad ya
+>   estaban terminados y cargados al Nivel Central.
+> - El modo admin del plugin tiene un botón nuevo: **"Publicar catálogo de
+>   recintos"** (también se refresca solo al abrir el modo admin).
+>
+> Tu flujo diario no cambia. Cualquier cosa rara, avisa por este canal.
 
 ---
 
@@ -78,6 +103,15 @@ nuevas). Los antiguos mantienen el formato anterior.
 El sistema quedó listo; falta un paso de configuración del servicio de
 correo. Mientras tanto, todas las notificaciones quedan registradas en la
 pestaña Correos del dashboard.
+
+**¿Qué significa "Cerrado SIGEA antiguo" en la pestaña Recintos?**
+Que ese recinto ya fue trabajado y está en el Nivel Central, pero se hizo
+antes de este sistema (SIGEA antiguo o confirmado por auditoría de
+terreno). No se puede asignar de nuevo — el trabajo ya existe.
+
+**La pestaña Recintos dice "catálogo aún no publicado".**
+Alguien con modo admin debe abrir QGIS → Modo Admin → Estado global →
+"Publicar catálogo de recintos" (una vez; después se refresca solo).
 
 **Veo algo raro / me falla la asignación.**
 Escríbelo en este canal con pantallazo. Si urge: se puede volver a la
