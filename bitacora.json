@@ -1842,6 +1842,18 @@
     "enviado": false,
     "nota": "Resend HTTP 403: The gmail.com domain is not verified. Please, add and verify your domain on https://resend.com/domains"
    }
+  },
+  {
+   "ts": "2026-07-14T20:00:12Z",
+   "tipo": "mail",
+   "recinto": "01289",
+   "funcionario": "igarrido",
+   "detalle": {
+    "destinatario": "igarrido",
+    "asunto": "[SIGEA] Se te asignó el recinto 01289",
+    "enviado": true,
+    "nota": ""
+   }
   }
  ]
 }
