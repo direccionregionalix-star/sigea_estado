@@ -1816,6 +1816,20 @@
     "total": 1221,
     "pct": 100.0
    }
+  },
+  {
+   "ts": "2026-07-14T18:04:34+00:00",
+   "tipo": "entrega",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 233,
+    "localidad": 132,
+    "calle": 795,
+    "exacto": 61,
+    "total": 1221,
+    "pct": 100.0
+   }
   }
  ]
 }
