@@ -1,0 +1,648 @@
+{
+ "generado": "2026-07-13T12:24:12+00:00",
+ "n_recintos": 107,
+ "recintos": [
+  {
+   "codigo": "01273",
+   "nombre": "COLEGIO BASICO ARAGON",
+   "comuna": "Angol",
+   "n_electores": 607
+  },
+  {
+   "codigo": "01274",
+   "nombre": "ESCUELA BASICA NAHUELBUTA",
+   "comuna": "Angol",
+   "n_electores": 1650
+  },
+  {
+   "codigo": "01275",
+   "nombre": "COLEGIO DIEGO DUBLE URRUTIA",
+   "comuna": "Angol",
+   "n_electores": 335
+  },
+  {
+   "codigo": "01276",
+   "nombre": "COLEGIO HERMANOS CARRERA",
+   "comuna": "Angol",
+   "n_electores": 556
+  },
+  {
+   "codigo": "01279",
+   "nombre": "LICEO BICENTENARIO ENRIQUE BALLACEY COTTEREAU",
+   "comuna": "Angol",
+   "n_electores": 1218
+  },
+  {
+   "codigo": "01283",
+   "nombre": "ESCUELA VILLA HUEQUEN",
+   "comuna": "Angol",
+   "n_electores": 216
+  },
+  {
+   "codigo": "01284",
+   "nombre": "ESCUELA PUBLICA KIM RUKA PABELLON A",
+   "comuna": "Carahue",
+   "n_electores": 1813
+  },
+  {
+   "codigo": "01286",
+   "nombre": "LICEO BICENTENARIO CLAUDIO ARRAU LEON",
+   "comuna": "Carahue",
+   "n_electores": 1037
+  },
+  {
+   "codigo": "01287",
+   "nombre": "ESCUELA PUBLICA NEHUENTUE",
+   "comuna": "Carahue",
+   "n_electores": 307
+  },
+  {
+   "codigo": "01288",
+   "nombre": "LICEO PUBLICO TROVOLHUE",
+   "comuna": "Carahue",
+   "n_electores": 561
+  },
+  {
+   "codigo": "01289",
+   "nombre": "LICEO SAN FRANCISCO DE ASIS",
+   "comuna": "Cholchol",
+   "n_electores": 1270
+  },
+  {
+   "codigo": "01290",
+   "nombre": "LICEO BICENTENARIO JAMES MUNDELL",
+   "comuna": "Cholchol",
+   "n_electores": 664
+  },
+  {
+   "codigo": "01291",
+   "nombre": "COMPLEJO EDUCACIONAL COLLIPULLI",
+   "comuna": "Collipulli",
+   "n_electores": 595
+  },
+  {
+   "codigo": "01292",
+   "nombre": "ESCUELA BASICA VICTOR DURAN PEREZ",
+   "comuna": "Collipulli",
+   "n_electores": 1340
+  },
+  {
+   "codigo": "01294",
+   "nombre": "ESCUELA THOMAS ALVA EDISON",
+   "comuna": "Collipulli",
+   "n_electores": 367
+  },
+  {
+   "codigo": "01296",
+   "nombre": "ESCUELA F-90 RAUL CASTRO MARQUEZ",
+   "comuna": "Collipulli",
+   "n_electores": 362
+  },
+  {
+   "codigo": "01299",
+   "nombre": "LICEO MUNICIPAL ATENEA",
+   "comuna": "Cunco",
+   "n_electores": 1632
+  },
+  {
+   "codigo": "01304",
+   "nombre": "ESCUELA OSVALDO FUENTES BARRERA",
+   "comuna": "Curacautín",
+   "n_electores": 701
+  },
+  {
+   "codigo": "01305",
+   "nombre": "ESCUELA RAMON EDUARDO RAMIREZ HENRIQUEZ",
+   "comuna": "Curacautín",
+   "n_electores": 129
+  },
+  {
+   "codigo": "01306",
+   "nombre": "COMPLEJO EDUCACIONAL MONSEÑOR FRANCISCO VALDES SUBERCASEAUX",
+   "comuna": "Curarrehue",
+   "n_electores": 840
+  },
+  {
+   "codigo": "01307",
+   "nombre": "COMPLEJO EDUCACIONAL RUKA NGEN",
+   "comuna": "Curarrehue",
+   "n_electores": 802
+  },
+  {
+   "codigo": "01308",
+   "nombre": "FUNDACION EDUCACIONAL ESCUELA SAN FRANCISCO DE ASIS DE ERCILLA",
+   "comuna": "Ercilla",
+   "n_electores": 1122
+  },
+  {
+   "codigo": "01309",
+   "nombre": "LICEO ALONSO DE ERCILLA Y ZUÑIGA",
+   "comuna": "Ercilla",
+   "n_electores": 571
+  },
+  {
+   "codigo": "01311",
+   "nombre": "COLEGIO SANTA CRUZ DE FREIRE",
+   "comuna": "Freire",
+   "n_electores": 698
+  },
+  {
+   "codigo": "01312",
+   "nombre": "LICEO BICENTENARIO JUAN SCHLEYER",
+   "comuna": "Freire",
+   "n_electores": 1018
+  },
+  {
+   "codigo": "01313",
+   "nombre": "ESCUELA JUAN SEGUEL",
+   "comuna": "Freire",
+   "n_electores": 1237
+  },
+  {
+   "codigo": "01314",
+   "nombre": "ESCUELA JUAN SEGUEL ANEXO",
+   "comuna": "Freire",
+   "n_electores": 955
+  },
+  {
+   "codigo": "01315",
+   "nombre": "ESCUELA RAIMAPU",
+   "comuna": "Freire",
+   "n_electores": 111
+  },
+  {
+   "codigo": "01316",
+   "nombre": "ESCUELA LA ESPERANZA",
+   "comuna": "Freire",
+   "n_electores": 31
+  },
+  {
+   "codigo": "01317",
+   "nombre": "ESCUELA MUNICIPAL GABRIELA MISTRAL",
+   "comuna": "Galvarino",
+   "n_electores": 1259
+  },
+  {
+   "codigo": "01320",
+   "nombre": "ESCUELA PRESBITERO JOSE AGUSTIN GOMEZ",
+   "comuna": "Gorbea",
+   "n_electores": 1200
+  },
+  {
+   "codigo": "01322",
+   "nombre": "COMPLEJO EDUCACIONAL JOSE VICTORINO LASTARRIA",
+   "comuna": "Gorbea",
+   "n_electores": 695
+  },
+  {
+   "codigo": "01326",
+   "nombre": "ESCUELA IRENE FREI",
+   "comuna": "Lautaro",
+   "n_electores": 1290
+  },
+  {
+   "codigo": "01330",
+   "nombre": "LICEO BICENTENARIO POLITECNICO EMA ESPINOZA CORREA",
+   "comuna": "Lautaro",
+   "n_electores": 1386
+  },
+  {
+   "codigo": "01333",
+   "nombre": "COMPLEJO EDUCACIONAL JUAN XXIII",
+   "comuna": "Loncoche",
+   "n_electores": 450
+  },
+  {
+   "codigo": "01335",
+   "nombre": "COLEGIO SANTA CRUZ DE LONCOCHE",
+   "comuna": "Loncoche",
+   "n_electores": 1687
+  },
+  {
+   "codigo": "01336",
+   "nombre": "LICEO BICENTENARIO PADRE ALBERTO HURTADO CRUCHAGA",
+   "comuna": "Loncoche",
+   "n_electores": 3
+  },
+  {
+   "codigo": "01339",
+   "nombre": "ESCUELA ALBORADA",
+   "comuna": "Loncoche",
+   "n_electores": 1050
+  },
+  {
+   "codigo": "01341",
+   "nombre": "ESCUELA BASICA LIUCURA",
+   "comuna": "Lonquimay",
+   "n_electores": 6
+  },
+  {
+   "codigo": "01342",
+   "nombre": "ESCUELA MUNICIPAL FRONTERIZA",
+   "comuna": "Lonquimay",
+   "n_electores": 1185
+  },
+  {
+   "codigo": "01344",
+   "nombre": "LICEO BICENTENARIO LONQUIMAY",
+   "comuna": "Lonquimay",
+   "n_electores": 795
+  },
+  {
+   "codigo": "01346",
+   "nombre": "ESCUELA GUSTAVO VASQUEZ DIAZ",
+   "comuna": "Los Sauces",
+   "n_electores": 1087
+  },
+  {
+   "codigo": "01347",
+   "nombre": "ESCUELA BASICA REPUBLICA DE ITALIA",
+   "comuna": "Lumaco",
+   "n_electores": 760
+  },
+  {
+   "codigo": "01351",
+   "nombre": "ESCUELA BASICA VOLCAN LLAIMA",
+   "comuna": "Melipeuco",
+   "n_electores": 539
+  },
+  {
+   "codigo": "01352",
+   "nombre": "LICEO LOS ANDES",
+   "comuna": "Melipeuco",
+   "n_electores": 1580
+  },
+  {
+   "codigo": "01353",
+   "nombre": "ESCUELA PUBLICA ALEJANDRO GOROSTIAGA",
+   "comuna": "Nueva Imperial",
+   "n_electores": 677
+  },
+  {
+   "codigo": "01354",
+   "nombre": "ESCUELA ESPECIAL PUBLICA AVANCEMOS JUNTOS",
+   "comuna": "Nueva Imperial",
+   "n_electores": 1209
+  },
+  {
+   "codigo": "01362",
+   "nombre": "COMPLEJO EDUCACIONAL PADRE LAS CASAS",
+   "comuna": "Padre Las Casas",
+   "n_electores": 270
+  },
+  {
+   "codigo": "01366",
+   "nombre": "ESCUELA MONSEÑOR GUIDO DE RAMBERGA",
+   "comuna": "Padre Las Casas",
+   "n_electores": 323
+  },
+  {
+   "codigo": "01371",
+   "nombre": "ESCUELA PARTICULAR SAN BERNARDO",
+   "comuna": "Padre Las Casas",
+   "n_electores": 172
+  },
+  {
+   "codigo": "01372",
+   "nombre": "ESCUELA PARTICULAR SAN RAFAEL ARCANGEL",
+   "comuna": "Padre Las Casas",
+   "n_electores": 39
+  },
+  {
+   "codigo": "01375",
+   "nombre": "COLEGIO HABIT-ART",
+   "comuna": "Padre Las Casas",
+   "n_electores": 187
+  },
+  {
+   "codigo": "01378",
+   "nombre": "LICEO MUNICIPAL LA FRONTERA",
+   "comuna": "Pitrufquén",
+   "n_electores": 298
+  },
+  {
+   "codigo": "01380",
+   "nombre": "ESCUELA LAS AMERICAS",
+   "comuna": "Pitrufquén",
+   "n_electores": 1291
+  },
+  {
+   "codigo": "01381",
+   "nombre": "ESCUELA UNION LATINOAMERICANA",
+   "comuna": "Pitrufquén",
+   "n_electores": 1747
+  },
+  {
+   "codigo": "01383",
+   "nombre": "COLEGIO LIAHONA",
+   "comuna": "Pucón",
+   "n_electores": 445
+  },
+  {
+   "codigo": "01386",
+   "nombre": "ESCUELA NUESTRA SEÑORA DE FATIMA",
+   "comuna": "Pucón",
+   "n_electores": 85
+  },
+  {
+   "codigo": "01387",
+   "nombre": "ESCUELA PARTICULAR 167 RAMON GUIÑEZ",
+   "comuna": "Pucón",
+   "n_electores": 1527
+  },
+  {
+   "codigo": "01388",
+   "nombre": "LICEO BICENTENARIO DE HOTELERIA Y TURISMO",
+   "comuna": "Pucón",
+   "n_electores": 1330
+  },
+  {
+   "codigo": "01390",
+   "nombre": "LICEO BICENTENARIO INDOMITO DE PUREN",
+   "comuna": "Purén",
+   "n_electores": 1221
+  },
+  {
+   "codigo": "01393",
+   "nombre": "LICEO POLITECNICO DOMINGO SANTA MARIA",
+   "comuna": "Renaico",
+   "n_electores": 1027
+  },
+  {
+   "codigo": "01394",
+   "nombre": "ESCUELA BASICA LOS NOGALES",
+   "comuna": "Renaico",
+   "n_electores": 137
+  },
+  {
+   "codigo": "01396",
+   "nombre": "ESCUELA PARTICULAR SAN SEBASTIAN",
+   "comuna": "Saavedra",
+   "n_electores": 1740
+  },
+  {
+   "codigo": "01397",
+   "nombre": "LICEO PUBLICO REINO DE SUECIA",
+   "comuna": "Saavedra",
+   "n_electores": 1420
+  },
+  {
+   "codigo": "01399",
+   "nombre": "COLEGIO CENTENARIO",
+   "comuna": "Temuco",
+   "n_electores": 899
+  },
+  {
+   "codigo": "01400",
+   "nombre": "COLEGIO SAINT PATRICK SCHOOL",
+   "comuna": "Temuco",
+   "n_electores": 207
+  },
+  {
+   "codigo": "01401",
+   "nombre": "COLEGIO SAN FRANCISCO",
+   "comuna": "Temuco",
+   "n_electores": 2
+  },
+  {
+   "codigo": "01403",
+   "nombre": "ESCUELA ARTISTICA ARMANDO DUFEY BLANC",
+   "comuna": "Temuco",
+   "n_electores": 1320
+  },
+  {
+   "codigo": "01406",
+   "nombre": "ESCUELA MILLARAY",
+   "comuna": "Temuco",
+   "n_electores": 1199
+  },
+  {
+   "codigo": "01407",
+   "nombre": "LICEO BICENTENARIO DE TEMUCO",
+   "comuna": "Temuco",
+   "n_electores": 1257
+  },
+  {
+   "codigo": "01410",
+   "nombre": "COLEGIO ALEMAN DE TEMUCO",
+   "comuna": "Temuco",
+   "n_electores": 251
+  },
+  {
+   "codigo": "01411",
+   "nombre": "LICEO PABLO NERUDA",
+   "comuna": "Temuco",
+   "n_electores": 1456
+  },
+  {
+   "codigo": "01420",
+   "nombre": "SUN FLOWER SCHOOL",
+   "comuna": "Temuco",
+   "n_electores": 1
+  },
+  {
+   "codigo": "01421",
+   "nombre": "ESCUELA PARTICULAR MONO PAINE",
+   "comuna": "Temuco",
+   "n_electores": 128
+  },
+  {
+   "codigo": "01424",
+   "nombre": "ESCUELA CAMPOS DEPORTIVOS",
+   "comuna": "Temuco",
+   "n_electores": 451
+  },
+  {
+   "codigo": "01433",
+   "nombre": "LICEO GABRIELA MISTRAL",
+   "comuna": "Temuco",
+   "n_electores": 552
+  },
+  {
+   "codigo": "01440",
+   "nombre": "COLEGIO ALONSO DE ERCILLA",
+   "comuna": "Temuco",
+   "n_electores": 2
+  },
+  {
+   "codigo": "01441",
+   "nombre": "COLEGIO AUGUSTO WINTER",
+   "comuna": "Temuco",
+   "n_electores": 410
+  },
+  {
+   "codigo": "01446",
+   "nombre": "COMPLEJO EDUCACIONAL UN AMANECER EN LA ARAUCANIA",
+   "comuna": "Temuco",
+   "n_electores": 173
+  },
+  {
+   "codigo": "01448",
+   "nombre": "LICEO CIENTIFICO HUMANISTA BRAINSTORM",
+   "comuna": "Temuco",
+   "n_electores": 370
+  },
+  {
+   "codigo": "01452",
+   "nombre": "ESCUELA PUBLICA HORIZONTES",
+   "comuna": "Teodoro Schmidt",
+   "n_electores": 1560
+  },
+  {
+   "codigo": "01453",
+   "nombre": "COMPLEJO EDUCACIONAL PUBLICO NUEVA ALBORADA",
+   "comuna": "Teodoro Schmidt",
+   "n_electores": 1333
+  },
+  {
+   "codigo": "01454",
+   "nombre": "ESCUELA PARTICULAR N° 9 PADRE ALEJANDRO ORTEGA",
+   "comuna": "Teodoro Schmidt",
+   "n_electores": 899
+  },
+  {
+   "codigo": "01455",
+   "nombre": "LICEO BICENTENARIO MARTIN KLEINKNECHT PALMA",
+   "comuna": "Toltén",
+   "n_electores": 1130
+  },
+  {
+   "codigo": "01456",
+   "nombre": "ESCUELA PUBLICA AGUAS Y GAVIOTAS",
+   "comuna": "Toltén",
+   "n_electores": 889
+  },
+  {
+   "codigo": "01457",
+   "nombre": "ESCUELA PARTICULAR SUBVENCIONADA PADRE ISIDORO",
+   "comuna": "Toltén",
+   "n_electores": 355
+  },
+  {
+   "codigo": "01459",
+   "nombre": "COMPLEJO EDUCACIONAL LUIS DURAND DURAND",
+   "comuna": "Traiguén",
+   "n_electores": 356
+  },
+  {
+   "codigo": "01460",
+   "nombre": "ESCUELA BASICA EMILIA ROMAGNA",
+   "comuna": "Traiguén",
+   "n_electores": 933
+  },
+  {
+   "codigo": "01461",
+   "nombre": "ESCUELA REPUBLICA DE ISRAEL",
+   "comuna": "Traiguén",
+   "n_electores": 1162
+  },
+  {
+   "codigo": "01462",
+   "nombre": "LICEO LUCILA GODOY ALCAYAGA",
+   "comuna": "Traiguén",
+   "n_electores": 130
+  },
+  {
+   "codigo": "01464",
+   "nombre": "ESCUELA MUNICIPAL MONICA GEBERT MEIER",
+   "comuna": "Victoria",
+   "n_electores": 72
+  },
+  {
+   "codigo": "01465",
+   "nombre": "ESCUELA SELVA OSCURA",
+   "comuna": "Victoria",
+   "n_electores": 343
+  },
+  {
+   "codigo": "01466",
+   "nombre": "COLEGIO IGNACIO CARRERA PINTO",
+   "comuna": "Victoria",
+   "n_electores": 523
+  },
+  {
+   "codigo": "01469",
+   "nombre": "ESCUELA HEROES DE IQUIQUE",
+   "comuna": "Victoria",
+   "n_electores": 567
+  },
+  {
+   "codigo": "01476",
+   "nombre": "LICEO BICENTENARIO PADRE NICOLAS",
+   "comuna": "Vilcún",
+   "n_electores": 1636
+  },
+  {
+   "codigo": "01479",
+   "nombre": "ESCUELA VOIPIR DE ÑANCUL",
+   "comuna": "Villarrica",
+   "n_electores": 359
+  },
+  {
+   "codigo": "01480",
+   "nombre": "COLEGIO DE HUMANIDADES DEL SAGRADO CORAZON DE JESUS",
+   "comuna": "Villarrica",
+   "n_electores": 425
+  },
+  {
+   "codigo": "01483",
+   "nombre": "ESCUELA JOSE ABELARDO NUÑEZ",
+   "comuna": "Villarrica",
+   "n_electores": 1668
+  },
+  {
+   "codigo": "01484",
+   "nombre": "ESCUELA MARIANO LATORRE",
+   "comuna": "Villarrica",
+   "n_electores": 382
+  },
+  {
+   "codigo": "01485",
+   "nombre": "ESCUELA PARTICULAR SAGRADA FAMILIA",
+   "comuna": "Villarrica",
+   "n_electores": 1587
+  },
+  {
+   "codigo": "01486",
+   "nombre": "ESCUELA VALENTIN LETELIER",
+   "comuna": "Villarrica",
+   "n_electores": 563
+  },
+  {
+   "codigo": "01487",
+   "nombre": "LICEO BICENTENARIO ARAUCANIA",
+   "comuna": "Villarrica",
+   "n_electores": 1020
+  },
+  {
+   "codigo": "01488",
+   "nombre": "LICEO BICENTENARIO ARTISTICO ALEXANDER GRAHAM BELL",
+   "comuna": "Villarrica",
+   "n_electores": 984
+  },
+  {
+   "codigo": "01489",
+   "nombre": "LICEO BICENTENARIO POLITECNICO VILLARRICA",
+   "comuna": "Villarrica",
+   "n_electores": 1300
+  },
+  {
+   "codigo": "03167",
+   "nombre": "ESCUELA EPU NEWEN",
+   "comuna": "Temuco",
+   "n_electores": 107
+  },
+  {
+   "codigo": "03620",
+   "nombre": "COLEGIO MANUEL MONTT",
+   "comuna": "Temuco",
+   "n_electores": 149
+  },
+  {
+   "codigo": "03624",
+   "nombre": "COLEGIO CUMBRES DE LABRANZA",
+   "comuna": "Temuco",
+   "n_electores": 1
+  }
+ ]
+}

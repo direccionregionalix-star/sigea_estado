@@ -1417,6 +1417,419 @@
     "total": 1270,
     "pct": 64.9
    }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01284",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01290",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01291",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01315",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01335",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01336",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01342",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01351",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01381",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01387",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01452",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01459",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01462",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01465",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "BD vieja",
+    "fecha_reportada": "2026-06-09",
+    "comentario": "Sin problemas graves identificados, QA pasado a la base del nivel central"
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01466",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "BD vieja",
+    "fecha_reportada": "2026-06-23",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01469",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "BD vieja",
+    "fecha_reportada": "2026-06-24",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01483",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01486",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T12:56:43+00:00",
+   "tipo": "cierre",
+   "recinto": "01487",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "whatsapp",
+    "fecha_reportada": "2026-07-08",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-13T14:15:24+00:00",
+   "tipo": "avance",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "calle": 314,
+    "exacto": 425,
+    "no_geo": 143,
+    "localidad": 145,
+    "total": 1027,
+    "pct": 100.0
+   }
+  },
+  {
+   "ts": "2026-07-13T14:19:14+00:00",
+   "tipo": "entrega",
+   "recinto": "01393",
+   "funcionario": "jmedina",
+   "detalle": {
+    "calle": 314,
+    "exacto": 425,
+    "no_geo": 143,
+    "localidad": 145,
+    "total": 1027,
+    "pct": 100.0
+   }
+  },
+  {
+   "ts": "2026-07-13T14:42:14+00:00",
+   "tipo": "asignacion",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "asignado_por": "smardones"
+   }
+  },
+  {
+   "ts": "2026-07-13T14:57:54+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 204,
+    "localidad": 9,
+    "exacto": 3,
+    "total": 1221,
+    "pct": 17.7
+   }
+  },
+  {
+   "ts": "2026-07-13T15:09:42+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 184,
+    "total": 1221,
+    "pct": 15.1
+   }
+  },
+  {
+   "ts": "2026-07-13T16:27:08+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 184,
+    "calle": 184,
+    "exacto": 31,
+    "total": 1221,
+    "pct": 32.7
+   }
+  },
+  {
+   "ts": "2026-07-13T17:01:36+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 184,
+    "calle": 453,
+    "exacto": 39,
+    "total": 1221,
+    "pct": 55.4
+   }
+  },
+  {
+   "ts": "2026-07-13T20:46:10+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 197,
+    "localidad": 69,
+    "calle": 701,
+    "exacto": 45,
+    "total": 1221,
+    "pct": 82.9
+   }
+  },
+  {
+   "ts": "2026-07-14T14:40:11+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 212,
+    "localidad": 102,
+    "calle": 750,
+    "exacto": 58,
+    "total": 1221,
+    "pct": 91.9
+   }
+  },
+  {
+   "ts": "2026-07-14T15:04:43+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 220,
+    "localidad": 108,
+    "calle": 771,
+    "exacto": 58,
+    "total": 1221,
+    "pct": 94.8
+   }
+  },
+  {
+   "ts": "2026-07-14T16:36:49+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 223,
+    "localidad": 123,
+    "calle": 792,
+    "exacto": 61,
+    "total": 1221,
+    "pct": 98.2
+   }
+  },
+  {
+   "ts": "2026-07-14T17:00:59+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 233,
+    "localidad": 132,
+    "calle": 792,
+    "exacto": 61,
+    "total": 1221,
+    "pct": 99.8
+   }
+  },
+  {
+   "ts": "2026-07-14T17:02:10+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 233,
+    "localidad": 132,
+    "calle": 795,
+    "exacto": 61,
+    "total": 1221,
+    "pct": 100.0
+   }
+  },
+  {
+   "ts": "2026-07-14T18:04:34+00:00",
+   "tipo": "entrega",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 233,
+    "localidad": 132,
+    "calle": 795,
+    "exacto": 61,
+    "total": 1221,
+    "pct": 100.0
+   }
   }
  ]
 }

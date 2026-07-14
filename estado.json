@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-14T11:28:43+00:00",
+ "generado": "2026-07-14T18:04:09+00:00Z",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1783536455,
@@ -28,32 +28,7 @@
    ]
   },
   "mespinozan": null,
-  "jmedina": {
-   "asignacion_id": 1783953733,
-   "codigo": "01390",
-   "unidad": "LICEO BICENTENARIO INDOMITO DE PUREN",
-   "comuna": "Purén",
-   "n_electores": 1221,
-   "fecha_estimada": "2026-07-30",
-   "dias_restantes": 17,
-   "avance": 1012,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1783953733,
-     "codigo": "01390",
-     "unidad": "LICEO BICENTENARIO INDOMITO DE PUREN",
-     "comuna": "Purén",
-     "n_electores": 1221,
-     "fecha_estimada": "2026-07-30",
-     "dias_restantes": 17,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "jmedina": null,
   "pfigueroa": null,
   "_cerrado_01284": {
    "codigo": "01284",
