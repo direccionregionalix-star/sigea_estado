@@ -1746,6 +1746,20 @@
     "total": 1221,
     "pct": 82.9
    }
+  },
+  {
+   "ts": "2026-07-14T14:40:11+00:00",
+   "tipo": "avance",
+   "recinto": "01390",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 212,
+    "localidad": 102,
+    "calle": 750,
+    "exacto": 58,
+    "total": 1221,
+    "pct": 91.9
+   }
   }
  ]
 }
