@@ -2062,6 +2062,21 @@
     "total": 1130,
     "pct": 69.2
    }
+  },
+  {
+   "ts": "2026-07-15T16:02:26+00:00",
+   "tipo": "entrega",
+   "recinto": "01289",
+   "funcionario": "igarrido",
+   "detalle": {
+    "no_geo": 205,
+    "localidad": 461,
+    "exacto": 216,
+    "calle": 370,
+    "fuera_comuna": 18,
+    "total": 1270,
+    "pct": 100.0
+   }
   }
  ]
 }
