@@ -2002,6 +2002,21 @@
     "total": 1650,
     "pct": 87.9
    }
+  },
+  {
+   "ts": "2026-07-15T14:32:29+00:00",
+   "tipo": "entrega",
+   "recinto": "01274",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "calle": 675,
+    "localidad": 129,
+    "no_geo": 455,
+    "exacto": 179,
+    "fuera_comuna": 13,
+    "total": 1650,
+    "pct": 87.9
+   }
   }
  ]
 }
