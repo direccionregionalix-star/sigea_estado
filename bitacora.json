@@ -2086,6 +2086,19 @@
    "detalle": {
     "asignado_por": "smardones"
    }
+  },
+  {
+   "ts": "2026-07-15T16:51:48+00:00",
+   "tipo": "avance",
+   "recinto": "01292",
+   "funcionario": "igarrido",
+   "detalle": {
+    "no_geo": 210,
+    "calle": 9,
+    "localidad": 2,
+    "total": 1340,
+    "pct": 16.5
+   }
   }
  ]
 }
