@@ -1,7 +1,32 @@
 {
- "generado": "2026-07-15T16:02:05+00:00Z",
+ "generado": "2026-07-15T16:47:46+00:00",
  "funcionarios": {
-  "igarrido": null,
+  "igarrido": {
+   "asignacion_id": 1784134066,
+   "codigo": "01292",
+   "unidad": "ESCUELA BASICA VICTOR DURAN PEREZ",
+   "comuna": "Collipulli",
+   "n_electores": 1340,
+   "fecha_estimada": "2026-08-04",
+   "dias_restantes": 20,
+   "avance": 0,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 1784134066,
+     "codigo": "01292",
+     "unidad": "ESCUELA BASICA VICTOR DURAN PEREZ",
+     "comuna": "Collipulli",
+     "n_electores": 1340,
+     "fecha_estimada": "2026-08-04",
+     "dias_restantes": 20,
+     "avance": 0,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
+  },
   "mespinozan": null,
   "jmedina": {
    "asignacion_id": 1784059569,
