@@ -1936,6 +1936,21 @@
    "detalle": {
     "asignado_por": "mespinozan"
    }
+  },
+  {
+   "ts": "2026-07-15T13:23:09+00:00",
+   "tipo": "avance",
+   "recinto": "01455",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 319,
+    "localidad": 51,
+    "calle": 175,
+    "fuera_comuna": 8,
+    "exacto": 1,
+    "total": 1130,
+    "pct": 49.0
+   }
   }
  ]
 }
