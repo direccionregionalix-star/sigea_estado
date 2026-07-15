@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-15T12:40:02+00:00",
+ "generado": "2026-07-15T00:02:21+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1783536455,
@@ -212,6 +212,41 @@
    "estado": "cerrado",
    "motivo": "auditoria_terreno",
    "cerrado_en": "2026-07-14T11:28:43+00:00"
+  },
+  "_cerrado_01380": {
+   "codigo": "01380",
+   "unidad": "Escuela Las Américas",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-15T00:02:21+00:00"
+  },
+  "_cerrado_01333": {
+   "codigo": "01333",
+   "unidad": "Complejo Educacional Juan XXIII",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-15T00:02:21+00:00"
+  },
+  "_cerrado_01339": {
+   "codigo": "01339",
+   "unidad": "Escuela Alborada",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-15T00:02:21+00:00"
+  },
+  "_cerrado_01383": {
+   "codigo": "01383",
+   "unidad": "Colegio Liahona",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-15T00:02:21+00:00"
+  },
+  "_cerrado_01388": {
+   "codigo": "01388",
+   "unidad": "Liceo Bicentenario de Hotelería y Turismo",
+   "estado": "cerrado",
+   "motivo": "auditoria_terreno",
+   "cerrado_en": "2026-07-15T00:02:21+00:00"
   }
  },
  "_t": "NCAzLTRQb0JXFS1QRCFWJy8qCwh3KiJhalp1ECMEOCgyMTNTJXgFFAtEQGFmUxwRMCcQLRg3Ih0yPzZ6dQF4EBMqEhMnBAcHBH1/BHJjBGhuJDclICIjNg5ZHiET",

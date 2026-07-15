@@ -176,6 +176,51 @@
   .bita-alerta_tipo { background: #fef9e7; color: #7d6608; border: 1px solid #f9e79f; }
   .bita-otro        { background: var(--gris-borde); color: var(--negro); }
 
+  /* ─── Bandeja de Servelito ─── */
+  .bandeja-cab { display: flex; align-items: center; gap: 1rem; background: var(--blanco);
+    border: 1px solid var(--gris-borde); border-radius: 12px; padding: 1rem 1.2rem;
+    margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .bandeja-servelito { width: 60px; height: 72px; flex-shrink: 0;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,.15)); }
+  .bandeja-resumen h2 { font-size: 1.05rem; margin-bottom: .1rem; }
+  .bandeja-resumen p { font-size: .82rem; color: var(--gris-texto); margin-bottom: .4rem; }
+  #bandeja-conteo { display: flex; gap: .5rem; flex-wrap: wrap; }
+  #bandeja-conteo .ct { font-size: .76rem; font-weight: 600; padding: .15rem .55rem;
+    border-radius: 99px; background: var(--gris-fondo); color: var(--gris-texto); }
+  #bandeja-conteo .ct b { color: var(--negro); }
+  #bandeja-conteo .ct.enviados { background: #d5f5e3; color: #1e6b3a; }
+  #bandeja-conteo .ct.simulados { background: #fef3d0; color: #8a5a00; }
+
+  .bandeja-chips { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .bandeja-chip { border: 1px solid var(--gris-borde); background: var(--blanco); color: var(--gris-texto);
+    border-radius: 99px; padding: .3rem .8rem; font-size: .8rem; font-weight: 600; cursor: pointer; }
+  .bandeja-chip:hover { border-color: var(--rojo); color: var(--rojo); }
+  .bandeja-chip.activo { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+
+  #bandeja-lista { display: flex; flex-direction: column; gap: .5rem; }
+  .bandeja-item { background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05); overflow: hidden; }
+  .bandeja-fila { display: flex; align-items: center; gap: .75rem; padding: .65rem .9rem; cursor: pointer; }
+  .bandeja-fila:hover { background: #fafafa; }
+  .bandeja-ini { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex;
+    align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; color: #fff; }
+  .bandeja-txt { flex: 1; min-width: 0; }
+  .bandeja-asunto { font-size: .88rem; font-weight: 600; color: var(--negro);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bandeja-meta { font-size: .76rem; color: var(--gris-texto); margin-top: .1rem; }
+  .bandeja-estado { flex-shrink: 0; font-size: .74rem; font-weight: 600; display: flex;
+    align-items: center; gap: .3rem; white-space: nowrap; }
+  .bandeja-estado.enviado { color: #1e8449; }
+  .bandeja-estado.simulado { color: #8a5a00; }
+  .bandeja-cuerpo { display: none; padding: .2rem 1rem 1rem calc(34px + .9rem + .75rem);
+    border-top: 1px solid var(--gris-fondo); }
+  .bandeja-item.abierto .bandeja-cuerpo { display: block; }
+  .bandeja-cuerpo pre { font-family: inherit; font-size: .84rem; color: var(--negro);
+    white-space: pre-wrap; word-break: break-word; line-height: 1.55; margin-top: .6rem; }
+  .bandeja-cuerpo .nota-fallo { font-size: .78rem; color: #935116; background: #fdebd0;
+    border-radius: 6px; padding: .35rem .6rem; margin-top: .5rem; }
+  .bandeja-vacio { text-align: center; color: var(--gris-texto); padding: 2.5rem 1rem; font-size: .88rem; }
+
   /* ─── Historial ─── */
   #hist-filtros { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: flex-end; }
   #hist-filtros label { font-size: .78rem; color: var(--gris-texto); display: flex; flex-direction: column; gap: .25rem; }
@@ -231,6 +276,11 @@
   /* Cerrado por auditoría de terreno (SIGEA antiguo): mismo "no asignable"
      que cerrado, pero visualmente distinto — no pasó por el ciclo digital. */
   .rec-cerrado_antiguo       { background: #e0e7e9; color: #37545c; border: 1px dashed #90a8ae; }
+  /* Indicador discreto "pendiente de verificar contra central" (01388). Solo
+     visual — no conecta con Pieza 4 ni dispara reimporte alguno. */
+  .rec-verif { display: inline-block; margin-left: .35rem; font-size: .68rem; font-weight: 700;
+    color: #8a5a00; background: #fff4d6; border: 1px solid #f0d488; border-radius: 99px;
+    padding: .05rem .4rem; cursor: help; white-space: nowrap; }
 
   .btn-marcar { padding: .18rem .55rem; border: 1px solid var(--gris-borde); border-radius: 6px;
     background: var(--blanco); color: var(--gris-texto); cursor: pointer; font-size: .68rem; font-weight: 600; }
@@ -315,7 +365,7 @@
   <button onclick="cambiarTab('recintos', this)">Recintos</button>
   <button onclick="cambiarTab('bitacora', this)">Bitácora</button>
   <button onclick="cambiarTab('historial', this)">Historial</button>
-  <button onclick="cambiarTab('correos', this)">Correos</button>
+  <button onclick="cambiarTab('bandeja', this)">Bandeja</button>
   <button onclick="cambiarTab('admin', this)">Admin</button>
 </nav>
 
@@ -448,34 +498,37 @@
     </div>
   </div>
 
-  <!-- ══ TAB CORREOS ════════════════════════════════════════════════════ -->
-  <div id="tab-correos" class="tab-panel">
-    <div id="correos-filtros" style="display:flex;gap:.5rem;flex-wrap:wrap;padding:1rem 1.5rem;background:var(--blanco);border-bottom:1px solid var(--gris-borde);align-items:center;">
-      <input id="correos-recinto-fil" type="text" placeholder="Código recinto…" style="max-width:130px">
-      <input id="correos-func-fil"    type="text" placeholder="Funcionario…"    style="max-width:130px">
-      <select id="correos-estado-fil">
-        <option value="">Todos</option>
-        <option value="enviado">Enviado</option>
-        <option value="simulado">Simulado</option>
-      </select>
-      <button onclick="filtrarCorreos()">Filtrar</button>
-      <button class="btn btn-gris" onclick="limpiarFiltrosCorreos()" style="background:none;border:1px solid var(--gris-borde);border-radius:6px;padding:.4rem .7rem;cursor:pointer;font-size:.85rem;">Limpiar</button>
+  <!-- ══ TAB BANDEJA (de Servelito) ═════════════════════════════════════ -->
+  <div id="tab-bandeja" class="tab-panel">
+    <div class="bandeja-cab">
+      <svg class="bandeja-servelito" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Servelito">
+        <ellipse cx="100" cy="228" rx="52" ry="9" fill="#00000018"/>
+        <path d="M100 8 C 52 8, 22 44, 22 88 C 22 140, 78 176, 96 216 C 98 221, 102 221, 104 216 C 122 176, 178 140, 178 88 C 178 44, 148 8, 100 8 Z"
+              fill="#c0392b" stroke="#922b21" stroke-width="4"/>
+        <path d="M52 42 C 62 28, 82 20, 96 20" fill="none" stroke="#ffffff55" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="100" cy="84" r="52" fill="#fff"/>
+        <g>
+          <circle cx="82" cy="76" r="7" fill="#1a1d23"/><circle cx="118" cy="76" r="7" fill="#1a1d23"/>
+          <circle cx="84.5" cy="73.5" r="2.2" fill="#fff"/><circle cx="120.5" cy="73.5" r="2.2" fill="#fff"/>
+        </g>
+        <path d="M72 62 Q 82 56 92 61" fill="none" stroke="#1a1d23" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M108 61 Q 118 56 128 62" fill="none" stroke="#1a1d23" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="72" cy="92" r="6.5" fill="#f5b7ae"/><circle cx="128" cy="92" r="6.5" fill="#f5b7ae"/>
+        <path d="M84 100 Q 100 116 116 100" fill="#922b21"/>
+        <g transform="translate(63 148)">
+          <rect x="0" y="14" width="74" height="46" rx="7" fill="#fff" stroke="#922b21" stroke-width="3.5"/>
+          <rect x="24" y="6" width="26" height="7" rx="3.5" fill="#922b21"/>
+          <path d="M30 30 l7 8 l14 -16" fill="none" stroke="#27ae60" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </svg>
+      <div class="bandeja-resumen">
+        <h2>Bandeja de Servelito</h2>
+        <p id="bandeja-sub">Los avisos que Servelito ha enviado a los funcionarios.</p>
+        <div id="bandeja-conteo"></div>
+      </div>
     </div>
-    <table id="correos-tabla" style="width:100%;border-collapse:collapse;font-size:.85rem;">
-      <thead>
-        <tr style="background:var(--gris-fondo);">
-          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Fecha</th>
-          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Destinatario</th>
-          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Asunto</th>
-          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Recinto</th>
-          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Funcionario</th>
-          <th style="padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--gris-borde);">Estado</th>
-        </tr>
-      </thead>
-      <tbody id="correos-body">
-        <tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Cargando…</td></tr>
-      </tbody>
-    </table>
+    <div id="bandeja-chips" class="bandeja-chips"></div>
+    <div id="bandeja-lista"><div class="bandeja-vacio">Cargando avisos…</div></div>
   </div>
 
   <!-- ══ TAB ADMIN ═══════════════════════════════════════════════════════ -->
@@ -568,8 +621,6 @@ let _bitaData = [];          // eventos completos cargados
 let _bitaFilt = [];          // después de filtrar
 let _bitaPag  = 0;
 const BITA_POR_PAG = 30;
-let _correosData = [];       // eventos mail del bitacora
-let _correosFilt = [];
 
 // Token decodificado (solo en memoria, nunca en DOM ni localStorage)
 let _tokenDesc = null;
@@ -591,7 +642,7 @@ function cambiarTab(id, btn) {
   if (id === "recintos") cargarRecintos();
   if (id === "bitacora" && _bitaData.length === 0) cargarBitacora();
   if (id === "historial") cargarHistorial();
-  if (id === "correos")  cargarCorreos();
+  if (id === "bandeja")  cargarBandeja();
   if (id === "admin")    renderMailLista();
 }
 
@@ -923,7 +974,9 @@ function _estadoDeRecinto(codigo) {
       return { estado: "cerrado_antiguo",
                detalle: `ya trabajado por ${(ev && ev.funcionario) || "—"} · ` +
                         `reportado ${d.fecha_reportada || (asig.cerrado_en ? fmtFecha(asig.cerrado_en) : "—")} (${d.fuente || "auditoría"})` +
-                        (d.comentario ? ` — "${d.comentario}"` : "") };
+                        (d.comentario ? ` — "${d.comentario}"` : ""),
+               verificar: d.verificar_central === true,
+               notaVerif: d.nota_verificacion || "" };
     }
     return { estado: "cerrado", detalle: "cerrado" + (asig.motivo ? ` (${asig.motivo})` : "") };
   }
@@ -955,7 +1008,9 @@ function _estadoDeRecinto(codigo) {
         return { estado: "cerrado_antiguo",
                  detalle: `ya trabajado por ${ev.funcionario || "—"} · ` +
                           `reportado ${det.fecha_reportada || fmtFecha(ev.ts)} (${det.fuente || "auditoría"})` +
-                          (det.comentario ? ` — "${det.comentario}"` : "") };
+                          (det.comentario ? ` — "${det.comentario}"` : ""),
+                 verificar: det.verificar_central === true,
+                 notaVerif: det.nota_verificacion || "" };
       return { estado: "cerrado", detalle: `cerrado el ${fmtFecha(ev.ts)}` };
     }
     if (ev.tipo === "entrega") {
@@ -1017,7 +1072,8 @@ function renderRecintos() {
       <td>${f.nombre || "—"}</td>
       <td>${f.comuna || "—"}</td>
       <td>${fmt(f.n_electores)}</td>
-      <td><span class="rec-pill rec-${f.estado}">${_REC_LABEL[f.estado]}</span></td>
+      <td><span class="rec-pill rec-${f.estado}">${_REC_LABEL[f.estado]}</span>${
+        f.verificar ? ` <span class="rec-verif" title="${(f.notaVerif || "Pendiente de verificar contra central.gpkg").replace(/"/g, "'")}">✱ verificar central</span>` : ""}</td>
       <td style="color:var(--gris-texto)">${f.detalle}
         ${f.estado === "pendiente"
           ? `<br><button class="btn-marcar" onclick="abrirModalAudit('${f.codigo}')"
@@ -1402,75 +1458,140 @@ function _renderHistFuncionarios(evs) {
   }).join("");
 }
 
-// ─── Correos ─────────────────────────────────────────────────────────────────
-async function cargarCorreos() {
-  if (_bitaData.length > 0) {
-    _renderCorreosData();
+// ─── Bandeja de Servelito (buzón de avisos, sobre bitacora.json) ────────────
+let _bandejaFiltro = "todos";   // funcionario seleccionado
+
+// Escape básico para insertar texto de usuario en HTML.
+function _esc(s) {
+  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Reconstrucción del cuerpo para avisos antiguos que no lo guardaron
+// (espejo de las plantillas del servidor). Los nuevos ya traen detalle.cuerpo.
+const _MAIL_CUERPOS = {
+  asignacion: (r, f) => `Hola ${f},\n\nSe te asignó el recinto ${r} para rectificación.\nPuedes ver tu asignación en el plugin QGIS.\n\nSIGEA DR Araucanía`,
+  entrega:    (r, f) => `El funcionario ${f} entregó el recinto ${r}.\nEl recinto quedó pendiente de QA por parte del supervisor.\n\nSIGEA DR Araucanía`,
+  qa_ok:      (r, f) => `El recinto ${r} del funcionario ${f} fue aprobado en QA.\n\nSIGEA DR Araucanía`,
+  qa_obs:     (r, f) => `El recinto ${r} del funcionario ${f} fue observado en QA.\nRevisa los comentarios con tu supervisor.\n\nSIGEA DR Araucanía`,
+  cierre:     (r, f) => `El recinto ${r} fue cerrado formalmente.\n\nSIGEA DR Araucanía`,
+};
+const _MAIL_TIPO_LBL = { asignacion: "asignación", entrega: "entrega",
+  qa_ok: "QA aprobado", qa_obs: "QA observado", cierre: "cierre" };
+
+function _tipoDeMail(det) {
+  if (det.tipo) return det.tipo;
+  const a = det.asunto || "";
+  // Formato actual de asuntos (plantillas del servidor).
+  if (a.includes("Se te asignó"))        return "asignacion";
+  if (a.includes("entregado por"))       return "entrega";
+  if (a.includes("QA aprobado"))         return "qa_ok";
+  if (a.includes("QA observado"))        return "qa_obs";
+  if (a.includes("cerrado formalmente")) return "cierre";
+  // Formato antiguo del fallback simulado: "[SIGEA] {tipo} — recinto {n}".
+  const m = a.match(/^\[SIGEA\]\s+(asignacion|entrega|qa_ok|qa_obs|cierre)\s+—/i);
+  if (m) return m[1].toLowerCase();
+  return "";
+}
+function _cuerpoDeMail(ev) {
+  const det = ev.detalle || {};
+  if (det.cuerpo) return det.cuerpo;
+  const t = _tipoDeMail(det);
+  if (t && _MAIL_CUERPOS[t]) return _MAIL_CUERPOS[t](ev.recinto || "—", ev.funcionario || "");
+  return "";
+}
+// Color estable por funcionario (para el avatar de iniciales).
+const _AVATAR_COLORES = ["#c0392b","#2980b9","#8e44ad","#16a085","#d35400","#2c3e50","#c2185b"];
+function _colorFunc(nombre) {
+  let h = 0;
+  for (let i = 0; i < nombre.length; i++) h = (h * 31 + nombre.charCodeAt(i)) >>> 0;
+  return _AVATAR_COLORES[h % _AVATAR_COLORES.length];
+}
+function _iniciales(nombre) {
+  const s = String(nombre || "?").replace(/[^a-zA-ZñÑ]/g, "");
+  return (s.slice(0, 2) || "?").toUpperCase();
+}
+
+async function cargarBandeja() {
+  if (_bitaData.length === 0) {
+    try {
+      const data = await fetchJSON(BITA_URL);
+      _bitaData = (data.eventos || []).slice().reverse();  // recientes primero
+    } catch (e) {
+      document.getElementById("bandeja-lista").innerHTML =
+        `<div class="bandeja-vacio" style="color:var(--rojo)">No pude cargar la bitácora: ${_esc(e.message)}</div>`;
+      return;
+    }
+  }
+  renderBandeja();
+}
+
+function renderBandeja() {
+  const mails = _bitaData.filter(ev => ev.tipo === "mail");   // ya vienen recientes primero
+
+  // Resumen
+  const enviados  = mails.filter(m => (m.detalle || {}).enviado).length;
+  const simulados = mails.length - enviados;
+  document.getElementById("bandeja-conteo").innerHTML =
+    `<span class="ct"><b>${mails.length}</b> aviso(s)</span>` +
+    `<span class="ct enviados">✓ <b>${enviados}</b> enviados</span>` +
+    `<span class="ct simulados">⏳ <b>${simulados}</b> simulados</span>`;
+  document.getElementById("bandeja-sub").textContent = mails.length
+    ? "Los avisos que Servelito ha enviado a los funcionarios."
+    : "Todavía no hay avisos: aparecerán aquí cuando se envíe el primero.";
+
+  // Chips por funcionario (excluye claves con guion bajo — no son personas)
+  const funcs = [...new Set(mails.map(m => m.funcionario).filter(f => f && !f.startsWith("_")))].sort();
+  const chips = ["todos", ...funcs];
+  document.getElementById("bandeja-chips").innerHTML = chips.map(c =>
+    `<button class="bandeja-chip ${c === _bandejaFiltro ? "activo" : ""}" onclick="setBandejaFiltro('${_esc(c)}')">${c === "todos" ? "Todos" : _esc(c)}</button>`
+  ).join("");
+
+  const lista = _bandejaFiltro === "todos"
+    ? mails : mails.filter(m => m.funcionario === _bandejaFiltro);
+
+  const cont = document.getElementById("bandeja-lista");
+  if (lista.length === 0) {
+    cont.innerHTML = `<div class="bandeja-vacio">Sin avisos${_bandejaFiltro !== "todos" ? " para " + _esc(_bandejaFiltro) : ""}.</div>`;
     return;
   }
-  // Si la bitácora no está cargada aún, cargarla primero
-  try {
-    const data = await fetchJSON(BITA_URL);
-    _bitaData = (data.eventos || []).slice().reverse();
-  } catch (e) {
-    document.getElementById("correos-body").innerHTML =
-      `<tr><td colspan="6" style="color:var(--rojo);padding:2rem;text-align:center">Error al cargar bitácora: ${e.message}</td></tr>`;
-    return;
-  }
-  _renderCorreosData();
-}
 
-function _renderCorreosData() {
-  _correosData = _bitaData.filter(ev => ev.tipo === "mail");
-  _correosFilt = _correosData;
-  _renderCorreosTabla();
-}
-
-function filtrarCorreos() {
-  const recFil  = (document.getElementById("correos-recinto-fil").value || "").trim().toLowerCase();
-  const funcFil = (document.getElementById("correos-func-fil").value || "").trim().toLowerCase();
-  const estFil  = document.getElementById("correos-estado-fil").value;
-  _correosFilt = _correosData.filter(ev => {
-    if (recFil  && !(ev.recinto   || "").toLowerCase().includes(recFil))  return false;
-    if (funcFil && !(ev.funcionario|| "").toLowerCase().includes(funcFil)) return false;
-    if (estFil === "enviado"  && !ev.detalle?.enviado)  return false;
-    if (estFil === "simulado" &&  ev.detalle?.enviado)  return false;
-    return true;
-  });
-  _renderCorreosTabla();
-}
-
-function limpiarFiltrosCorreos() {
-  document.getElementById("correos-recinto-fil").value = "";
-  document.getElementById("correos-func-fil").value = "";
-  document.getElementById("correos-estado-fil").value = "";
-  _correosFilt = _correosData;
-  _renderCorreosTabla();
-}
-
-function _renderCorreosTabla() {
-  const tbody = document.getElementById("correos-body");
-  if (_correosFilt.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gris-texto);padding:2rem;text-align:center">Sin eventos de correo registrados.</td></tr>';
-    return;
-  }
-  const filas = _correosFilt.map(ev => {
+  cont.innerHTML = lista.map(ev => {
     const det = ev.detalle || {};
-    const enviado = det.enviado;
-    const badge = enviado
-      ? '<span style="background:#c8e6c9;color:#1b5e20;padding:2px 7px;border-radius:10px;font-size:.78rem;">enviado</span>'
-      : '<span style="background:#fff9c4;color:#6d4c41;padding:2px 7px;border-radius:10px;font-size:.78rem;">simulado</span>';
-    return `<tr>
-      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${fmtFecha(ev.ts)}</td>
-      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${det.destinatario || "—"}</td>
-      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${(det.asunto||"").replace(/"/g,"'")}">
-        ${det.asunto || "—"}</td>
-      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${ev.recinto || "—"}</td>
-      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${ev.funcionario || "—"}</td>
-      <td style="padding:.45rem .75rem;border-bottom:1px solid var(--gris-borde);">${badge}</td>
-    </tr>`;
+    const enviado = !!det.enviado;
+    const f = ev.funcionario || "—";
+    const tipo = _tipoDeMail(det);
+    const tipoLbl = _MAIL_TIPO_LBL[tipo] || (tipo || "aviso");
+    const cuerpo = _cuerpoDeMail(ev);
+    const estado = enviado
+      ? `<span class="bandeja-estado enviado">✓ enviado</span>`
+      : `<span class="bandeja-estado simulado">⏳ simulado</span>`;
+    const notaFallo = (!enviado && det.nota)
+      ? `<div class="nota-fallo">Motivo: ${_esc(det.nota)}</div>` : "";
+    const cuerpoHtml = cuerpo
+      ? `<pre>${_esc(cuerpo)}</pre>`
+      : `<pre style="color:var(--gris-texto)">(el cuerpo de este aviso no quedó guardado)</pre>`;
+    return `
+      <div class="bandeja-item">
+        <div class="bandeja-fila" onclick="this.parentNode.classList.toggle('abierto')">
+          <div class="bandeja-ini" style="background:${_colorFunc(f)}">${_esc(_iniciales(f))}</div>
+          <div class="bandeja-txt">
+            <div class="bandeja-asunto">${_esc(det.asunto || "(sin asunto)")}</div>
+            <div class="bandeja-meta">${_esc(f)} · ${_esc(tipoLbl)}${ev.recinto ? " · recinto " + _esc(ev.recinto) : ""} · ${fmtFecha(ev.ts)}</div>
+          </div>
+          ${estado}
+        </div>
+        <div class="bandeja-cuerpo">
+          <div style="font-size:.76rem;color:var(--gris-texto)">Para: ${_esc(det.destinatario || "—")}</div>
+          ${cuerpoHtml}${notaFallo}
+        </div>
+      </div>`;
   }).join("");
-  tbody.innerHTML = filas;
+}
+
+function setBandejaFiltro(f) {
+  _bandejaFiltro = f;
+  renderBandeja();
 }
 
 // ─── Admin — unlock ──────────────────────────────────────────────────────────
