@@ -1,20 +1,16 @@
 {
  "usuario": "mespinozan",
  "recinto_cod": "01274",
- "timestamp": "2026-07-08T19:48:38+00:00",
+ "timestamp": "2026-07-15T13:42:29+00:00",
  "avance": {
   "total_registros": 1650,
   "confirmados": {
-   "CALLE": 767,
-   "LOCALIDAD": 129,
-   "NO_GEO": 546,
-   "EXACTO": 194,
-   "FUERA_COMUNA": 13,
-   "TIPO_33": 1
+   "NO_GEO": 208,
+   "FUERA_COMUNA": 1
   },
-  "confirmados_total": 1650,
-  "pendientes": 0,
-  "pct": 100.0
+  "confirmados_total": 209,
+  "pendientes": 1441,
+  "pct": 12.7
  },
- "origen": "Plugin QGIS entrega"
+ "origen": "Plugin QGIS"
 }
