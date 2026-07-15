@@ -2129,6 +2129,16 @@
     "total": 1130,
     "pct": 79.3
    }
+  },
+  {
+   "ts": "2026-07-15T20:02:01+00:00",
+   "tipo": "qa",
+   "recinto": "01346",
+   "funcionario": "",
+   "detalle": {
+    "resultado": "aprobado",
+    "comentario": "Se perdieron electores en la entrega a QA, la rectificacion fue entregada al 100% por jmedina"
+   }
   }
  ]
 }
