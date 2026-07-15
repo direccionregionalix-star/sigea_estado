@@ -1927,6 +1927,68 @@
     "total": 1130,
     "pct": 34.2
    }
+  },
+  {
+   "ts": "2026-07-15T00:02:21+00:00",
+   "tipo": "cierre",
+   "recinto": "01380",
+   "funcionario": "igarrido",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "sigea_antiguo_db",
+    "fecha_reportada": "2026-06-18",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-15T00:02:21+00:00",
+   "tipo": "cierre",
+   "recinto": "01333",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "sigea_antiguo_db",
+    "fecha_reportada": "2026-06-10",
+    "comentario": "Sin observaciones."
+   }
+  },
+  {
+   "ts": "2026-07-15T00:02:21+00:00",
+   "tipo": "cierre",
+   "recinto": "01339",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "sigea_antiguo_db",
+    "fecha_reportada": "2026-06-19",
+    "comentario": ""
+   }
+  },
+  {
+   "ts": "2026-07-15T00:02:21+00:00",
+   "tipo": "cierre",
+   "recinto": "01383",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "sigea_antiguo_db",
+    "fecha_reportada": "2026-06-16",
+    "comentario": "Muy buena precisión en la rectificación"
+   }
+  },
+  {
+   "ts": "2026-07-15T00:02:21+00:00",
+   "tipo": "cierre",
+   "recinto": "01388",
+   "funcionario": "jmedina",
+   "detalle": {
+    "origen": "auditoria_terreno",
+    "fuente": "sigea_antiguo_db",
+    "fecha_reportada": "2026-06-23",
+    "comentario": "Confirmado en Enterprise por el Director.",
+    "verificar_central": true,
+    "nota_verificacion": "Marcado para contrastar contra central.gpkg cuando se ejercite Pieza 4 formalmente. No dispara ningún reimporte ahora."
+   }
   }
  ]
 }

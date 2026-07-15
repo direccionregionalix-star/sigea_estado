@@ -99,7 +99,7 @@ function deofuscar(b64, key = "SIGEA2026araucania") {
   return buf.map((b, i) => b ^ keyBuf[i % keyBuf.length]).toString();
 }
 
-async function registrarEventoMail(recinto, funcionario, destinatario, asunto, enviado, nota) {
+async function registrarEventoMail(recinto, funcionario, destinatario, asunto, enviado, nota, tipo, cuerpo) {
   try {
     const estado = await fetchEstado();
     if (!estado) return;
@@ -137,7 +137,10 @@ async function registrarEventoMail(recinto, funcionario, destinatario, asunto, e
       ts: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
       tipo: "mail",
       recinto, funcionario,
-      detalle: { destinatario, asunto, enviado, nota: nota || "" },
+      // cuerpo + tipo se persisten para la Bandeja de Servelito (acordeón de
+      // detalle). Solo metadata de proceso — nunca RUT/coordenadas.
+      detalle: { destinatario, asunto, enviado, nota: nota || "",
+                 tipo: tipo || "", cuerpo: cuerpo || "" },
     });
 
     const contenidoB64 = Buffer.from(JSON.stringify(bitacora, null, 1)).toString("base64");
@@ -250,7 +253,7 @@ const server = http.createServer(async (req, res) => {
       // Registrar en bitácora con la causa del fallo si lo hubo
       // (async, no bloquea la respuesta)
       registrarEventoMail(recinto, funcionario || "", destKey, asunto,
-                          info.enviado, info.nota)
+                          info.enviado, info.nota, tipo, cuerpo)
         .catch(e => console.error("[bitacora mail]", e.message));
 
       res.writeHead(200, { "Content-Type": "application/json" });
