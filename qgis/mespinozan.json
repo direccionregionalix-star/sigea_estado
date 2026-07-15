@@ -1,7 +1,7 @@
 {
  "usuario": "mespinozan",
  "recinto_cod": "01274",
- "timestamp": "2026-07-15T13:56:15+00:00",
+ "timestamp": "2026-07-15T14:32:27+00:00",
  "avance": {
   "total_registros": 1650,
   "confirmados": {
@@ -15,5 +15,5 @@
   "pendientes": 199,
   "pct": 87.9
  },
- "origen": "Plugin QGIS"
+ "origen": "Plugin QGIS entrega"
 }
