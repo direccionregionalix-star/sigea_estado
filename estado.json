@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-15T13:55:51+00:00Z",
+ "generado": "2026-07-15T14:32:04+00:00Z",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1783536455,
@@ -27,32 +27,7 @@
     }
    ]
   },
-  "mespinozan": {
-   "asignacion_id": 1784122436,
-   "codigo": "01274",
-   "unidad": "ESCUELA BASICA NAHUELBUTA",
-   "comuna": "Angol",
-   "n_electores": 1650,
-   "fecha_estimada": "2026-08-07",
-   "dias_restantes": 23,
-   "avance": 1451,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1784122436,
-     "codigo": "01274",
-     "unidad": "ESCUELA BASICA NAHUELBUTA",
-     "comuna": "Angol",
-     "n_electores": 1650,
-     "fecha_estimada": "2026-08-07",
-     "dias_restantes": 23,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "mespinozan": null,
   "jmedina": {
    "asignacion_id": 1784059569,
    "codigo": "01455",
