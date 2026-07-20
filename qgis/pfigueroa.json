@@ -1,16 +1,18 @@
 {
  "usuario": "pfigueroa",
- "recinto_cod": "01476",
- "timestamp": "2026-07-20T13:11:06+00:00",
+ "recinto_cod": "01352",
+ "timestamp": "2026-07-20T20:15:01+00:00",
  "avance": {
-  "total_registros": 1636,
+  "total_registros": 1580,
   "confirmados": {
-   "NO_GEO": 608,
-   "PROXIMIDAD": 1
+   "NO_GEO": 442,
+   "CALLE": 110,
+   "PROXIMIDAD": 3,
+   "TIPO_0": 11
   },
-  "confirmados_total": 609,
-  "pendientes": 1027,
-  "pct": 37.2
+  "confirmados_total": 566,
+  "pendientes": 1014,
+  "pct": 35.8
  },
- "origen": "Plugin QGIS entrega"
+ "origen": "Plugin QGIS"
 }
