@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-15T18:46:15+00:00Z",
+ "generado": "2026-07-20T12:41:36+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1784134066,
@@ -54,7 +54,32 @@
     }
    ]
   },
-  "pfigueroa": null,
+  "pfigueroa": {
+   "asignacion_id": 1784551296,
+   "codigo": "01476",
+   "unidad": "LICEO BICENTENARIO PADRE NICOLAS",
+   "comuna": "Vilcún",
+   "n_electores": 1636,
+   "fecha_estimada": "2026-08-12",
+   "dias_restantes": 23,
+   "avance": 0,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 1784551296,
+     "codigo": "01476",
+     "unidad": "LICEO BICENTENARIO PADRE NICOLAS",
+     "comuna": "Vilcún",
+     "n_electores": 1636,
+     "fecha_estimada": "2026-08-12",
+     "dias_restantes": 23,
+     "avance": 0,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
+  },
   "_cerrado_01284": {
    "codigo": "01284",
    "unidad": "01284",
