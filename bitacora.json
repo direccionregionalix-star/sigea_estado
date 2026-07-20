@@ -2169,6 +2169,21 @@
    "detalle": {
     "asignado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-07-20T16:57:39+00:00",
+   "tipo": "avance",
+   "recinto": "01455",
+   "funcionario": "jmedina",
+   "detalle": {
+    "no_geo": 339,
+    "localidad": 247,
+    "calle": 417,
+    "fuera_comuna": 23,
+    "exacto": 2,
+    "total": 1130,
+    "pct": 91.0
+   }
   }
  ]
 }
