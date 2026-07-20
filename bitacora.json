@@ -2148,6 +2148,18 @@
    "detalle": {
     "asignado_por": "jmedina"
    }
+  },
+  {
+   "ts": "2026-07-20T13:11:08+00:00",
+   "tipo": "entrega",
+   "recinto": "01476",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "no_geo": 608,
+    "proximidad": 1,
+    "total": 1636,
+    "pct": 37.2
+   }
   }
  ]
 }
