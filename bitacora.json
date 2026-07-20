@@ -2160,6 +2160,15 @@
     "total": 1636,
     "pct": 37.2
    }
+  },
+  {
+   "ts": "2026-07-20T13:12:14+00:00",
+   "tipo": "asignacion",
+   "recinto": "01352",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "asignado_por": "jmedina"
+   }
   }
  ]
 }
