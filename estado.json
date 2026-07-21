@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-21T16:48:59+00:00Z",
+ "generado": "2026-07-21T16:56:00+00:00Z",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1784134066,
@@ -28,32 +28,7 @@
    ]
   },
   "mespinozan": null,
-  "jmedina": {
-   "asignacion_id": 1784059569,
-   "codigo": "01455",
-   "unidad": "LICEO BICENTENARIO MARTIN KLEINKNECHT PALMA",
-   "comuna": "Toltén",
-   "n_electores": 1130,
-   "fecha_estimada": "2026-07-30",
-   "dias_restantes": 16,
-   "avance": 1130,
-   "herramienta": "qgis",
-   "tipo_origen": "recinto",
-   "asignaciones": [
-    {
-     "asignacion_id": 1784059569,
-     "codigo": "01455",
-     "unidad": "LICEO BICENTENARIO MARTIN KLEINKNECHT PALMA",
-     "comuna": "Toltén",
-     "n_electores": 1130,
-     "fecha_estimada": "2026-07-30",
-     "dias_restantes": 16,
-     "avance": 0,
-     "herramienta": "qgis",
-     "tipo_origen": "recinto"
-    }
-   ]
-  },
+  "jmedina": null,
   "pfigueroa": {
    "asignacion_id": 1784553133,
    "codigo": "01352",
