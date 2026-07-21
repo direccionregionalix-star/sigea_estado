@@ -34,6 +34,10 @@ const GMAIL_CLIENT_ID     = process.env.GMAIL_CLIENT_ID || "";
 const GMAIL_CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET || "";
 const GMAIL_REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN || "";
 const GMAIL_SENDER        = process.env.GMAIL_SENDER || "";
+// Nombre visible del remitente en el encabezado From. Sigue la misma firma
+// regional que el resto del backend (SIGEA_FIRMA_CORREO); por defecto Araucanía.
+// Único punto de identidad regional en este módulo — ver region_config.json.
+const REMITENTE_NOMBRE    = process.env.SIGEA_FIRMA_CORREO || "SIGEA DR Araucanía";
 
 // Scope mínimo: solo ENVIAR. No pedimos lectura del buzón del Director.
 const GMAIL_SCOPE = "https://www.googleapis.com/auth/gmail.send";
@@ -107,7 +111,7 @@ async function enviarGmail(destinatario, asunto, cuerpo) {
     const html = escapeHtml(cuerpo).replace(/\n/g, "<br>\n");
     const headers = [
       `To: ${destinatario}`,
-      ...(GMAIL_SENDER ? [`From: SIGEA DR Araucanía <${GMAIL_SENDER}>`] : []),
+      ...(GMAIL_SENDER ? [`From: ${REMITENTE_NOMBRE} <${GMAIL_SENDER}>`] : []),
       `Subject: ${encodeHeader(asunto)}`,
       "MIME-Version: 1.0",
       "Content-Type: text/html; charset=utf-8",

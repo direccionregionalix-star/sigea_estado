@@ -35,6 +35,24 @@ const PORT = process.env.PORT || 3001;
 const SIGEA_REPO = process.env.SIGEA_REPO || "direccionregionalix-star/sigea_estado";
 const GH_RAW_BASE = `https://raw.githubusercontent.com/${SIGEA_REPO}/main`;
 
+// ─── Configuración regional (identidad de la región) ─────────────────────────
+// Punto único del backend con datos propios de la región. Por defecto los de
+// La Araucanía; se leen de region_config.json y pueden sobreescribirse por
+// variables de entorno en Railway. Ver docs/PORTABILIDAD_REGIONAL.md.
+let REGION = {
+  region: "La Araucanía",
+  titulo: "SIGEA — Estado Rectificación La Araucanía",
+  encabezado: "— Rectificación Electoral La Araucanía",
+  firma_correo: "SIGEA DR Araucanía",
+};
+try {
+  const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, "region_config.json"), "utf8"));
+  REGION = { ...REGION, ...cfg };
+} catch (_) { /* sin archivo: se usan los defaults de Araucanía */ }
+REGION.titulo       = process.env.SIGEA_REGION_TITULO     || REGION.titulo;
+REGION.encabezado   = process.env.SIGEA_REGION_ENCABEZADO || REGION.encabezado;
+REGION.firma_correo = process.env.SIGEA_FIRMA_CORREO      || REGION.firma_correo;
+
 // Mapa funcionario → email (configurable por variable de entorno JSON)
 // SIGEA_MAILS='{"igarrido":"i.garrido@servel.cl", ...}'
 let MAILS_FUNCIONARIOS = {};
@@ -54,20 +72,21 @@ const ASUNTOS = {
   cierre:     (r, f) => `[SIGEA] Recinto ${r} cerrado formalmente`,
 };
 
+const _FIRMA = REGION.firma_correo;
 const CUERPOS = {
   asignacion: (r, f) =>
     `Hola ${f},\n\nSe te asignó el recinto ${r} para rectificación.\n` +
-    `Puedes ver tu asignación en el plugin QGIS.\n\nSIGEA DR Araucanía`,
+    `Puedes ver tu asignación en el plugin QGIS.\n\n${_FIRMA}`,
   entrega: (r, f) =>
     `El funcionario ${f} entregó el recinto ${r}.\n` +
-    `El recinto quedó pendiente de QA por parte del supervisor.\n\nSIGEA DR Araucanía`,
+    `El recinto quedó pendiente de QA por parte del supervisor.\n\n${_FIRMA}`,
   qa_ok: (r, f) =>
-    `El recinto ${r} del funcionario ${f} fue aprobado en QA.\n\nSIGEA DR Araucanía`,
+    `El recinto ${r} del funcionario ${f} fue aprobado en QA.\n\n${_FIRMA}`,
   qa_obs: (r, f) =>
     `El recinto ${r} del funcionario ${f} fue observado en QA.\n` +
-    `Revisa los comentarios con tu supervisor.\n\nSIGEA DR Araucanía`,
+    `Revisa los comentarios con tu supervisor.\n\n${_FIRMA}`,
   cierre: (r, f) =>
-    `El recinto ${r} fue cerrado formalmente.\n\nSIGEA DR Araucanía`,
+    `El recinto ${r} fue cerrado formalmente.\n\n${_FIRMA}`,
 };
 
 // El envío real vive en ./mailer_gmail.js (enviarGmail), con el mismo
@@ -269,7 +288,11 @@ const server = http.createServer(async (req, res) => {
     const htmlPath = path.join(__dirname, "index.html");
     fs.readFile(htmlPath, "utf8", (err, html) => {
       if (err) { res.writeHead(404); res.end("Not found"); return; }
-      const out = html.replace("__GH_RAW_BASE__", GH_RAW_BASE);
+      const out = html
+        .replace("__GH_RAW_BASE__", GH_RAW_BASE)
+        .replace("__REGION_TITULO__", REGION.titulo)
+        .replace("__REGION_ENCABEZADO__", REGION.encabezado)
+        .replace("__REGION_FIRMA__", REGION.firma_correo);
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(out);
     });

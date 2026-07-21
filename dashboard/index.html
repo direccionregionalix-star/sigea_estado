@@ -352,7 +352,7 @@
 
 <header>
   <div>
-    <h1>SIGEA <span>— Rectificación Electoral La Araucanía</span></h1>
+    <h1>SIGEA <span id="app-encab">— Rectificación Electoral La Araucanía</span></h1>
   </div>
   <div id="meta">
     <div id="ts-generado">Cargando…</div>
@@ -608,6 +608,24 @@
 // _GH_RAW es inyectado por server.js al servir este archivo (reemplaza el placeholder).
 // Para desarrollo local sin server.js, puedes cambiarlo manualmente.
 const _GH_RAW = "__GH_RAW_BASE__";
+
+// ─── Identidad regional ──────────────────────────────────────────────────────
+// server.js reemplaza estos placeholders al servir el HTML. Si el dashboard se
+// abre como archivo estático (sin server.js), se usan los valores por defecto
+// de Araucanía. Único punto de identidad regional en el cliente — ver
+// dashboard/region_config.json y docs/PORTABILIDAD_REGIONAL.md.
+const _REGION_TITULO = "__REGION_TITULO__".indexOf("__") === 0
+  ? "SIGEA — Estado Rectificación La Araucanía" : "__REGION_TITULO__";
+const _REGION_ENCAB = "__REGION_ENCABEZADO__".indexOf("__") === 0
+  ? "— Rectificación Electoral La Araucanía" : "__REGION_ENCABEZADO__";
+const _REGION_FIRMA = "__REGION_FIRMA__".indexOf("__") === 0
+  ? "SIGEA DR Araucanía" : "__REGION_FIRMA__";
+document.title = _REGION_TITULO;
+document.addEventListener("DOMContentLoaded", () => {
+  const el = document.getElementById("app-encab");
+  if (el) el.textContent = _REGION_ENCAB;
+});
+
 const ESTADO_URL = _GH_RAW + "/estado.json";
 const BITA_URL   = _GH_RAW + "/bitacora.json";
 const CATALOGO_URL = _GH_RAW + "/recintos_catalogo.json";
@@ -1470,11 +1488,11 @@ function _esc(s) {
 // Reconstrucción del cuerpo para avisos antiguos que no lo guardaron
 // (espejo de las plantillas del servidor). Los nuevos ya traen detalle.cuerpo.
 const _MAIL_CUERPOS = {
-  asignacion: (r, f) => `Hola ${f},\n\nSe te asignó el recinto ${r} para rectificación.\nPuedes ver tu asignación en el plugin QGIS.\n\nSIGEA DR Araucanía`,
-  entrega:    (r, f) => `El funcionario ${f} entregó el recinto ${r}.\nEl recinto quedó pendiente de QA por parte del supervisor.\n\nSIGEA DR Araucanía`,
-  qa_ok:      (r, f) => `El recinto ${r} del funcionario ${f} fue aprobado en QA.\n\nSIGEA DR Araucanía`,
-  qa_obs:     (r, f) => `El recinto ${r} del funcionario ${f} fue observado en QA.\nRevisa los comentarios con tu supervisor.\n\nSIGEA DR Araucanía`,
-  cierre:     (r, f) => `El recinto ${r} fue cerrado formalmente.\n\nSIGEA DR Araucanía`,
+  asignacion: (r, f) => `Hola ${f},\n\nSe te asignó el recinto ${r} para rectificación.\nPuedes ver tu asignación en el plugin QGIS.\n\n${_REGION_FIRMA}`,
+  entrega:    (r, f) => `El funcionario ${f} entregó el recinto ${r}.\nEl recinto quedó pendiente de QA por parte del supervisor.\n\n${_REGION_FIRMA}`,
+  qa_ok:      (r, f) => `El recinto ${r} del funcionario ${f} fue aprobado en QA.\n\n${_REGION_FIRMA}`,
+  qa_obs:     (r, f) => `El recinto ${r} del funcionario ${f} fue observado en QA.\nRevisa los comentarios con tu supervisor.\n\n${_REGION_FIRMA}`,
+  cierre:     (r, f) => `El recinto ${r} fue cerrado formalmente.\n\n${_REGION_FIRMA}`,
 };
 const _MAIL_TIPO_LBL = { asignacion: "asignación", entrega: "entrega",
   qa_ok: "QA aprobado", qa_obs: "QA observado", cierre: "cierre" };
