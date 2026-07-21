@@ -1,7 +1,7 @@
 {
  "usuario": "jmedina",
  "recinto_cod": "01455",
- "timestamp": "2026-07-21T16:49:24+00:00",
+ "timestamp": "2026-07-21T16:56:26+00:00",
  "avance": {
   "total_registros": 1130,
   "confirmados": {
@@ -15,5 +15,5 @@
   "pendientes": 0,
   "pct": 100.0
  },
- "origen": "Plugin QGIS"
+ "origen": "Plugin QGIS entrega"
 }
