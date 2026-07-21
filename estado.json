@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-21T16:56:00+00:00Z",
+ "generado": "2026-07-21T16:56:22+00:00Z",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1784134066,
@@ -37,7 +37,7 @@
    "n_electores": 1580,
    "fecha_estimada": "2026-08-11",
    "dias_restantes": 22,
-   "avance": 624,
+   "avance": 1567,
    "herramienta": "qgis",
    "tipo_origen": "recinto",
    "asignaciones": [
