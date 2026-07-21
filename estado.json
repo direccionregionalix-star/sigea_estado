@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-21T16:56:22+00:00Z",
+ "generado": "2026-07-21T18:28:19+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1784134066,
@@ -28,7 +28,32 @@
    ]
   },
   "mespinozan": null,
-  "jmedina": null,
+  "jmedina": {
+   "asignacion_id": 1784658498,
+   "codigo": "01330",
+   "unidad": "LICEO BICENTENARIO POLITECNICO EMA ESPINOZA CORREA",
+   "comuna": "Lautaro",
+   "n_electores": 1386,
+   "fecha_estimada": "2026-08-10",
+   "dias_restantes": 20,
+   "avance": 0,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 1784658498,
+     "codigo": "01330",
+     "unidad": "LICEO BICENTENARIO POLITECNICO EMA ESPINOZA CORREA",
+     "comuna": "Lautaro",
+     "n_electores": 1386,
+     "fecha_estimada": "2026-08-10",
+     "dias_restantes": 20,
+     "avance": 0,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
+  },
   "pfigueroa": {
    "asignacion_id": 1784553133,
    "codigo": "01352",
