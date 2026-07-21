@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <plugins>
-  <pyqgis_plugin name="SIGEA Panel" version="2.1.7">
+  <pyqgis_plugin name="SIGEA Panel" version="2.1.8">
     <description>Panel de rectificación electoral integrado con SIGEA DR Araucanía</description>
-    <about>v2.1.7: CRÍTICO — la entrega sincroniza el .gpkg a OneDrive (SHA-256 verificado) ANTES de publicar el avance y limpiar la pantalla; si la sincronización falla, la entrega se bloquea y el trabajo queda reintentable sin pérdida (antes publicaba el conteo pero no subía el archivo editado). v2.1.6: Filtra claves especiales (_cerrado_{codigo}) en los combos de funcionario del modo admin. v2.1.5: Catálogo de recintos para el dashboard (recintos_catalogo.json). v2.1.4: GeoPackage de asignación generado con GDAL/OGR (índice espacial RTree, compatible ArcGIS Pro).</about>
-    <version>2.1.7</version>
+    <about>v2.1.8: HOTFIX de instalación en QGIS 3.x (Qt5) — QAction se importaba solo desde QtGui (válido en QGIS 4.x/Qt6) y rompía la carga del plugin en QGIS 3.16–3.34 con el error "cannot import name QAction from qgis.PyQt.QtGui"; ahora se resuelve con fallback QtWidgets↔QtGui. Sin este arreglo el plugin no arrancaba en las máquinas de los funcionarios. v2.1.7: CRÍTICO — la entrega sincroniza el .gpkg a OneDrive (SHA-256 verificado) ANTES de publicar el avance y limpiar la pantalla; si la sincronización falla, la entrega se bloquea y el trabajo queda reintentable sin pérdida. v2.1.6: Filtra claves especiales (_cerrado_{codigo}) en los combos de funcionario del modo admin. v2.1.5: Catálogo de recintos para el dashboard (recintos_catalogo.json). v2.1.4: GeoPackage de asignación generado con GDAL/OGR (índice espacial RTree, compatible ArcGIS Pro).</about>
+    <version>2.1.8</version>
     <qgis_minimum_version>3.16</qgis_minimum_version>
     <qgis_maximum_version>4.99.99</qgis_maximum_version>
     <homepage>https://github.com/direccionregionalix-star/sigea_estado</homepage>
-    <file_name>sigea_panel.2.1.7.zip</file_name>
+    <file_name>sigea_panel.2.1.8.zip</file_name>
     <icon>icon.png</icon>
     <author_name>SERVEL DR Araucanía</author_name>
-    <download_url>https://raw.githubusercontent.com/direccionregionalix-star/sigea_estado/main/sigea_panel.2.1.7.zip</download_url>
-    <update_date>2026-07-15</update_date>
+    <download_url>https://raw.githubusercontent.com/direccionregionalix-star/sigea_estado/main/sigea_panel.2.1.8.zip</download_url>
+    <update_date>2026-07-21</update_date>
     <experimental>False</experimental>
     <deprecated>False</deprecated>
     <tags>electoral,servel,sigea</tags>
