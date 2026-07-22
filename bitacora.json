@@ -2363,6 +2363,15 @@
     "total": 1580,
     "pct": 99.2
    }
+  },
+  {
+   "ts": "2026-07-22T12:14:04+00:00",
+   "tipo": "asignacion",
+   "recinto": "01289",
+   "funcionario": "mespinozan",
+   "detalle": {
+    "asignado_por": "jmedina"
+   }
   }
  ]
 }
