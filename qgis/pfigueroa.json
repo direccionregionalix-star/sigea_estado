@@ -1,17 +1,17 @@
 {
  "usuario": "pfigueroa",
  "recinto_cod": "01352",
- "timestamp": "2026-07-22T16:53:39+00:00",
+ "timestamp": "2026-07-22T19:35:41+00:00",
  "avance": {
   "total_registros": 1580,
   "confirmados": {
    "LOCALIDAD": 93,
    "NO_GEO": 606,
-   "CALLE": 207
+   "CALLE": 208
   },
-  "confirmados_total": 906,
-  "pendientes": 674,
-  "pct": 57.3
+  "confirmados_total": 907,
+  "pendientes": 673,
+  "pct": 57.4
  },
  "origen": "Plugin QGIS"
 }
