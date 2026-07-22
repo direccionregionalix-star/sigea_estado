@@ -2400,6 +2400,19 @@
     "total": 1580,
     "pct": 99.2
    }
+  },
+  {
+   "ts": "2026-07-22T16:40:39+00:00",
+   "tipo": "avance",
+   "recinto": "01352",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "localidad": 93,
+    "no_geo": 606,
+    "calle": 204,
+    "total": 1580,
+    "pct": 57.2
+   }
   }
  ]
 }
