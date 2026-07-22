@@ -1,14 +1,14 @@
 {
  "usuario": "pfigueroa",
  "recinto_cod": "01352",
- "timestamp": "2026-07-21T20:22:28+00:00",
+ "timestamp": "2026-07-22T14:55:16+00:00",
  "avance": {
   "total_registros": 1580,
   "confirmados": {
-   "TIPO_0": 836,
-   "NO_GEO": 558,
-   "CALLE": 164,
-   "LOCALIDAD": 9
+   "TIPO_0": 751,
+   "NO_GEO": 581,
+   "CALLE": 184,
+   "LOCALIDAD": 51
   },
   "confirmados_total": 1567,
   "pendientes": 13,
