@@ -1,5 +1,5 @@
 {
- "generado": "2026-07-21T19:31:19+00:00Z",
+ "generado": "2026-07-22T12:14:02+00:00",
  "funcionarios": {
   "igarrido": {
    "asignacion_id": 1784134066,
@@ -27,7 +27,32 @@
     }
    ]
   },
-  "mespinozan": null,
+  "mespinozan": {
+   "asignacion_id": 1784722442,
+   "codigo": "01289",
+   "unidad": "LICEO SAN FRANCISCO DE ASIS",
+   "comuna": "Cholchol",
+   "n_electores": 1270,
+   "fecha_estimada": "2026-08-10",
+   "dias_restantes": 19,
+   "avance": 0,
+   "herramienta": "qgis",
+   "tipo_origen": "recinto",
+   "asignaciones": [
+    {
+     "asignacion_id": 1784722442,
+     "codigo": "01289",
+     "unidad": "LICEO SAN FRANCISCO DE ASIS",
+     "comuna": "Cholchol",
+     "n_electores": 1270,
+     "fecha_estimada": "2026-08-10",
+     "dias_restantes": 19,
+     "avance": 0,
+     "herramienta": "qgis",
+     "tipo_origen": "recinto"
+    }
+   ]
+  },
   "jmedina": {
    "asignacion_id": 1784658498,
    "codigo": "01330",
