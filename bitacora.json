@@ -2586,6 +2586,20 @@
     "total": 1580,
     "pct": 91.2
    }
+  },
+  {
+   "ts": "2026-07-24T19:25:20+00:00",
+   "tipo": "avance",
+   "recinto": "01352",
+   "funcionario": "pfigueroa",
+   "detalle": {
+    "calle": 507,
+    "localidad": 187,
+    "no_geo": 744,
+    "exacto": 3,
+    "total": 1580,
+    "pct": 91.2
+   }
   }
  ]
 }
